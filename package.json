@@ -1,0 +1,8 @@
+{
+  "name": "server-microservices",
+  "version": "1.0.0",
+  "description": "microservice architecture for digidocs server",
+  "main": "index.js",
+  "author": "digidocs org",
+  "license": "MIT"
+}
