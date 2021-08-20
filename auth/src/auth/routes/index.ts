@@ -13,7 +13,7 @@ import {
 } from '../controllers/verifyEmail-controller';
 import { forgotPasswordOtp, forgotPasswordVerifyOtp } from '../controllers/forgotPassword-controller'
 import { currentUser, validateRequest, headerValidators, bodyValidators } from '@digidocs-org/guardian';
-// import { verifyToken } from '../middlewares/verify-token';
+import { verifyToken } from '../middlewares/vertfyToken';
 
 export class AuthRouter {
     private static router = Router()
@@ -157,5 +157,7 @@ export class AuthRouter {
             verifyToken,
             resetPassword
         );
+
+        return this.router
     }
 }

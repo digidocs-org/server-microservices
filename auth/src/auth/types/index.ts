@@ -3,3 +3,10 @@ export interface DecodedToken {
     type: string
     otp?: string | number
 }
+
+export interface IUserBody {
+    firstname: string
+    lastname: string
+    email: string
+    password: string
+}
