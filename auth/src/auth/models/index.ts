@@ -7,15 +7,11 @@ export interface IUser extends Document {
   email: string
   firstname: string
   isGuestUser: boolean
-  socialAuthToken?: string
   googleId: string
   lastname: string
   mobile: string
   isBlocked: boolean
-  promoCode: string
-  installLocation: string
   isPremium: boolean
-  currentLocation: string
   profileImage: string
   emailOtp?: { otp: number | null; expire: number | null }
   forgetPasswordOtp?: { otp: number | null; expire: number | null }
@@ -25,7 +21,7 @@ export interface IUser extends Document {
   deviceId: string
   password?: string
   refreshToken?: string
-  iat: number
+  version: number
 }
 /**
  *
@@ -36,16 +32,12 @@ const userSchema: Schema = new Schema(
     firstname: String,
     isGuestUser: { type: Boolean, default: false },
     isPass: { type: Boolean, default: false },
-    socialAuthToken: String,
     lastname: String,
     mobile: { type: String },
     isPremium: { type: Boolean },
     isBlocked: { type: Boolean, default: false },
-    promoCode: String,
     isEmailVerified: { type: Boolean, default: false },
-    installLocation: String,
     googleId: String,
-    currentLocation: String,
     profileImage: String,
     emailOtp: {
       otp: { type: Number, default: null },
@@ -59,6 +51,7 @@ const userSchema: Schema = new Schema(
     deviceId: String,
     password: String,
     refreshToken: String,
+    version: Number
   },
   {
     timestamps: { createdAt: true, updatedAt: true }, toJSON: {
