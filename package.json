@@ -4,5 +4,8 @@
   "description": "microservice architecture for digidocs server",
   "main": "index.js",
   "author": "digidocs org",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "clean": "docker system prune -a"
+  }
 }

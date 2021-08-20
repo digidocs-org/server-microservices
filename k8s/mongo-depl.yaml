@@ -1,0 +1,8 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: digidocs-mongo
+  namespace: external
+spec: 
+  type: ExternalName
+  externalName: 10.0.2.2
