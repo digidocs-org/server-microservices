@@ -1,8 +1,8 @@
-import { IUserBody } from "../types";
-import User from '../models'
-import { BadRequestError } from "@digidocs-org/guardian";
+import { IUserBody } from "auth/types";
+import User from 'auth/models'
+import { BadRequestError } from "@digidocs/guardian";
 import bcrypt from 'bcryptjs';
-import { generateToken } from "../utils";
+import { generateToken } from "auth/utils";
 
 export class AuthService {
     public static async createUser(userData: IUserBody) {

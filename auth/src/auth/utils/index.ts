@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { DecodedToken } from '../types';
+import { DecodedToken } from 'auth/types';
 
 export const generateToken = (
   payload: { id: string },
@@ -16,4 +16,4 @@ export const generateTimeBasedToken = (payload: DecodedToken, time: string) =>
     expiresIn: time,
   });
 
-  
+

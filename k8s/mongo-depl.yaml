@@ -1,8 +1,30 @@
-kind: Service
-apiVersion: v1
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: digidocs-mongo
-  namespace: external
-spec: 
-  type: ExternalName
-  externalName: 10.0.2.2
+  name: mongo-depl
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-srv
+spec:
+  selector:
+    app: mongo
+  ports:
+  - name: db
+    protocol: TCP
+    port: 27017
+    targetPort: 27017

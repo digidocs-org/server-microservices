@@ -3,22 +3,26 @@ import passport from 'passport';
 import {
     Signin,
     googlePassport,
-} from '../controllers/signin-controller';
-import { Signup } from '../controllers/signup-controller'
-import { refreshToken } from '../controllers/refreshToken-controller';
-import { getUserProfile, resetPassword } from '../controllers/userProfile-controller';
+} from 'auth/controllers/signin-controller';
+import { Signup } from 'auth/controllers/signup-controller'
+import { refreshToken } from 'auth/controllers/refreshToken-controller';
+import { getUserProfile, resetPassword } from 'auth/controllers/userProfile-controller';
 import {
     sendOTPEmail,
     verifyOTP,
-} from '../controllers/verifyEmail-controller';
-import { forgotPasswordOtp, forgotPasswordVerifyOtp } from '../controllers/forgotPassword-controller'
-import { currentUser, validateRequest, headerValidators, bodyValidators } from '@digidocs-org/guardian';
-import { verifyToken } from '../middlewares/vertfyToken';
+} from 'auth/controllers/verifyEmail-controller';
+import { forgotPasswordOtp, forgotPasswordVerifyOtp } from 'auth/controllers/forgotPassword-controller'
+import { currentUser, validateRequest, headerValidators, bodyValidators } from '@digidocs/guardian';
+import { verifyToken } from 'auth/middlewares/vertfyToken';
 
 export class AuthRouter {
     private static router = Router()
 
     public static route() {
+
+        this.router.get('/api/auth', (req, res) => {
+            res.send("auth service is up and running")
+        })
 
         /**
          * @Route  POST 'api/v1/auth/signup'
@@ -27,7 +31,7 @@ export class AuthRouter {
          */
 
         this.router.post(
-            '/signup',
+            '/api/auth/signup',
             bodyValidators('email', 'password', 'firstname', 'lastname'),
             validateRequest,
             Signup
@@ -40,7 +44,7 @@ export class AuthRouter {
          */
 
         this.router.post(
-            '/signin',
+            '/api/auth/signin',
             bodyValidators('email', 'password'),
             validateRequest,
             Signin
@@ -53,7 +57,7 @@ export class AuthRouter {
         */
 
         this.router.get(
-            '/user-profile',
+            '/api/auth/user-profile',
             headerValidators('token'),
             validateRequest,
             currentUser,
@@ -67,7 +71,7 @@ export class AuthRouter {
          */
 
         this.router.get(
-            '/refresh-token',
+            '/api/auth/refresh-token',
             headerValidators('refreshToken'),
             validateRequest,
             refreshToken
@@ -80,7 +84,7 @@ export class AuthRouter {
          */
 
         this.router.get(
-            '/google',
+            '/api/auth/google',
             passport.authenticate('google', {
                 scope: ['profile', 'email'],
             })
@@ -91,7 +95,7 @@ export class AuthRouter {
          * @Desc   redirect route
          * @Access Private
          */
-        this.router.get('/google/callback', passport.authenticate('google'), googlePassport);
+        this.router.get('/api/auth/google/callback', passport.authenticate('google'), googlePassport);
 
         /**
          * @Route  POST 'api/v1/auth/verify-email'
@@ -99,7 +103,7 @@ export class AuthRouter {
          * @Access Private
          */
         this.router.post(
-            '/verify-otp',
+            '/api/auth/verify-otp',
             headerValidators('token'),
             bodyValidators('otp'),
             validateRequest,
@@ -113,7 +117,7 @@ export class AuthRouter {
          * @Access Private
          */
         this.router.post(
-            '/send-otp-email',
+            '/api/auth/send-otp-email',
             headerValidators('token'),
             validateRequest,
             currentUser,
@@ -126,7 +130,7 @@ export class AuthRouter {
          * @Access Private
          */
         this.router.post(
-            '/forgotPassword/send-otp',
+            '/api/auth/forgotPassword/send-otp',
             bodyValidators('email'),
             validateRequest,
             forgotPasswordOtp
@@ -138,7 +142,7 @@ export class AuthRouter {
          * @Access Private
          */
         this.router.post(
-            '/forgotPassword/verify-otp',
+            '/api/auth/forgotPassword/verify-otp',
             bodyValidators('email', 'otp'),
             validateRequest,
             forgotPasswordVerifyOtp
@@ -150,7 +154,7 @@ export class AuthRouter {
          * @Access Private
          */
         this.router.post(
-            '/reset-password',
+            '/api/auth/reset-password',
             headerValidators('reset-token'),
             bodyValidators('password'),
             validateRequest,

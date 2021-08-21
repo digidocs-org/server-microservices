@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node@14/14.17.1/bin/node /usr/local/bin/yarn add @digidocs-org/guardian
+  /usr/local/Cellar/node@14/14.17.1/bin/node /usr/local/bin/yarn add @digidocs/guardian
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/Library/Apple/usr/bin:/Users/B0224569/Library/Android/sdk/emulator:/Users/B0224569/Library/Android/sdk/tools:/Users/B0224569/Library/Android/sdk/tools/bin:/Users/B0224569/Library/Android/sdk/platform-tools:/Users/B0224569/Library/Android/sdk/emulator:/Users/B0224569/Library/Android/sdk/tools:/Users/B0224569/Library/Android/sdk/tools/bin:/Users/B0224569/Library/Android/sdk/platform-tools

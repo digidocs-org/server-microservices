@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import crypto from 'crypto';
-import { BadRequestError, ForbiddenError } from '@digidocs-org/guardian';
-import User from '../models';
-// import { sendEmailToClient } from '../../utils/email';
-import { generateTimeBasedToken } from '../utils';
+import { BadRequestError, ForbiddenError } from '@digidocs/guardian';
+import User from 'auth/models';
+// import { sendEmailToClient } from 'auth/auth/utils/email';
+import { generateTimeBasedToken } from 'auth/utils';
 
 export const forgotPasswordOtp = async (req: Request, res: Response) => {
     const { email } = req.body;

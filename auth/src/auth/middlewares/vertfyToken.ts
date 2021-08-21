@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import { NextFunction, Request, Response } from 'express';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
-import { BadRequestError, NotAuthorizedError } from '@digidocs-org/guardian';
-import User from '../models';
+import { BadRequestError, NotAuthorizedError } from '@digidocs/guardian';
+import User from 'auth/models';
 
 export interface DecodedToken {
     id: string

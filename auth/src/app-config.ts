@@ -1,6 +1,6 @@
 import { json } from 'body-parser';
-import { currentUser, App } from '@digidocs-org/guardian';
-const cookieSession = require('cookie-session');
+import { currentUser, App } from '@digidocs/guardian';
+import cookieSession from 'cookie-session';
 
 import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import crypto from 'crypto';
-import User from '../models';
-// import { sendEmailToClient } from '../utils';
-import { BadRequestError } from '@digidocs-org/guardian';
+import User from 'auth/models';
+// import { sendEmailToClient } from 'auth/utils';
+import { BadRequestError } from '@digidocs/guardian';
 
 export const sendOTPEmail = async (req: Request, res: Response) => {
   try {

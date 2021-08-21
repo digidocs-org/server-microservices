@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-// import { sendEmailToClient } from '../../utils/email';
+// import { sendEmailToClient } from 'auth/auth/utils/email';
 
 export const getUserProfile = async (req: Request, res: Response) => {
   const user = req.currentUser.toJSON();
@@ -24,10 +24,10 @@ export const resetPassword = async (req: Request, res: Response) => {
   user.isPass = true;
   user.__v = user.__v ? user.__v++ : 1;
   await user.save();
-//   sendEmailToClient({
-//     clientEmail: user.email,
-//     subject: 'Password Reset Successful',
-//     body: 'Hi,\nYour password has been reset successfully',
-//   });
+  //   sendEmailToClient({
+  //     clientEmail: user.email,
+  //     subject: 'Password Reset Successful',
+  //     body: 'Hi,\nYour password has been reset successfully',
+  //   });
   res.send({ success: true });
 };

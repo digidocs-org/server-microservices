@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { NotAuthorizedError } from '@digidocs-org/guardian';
+import { NotAuthorizedError } from '@digidocs/guardian';
 
-import User from '../models';
-import { generateToken } from '../utils';
+import User from 'auth/models';
+import { generateToken } from 'auth/utils';
 
 
 /**

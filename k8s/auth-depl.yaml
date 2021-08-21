@@ -17,12 +17,37 @@ spec:
           image: digidocs/auth
           env:
             - name: MONGO_URI
-              value: digidocs-mongo.external.svc
+              value: 'mongodb://mongo-srv/auth'
+
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+
+            - name: ACCESS_TOKEN_EXP
+              valueFrom:
+                secretKeyRef:
+                  name: access-token-exp
+                  key: ACCESS_TOKEN_EXP
+
+            - name: REFRESH_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: refresh-token-secret
+                  key: REFRESH_TOKEN_SECRET
+
+            - name: REFRESH_TOKEN_EXP
+              valueFrom:
+                secretKeyRef:
+                  name: refresh-token-exp
+                  key: REFRESH_TOKEN_EXP
+
+            - name: TIME_BASED_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: time-based-token-secret
+                  key: TIME_BASED_TOKEN_SECRET
 ---
 apiVersion: v1
 kind: Service
