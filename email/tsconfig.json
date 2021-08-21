@@ -1,0 +1,17 @@
+{
+  "extends": "../node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "outDir": "build",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports":true,
+    "baseUrl": "./",                
+    "paths": {
+      "email-service/*":["src/*"]
+    },
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+, "index.ts"  ]
+}

@@ -24,17 +24,15 @@ export const currentUser = (
 ) => {
   const token = req.header('token');
 
-  if (!req.session?.jwt) {
-    return next();
-  }
-
   try {
     const payload = jwt.verify(
       token ?? req.session?.jwt,
-      process.env.JWT_KEY!
+      process.env.ACCESS_TOKEN_SECRET!
     ) as UserPayload;
     req.currentUser = payload;
-  } catch (err) {}
+  } catch (err) {
+    console.log(err)
+  }
 
   return next();
 };

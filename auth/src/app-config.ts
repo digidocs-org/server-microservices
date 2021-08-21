@@ -23,8 +23,7 @@ export class Application {
 
             natsWrapper.client.on('close', () => {
                 console.log('NATS connection closed.');
-                // eslint-disable-next-line no-process-exit
-                // process.exit();
+                process.exit();
             });
 
             process.on('SIGINT', () => natsWrapper.client.close());

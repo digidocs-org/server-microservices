@@ -7,12 +7,12 @@ export interface UserCreatedEvent {
         email: string
         firstname: string
         lastname: string
-        mobile: string
+        mobile?: string
         isBlocked: boolean
         isPremium: boolean
-        profileImage: string
-        notificationId: string
-        deviceId: string
-        version: number
+        profileImage?: string
+        notificationId?: string
+        deviceId?: string
+        version?: number
     };
 }

@@ -1,4 +1,6 @@
 export enum Subjects {
     UserCreated = 'user:created',
-    UserUpdated = 'user:updated'
+    UserUpdated = 'user:updated',
+
+    SendEmail = 'email:send'
 }

@@ -9,9 +9,8 @@
     "clean": "gts clean",
     "compile": "tsc",
     "fix": "gts fix",
-    "dev": "nodemon",
-    "build": "tsc",
-    "start": "node dist/main.js"
+    "start": "nodemon",
+    "build": "tsc"
   },
   "author": "",
   "license": "MIT",

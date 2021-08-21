@@ -3,6 +3,8 @@ import User from 'auth/models'
 import { BadRequestError } from "@digidocs/guardian";
 import bcrypt from 'bcryptjs';
 import { generateToken } from "auth/utils";
+import { UserCreatedPublisher } from "src/events/publishers";
+import { natsWrapper } from "src/nats-wrapper";
 
 export class AuthService {
     public static async createUser(userData: IUserBody) {
@@ -38,6 +40,37 @@ export class AuthService {
         user.refreshToken = refreshToken;
         await user.save();
 
+        new UserCreatedPublisher(natsWrapper.client).publish({
+            id: user.id,
+            email: user.email,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            mobile: user.mobile,
+            isBlocked: user.isBlocked,
+            isPremium: user.isPremium,
+            profileImage: user.profileImage,
+            notificationId: user.notificationId,
+            deviceId: user.deviceId,
+            version: user.version
+        })
+
         return { accessToken, refreshToken }
+    }
+
+    public static async getUser(userId?: string) {
+        const user = await User.findById(userId)
+        
+
+        if (!user) {
+            throw new BadRequestError("User Not Found")
+        }
+        const userData = user.toJSON()
+        delete userData.password;
+        delete userData.refreshToken;
+        delete userData.emailOtp;
+        delete userData.forgetPasswordOtp;
+        delete userData.version;
+
+        return userData
     }
 }

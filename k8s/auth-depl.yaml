@@ -20,7 +20,9 @@ spec:
               value: mongodb://host.docker.internal/authentication
 
             - name: NATS_CLIENT_ID
-              value: 'asdfasdf'
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name 
 
             - name: NATS_URI
               value: 'http://nats-srv:4222'

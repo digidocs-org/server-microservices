@@ -1,24 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import User from 'auth/models'
 import { BadRequestError } from '@digidocs/guardian';
+import { AuthService } from 'auth/services';
 // import { sendEmailToClient } from 'auth/auth/utils/email';
 
-export const getUserProfile = async (req: Request, res: Response) => {
-  const userId = req.currentUser?.id;
-  const user = await User.findById(userId)
-
-  if (!user) {
-    throw new BadRequestError("User Not Found")
+export const getUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.currentUser?.id
+    const userInfo = await AuthService.getUser(userId)
+    return res.status(201).send(userInfo);
+  } catch (error) {
+    return next(error)
   }
-
-  delete user.password;
-  delete user.refreshToken;
-  delete user.emailOtp;
-  delete user.forgetPasswordOtp;
-
-  res.json(user);
 };
 
 export const resetPassword = async (req: Request, res: Response) => {

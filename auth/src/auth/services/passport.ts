@@ -45,7 +45,7 @@ export default function passportInit(): void {
             {
                 clientID: process.env.GOOGLE_CLIENT_ID!,
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-                callbackURL: '/api/v1/auth/google/callback',
+                callbackURL: '/api/auth/google/callback',
             },
             async (accessToken, refreshToken, profile, done) => {
                 const user = await User.findOne({ googleId: profile.id });

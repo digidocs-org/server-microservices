@@ -22,7 +22,7 @@ export interface IUser extends Document {
   deviceId: string
   password?: string
   refreshToken?: string
-  version: number
+  version?: number
 }
 /**
  *
