@@ -9,7 +9,7 @@ export class SendEmailListener extends Listener<SendEmailEvent>{
 
     async onMessage(data: SendEmailEvent['data'], msg: Message) {
         try {
-            await sendEmailToClient(data) 
+            sendEmailToClient(data) 
             msg.ack()
         } catch (error) {
             console.log(error)

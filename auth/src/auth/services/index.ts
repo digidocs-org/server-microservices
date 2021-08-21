@@ -3,7 +3,7 @@ import User from 'auth/models'
 import { BadRequestError } from "@digidocs/guardian";
 import bcrypt from 'bcryptjs';
 import { generateToken } from "auth/utils";
-import { UserCreatedPublisher } from "src/events/publishers";
+import { UserCreatedPublisher, SendEmailPublisher } from "src/events/publishers";
 import { natsWrapper } from "src/nats-wrapper";
 
 export class AuthService {
@@ -54,12 +54,19 @@ export class AuthService {
             version: user.version
         })
 
+        new SendEmailPublisher(natsWrapper.client).publish({
+            senderEmail: 'notifications@digidocs.one',
+            clientEmail: user.email,
+            subject: "Welcome to Digidocs Esign",
+            body: `Hey ${user.firstname} thankyou for signing up to digidocs esign we are glad to have you on board`
+        })
+
         return { accessToken, refreshToken }
     }
 
     public static async getUser(userId?: string) {
         const user = await User.findById(userId)
-        
+
 
         if (!user) {
             throw new BadRequestError("User Not Found")

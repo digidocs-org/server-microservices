@@ -15,11 +15,20 @@ export const transporter = nodemailer.createTransport({
     },
 });
 
-export const sendEmailToClient = async (options: EmailOptions) => {
-    try {
-        const mailTransporter = promisify(transporter.sendMail)
-        await mailTransporter(options)
-    } catch (error) {
-        throw error
-    }
+export const sendEmailToClient = (options: EmailOptions) => {
+    return transporter.sendMail(
+        {
+            from: process.env.NODEMAILER_EMAIL!,
+            to: options.clientEmail,
+            subject: options.subject,
+            text: options.body,
+        },
+        (err, info) => {
+            if (err) {
+                throw err;
+            } else {
+                return true;
+            }
+        }
+    );
 };
