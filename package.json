@@ -6,7 +6,8 @@
   "author": "digidocs org",
   "license": "MIT",
   "scripts": {
-    "clean": "docker system prune -a"
+    "clean": "docker system prune -a",
+    "start-auth":"yarn workspace @digidocs/auth start"
   },
   "private": true,
   "workspaces": [

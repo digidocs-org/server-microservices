@@ -9,9 +9,9 @@ build:
     push: false
   artifacts:
     - image: digidocs/auth
-      context: auth
+      context: ./
       docker:
-        dockerfile: Dockerfile
+        dockerfile: ./auth/Dockerfile
       sync:
         manual:
           - src: 'src/***/*.ts'

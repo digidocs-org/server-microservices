@@ -1,7 +1,14 @@
-FROM node:14-alpine
+FROM node:14-alpine As base
 
 WORKDIR /app
-COPY . .
-RUN npm install
 
-CMD ["npm", "start"]
+FROM base AS dependencies
+
+COPY guardian guardian
+COPY auth auth
+COPY package.json .
+COPY yarn.lock .
+
+RUN yarn install --pure-lockfile --non-interactive --cache-folder ./ycache; rm -rf ./ycache
+
+CMD ["yarn", "start-auth"]
