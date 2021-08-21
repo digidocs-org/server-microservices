@@ -13,12 +13,11 @@ export class AuthService {
             throw new BadRequestError('User already Exists!!');
         }
 
-        user = new User({ email, firstname, lastname });
+        user = await User.create({ email, firstname, lastname });
         // hash pwd
         const salt = await bcrypt.genSalt(10);
         user.password = bcrypt.hashSync(password, salt);
         user.isPass = true;
-        await user.save();
 
         const { id, __v } = user;
 

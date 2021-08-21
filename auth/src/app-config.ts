@@ -13,7 +13,6 @@ export class Application {
 
     constructor() {
         if (process.env.NODE_ENV !== 'test') {
-            DatabaseConfig.connect();
             passportInit()
 
             natsWrapper.connect(
@@ -25,7 +24,7 @@ export class Application {
             natsWrapper.client.on('close', () => {
                 console.log('NATS connection closed.');
                 // eslint-disable-next-line no-process-exit
-                process.exit();
+                // process.exit();
             });
 
             process.on('SIGINT', () => natsWrapper.client.close());
@@ -46,7 +45,8 @@ export class Application {
         );
     }
 
-    public start(portNumber: number) {
+    public async start(portNumber: number) {
+        await DatabaseConfig.connect();
         this.app.start(portNumber);
     }
 

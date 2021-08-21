@@ -5,14 +5,14 @@ import { AuthService } from 'auth/services';
 export const Signup = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password, firstname, lastname } = req.body;
   try {
-    const data = await AuthService.createUser({
+    const user = await AuthService.createUser({
       email,
       password,
       firstname,
       lastname
     })
-    res.send(data);
+    return res.status(201).send(user);
   } catch (error) {
-    return next()
+    return next(error)
   }
 };

@@ -17,24 +17,22 @@ spec:
           image: digidocs/auth
           env:
             - name: MONGO_URI
-              value: 'mongodb://mongo-srv/auth'
+              value: mongodb://host.docker.internal/authentication
 
             - name: NATS_CLIENT_ID
-              valueFrom: 
-                fieldRef:
-                  fieldPath: metadata.name
+              value: 'asdfasdf'
 
             - name: NATS_URI
               value: 'http://nats-srv:4222'
 
             - name: NATS_CLUSTER_ID
-              value: auth
+              value: digidocs
 
-            - name: JWT_KEY
+            - name: ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_KEY
+                  name: access-token-secret
+                  key: ACCESS_TOKEN_SECRET
 
             - name: ACCESS_TOKEN_EXP
               valueFrom:

@@ -21,7 +21,7 @@ export class AuthRouter {
     public static route() {
 
         this.router.get('/api/auth', (req, res) => {
-            res.send("auth service is up and running")
+            res.send({ message: "auth service is up and running" })
         })
 
         /**

@@ -1,4 +1,4 @@
-kubectl create secret generic jwt-secret --from-literal=JWT_KEY=ljadji_fo3i90ajdoifjasff22$
+kubectl create secret generic access-token-secret --from-literal=ACCESS_TOKEN_SECRET=ljadji_fo3i90ajdoifjasff22$
 kubectl create secret generic access-token-exp --from-literal=ACCESS_TOKEN_EXP=88503000222
 kubectl create secret generic refresh-token-secret --from-literal=REFRESH_TOKEN_SECRET=joiajd988j4jjiaaoif_jiosjf499d
 kubectl create secret generic refresh-token-exp --from-literal=REFRESH_TOKEN_EXP=3490034999999300

@@ -23,9 +23,7 @@ class App {
 
     // If No route is found
     this.app.all('*', async (req: Request, res: Response) => {
-      // console.log("URL",req.url)
-      // throw new NotFoundError();
-      res.send({success:req.url})
+      throw new NotFoundError();
     });
 
     // Error Handler

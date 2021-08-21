@@ -1,6 +1,6 @@
 import {Application} from './app-config';
 
-if (!process.env.JWT_KEY) {
+if (!process.env.ACCESS_TOKEN_SECRET) {
   throw new Error('JWT_KEY is required.');
 }
 
