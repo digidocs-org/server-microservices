@@ -3,13 +3,22 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { BadRequestError, NotAuthorizedError } from '@digidocs/guardian';
-import User from 'auth/models';
+import User, { IUser } from 'auth/models';
 
 export interface DecodedToken {
     id: string
     type: string
     otp?: string | number
 }
+
+declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace Express {
+      interface Request {
+        userData: IUser
+      }
+    }
+  }
 
 export const verifyToken = async (
     req: Request,
@@ -28,7 +37,7 @@ export const verifyToken = async (
             throw new BadRequestError('User not found!!!');
         }
         if (user.forgetPasswordOtp?.otp != decoded.otp) throw new BadRequestError("Invalid token!!!")
-        req.currentUser = user;
+        req.userData = user;
     } catch (error) {
         if (error instanceof TokenExpiredError) {
             throw new NotAuthorizedError()

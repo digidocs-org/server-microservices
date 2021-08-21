@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "docker system prune -a",
-    "start-auth":"yarn workspace @digidocs/auth start"
+    "start-auth":"yarn workspace @digidocs/auth dev"
   },
   "private": true,
   "workspaces": [

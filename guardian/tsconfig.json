@@ -1,5 +1,9 @@
 {
   "extends": "../node_modules/gts/tsconfig-google.json",
+  "ts-node": {
+    "transpileOnly": true,
+    "require": [ "typescript-transform-paths/register" ],
+  },
   "compilerOptions": {
     "outDir": "build",
     "allowJs": false,

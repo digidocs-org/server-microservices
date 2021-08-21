@@ -19,6 +19,17 @@ spec:
             - name: MONGO_URI
               value: 'mongodb://mongo-srv/auth'
 
+            - name: NATS_CLIENT_ID
+              valueFrom: 
+                fieldRef:
+                  fieldPath: metadata.name
+
+            - name: NATS_URI
+              value: 'http://nats-srv:4222'
+
+            - name: NATS_CLUSTER_ID
+              value: auth
+
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -48,6 +59,24 @@ spec:
                 secretKeyRef:
                   name: time-based-token-secret
                   key: TIME_BASED_TOKEN_SECRET
+
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-id
+                  key: GOOGLE_CLIENT_ID
+
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-secret
+                  key: GOOGLE_CLIENT_SECRET
+
+            - name: CLIENT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: client-url
+                  key: CLIENT_URL
 ---
 apiVersion: v1
 kind: Service

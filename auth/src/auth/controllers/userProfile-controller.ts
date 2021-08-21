@@ -1,13 +1,19 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import User from 'auth/models'
+import { BadRequestError } from '@digidocs/guardian';
 // import { sendEmailToClient } from 'auth/auth/utils/email';
 
 export const getUserProfile = async (req: Request, res: Response) => {
-  const user = req.currentUser.toJSON();
+  const userId = req.currentUser?.id;
+  const user = await User.findById(userId)
+
+  if (!user) {
+    throw new BadRequestError("User Not Found")
+  }
 
   delete user.password;
-  delete user.socialAuthToken;
   delete user.refreshToken;
   delete user.emailOtp;
   delete user.forgetPasswordOtp;
@@ -17,7 +23,12 @@ export const getUserProfile = async (req: Request, res: Response) => {
 
 export const resetPassword = async (req: Request, res: Response) => {
   const { password } = req.body;
-  const user = req.currentUser;
+  const user = req.userData;
+
+  if (!user) {
+    throw new BadRequestError("User Not Found")
+  }
+
   const salt = await bcrypt.genSalt(10);
   user.password = bcrypt.hashSync(password, salt);
   user.forgetPasswordOtp = { otp: null, expire: null };

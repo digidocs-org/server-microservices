@@ -1,10 +1,12 @@
 import { json } from 'body-parser';
-import { currentUser, App } from '@digidocs/guardian';
+import { App } from '@digidocs/guardian';
 import cookieSession from 'cookie-session';
 
 import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';
 import { AuthRouter } from './auth/routes';
+import passport from 'passport';
+import passportInit from 'auth/services/passport';
 
 export class Application {
     private app: App;
@@ -12,6 +14,7 @@ export class Application {
     constructor() {
         if (process.env.NODE_ENV !== 'test') {
             DatabaseConfig.connect();
+            passportInit()
 
             natsWrapper.connect(
                 process.env.NATS_CLUSTER_ID!,
@@ -38,7 +41,7 @@ export class Application {
                     signed: false,
                     secure: process.env.NODE_ENV !== 'test',
                 }),
-                currentUser,
+                passport.initialize(),
             ]
         );
     }

@@ -5,13 +5,10 @@
     "outDir": "build",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports":true,
-    "baseUrl": "./",                  
+    "baseUrl": "./",                
     "paths": {
-      "auth":["src/auth"],
-      "auth/*":["src/auth/*"],
-      "auth/events":["src/events"],
-      "auth/events/*":["src/events/*"]
-    }
+      "auth/*":["src/auth/*"]
+    },
   },
   "include": [
     "src/**/*.ts",

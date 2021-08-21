@@ -18,14 +18,14 @@ class App {
 
     // Configure Routes
     this.routes.forEach((route, index, array) => {
-      console.log("routes",route)
       this.app.use(route);
     });
 
     // If No route is found
     this.app.all('*', async (req: Request, res: Response) => {
-      console.log("URL",req.url)
-      throw new NotFoundError();
+      // console.log("URL",req.url)
+      // throw new NotFoundError();
+      res.send({success:req.url})
     });
 
     // Error Handler

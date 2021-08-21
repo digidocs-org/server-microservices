@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 export class DatabaseConfig {
   public static async connect() {
@@ -7,5 +7,6 @@ export class DatabaseConfig {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
+    console.log("connected to mongodb")
   }
 }
