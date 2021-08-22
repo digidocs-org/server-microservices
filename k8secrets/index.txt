@@ -5,4 +5,5 @@ kubectl create secret generic refresh-token-exp --from-literal=REFRESH_TOKEN_EXP
 kubectl create secret generic time-based-token-secret --from-literal=TIME_BASED_TOKEN_SECRET=jlkafioejwiojf032i4ukjnfkadf
 kubectl create secret generic google-client-id --from-literal=GOOGLE_CLIENT_ID=223642249214-q6p5o9c977ria389k522vpiao0gbg232.apps.googleusercontent.com
 kubectl create secret generic google-client-secret --from-literal=GOOGLE_CLIENT_SECRET=mM6G0Pz4zJL6ZIpMbzTH17DI
-kubectl create secret generic client-url --from-literal=CLIENT_URL=https://accounts.digidocs.one
+kubectl create secret generic aws-access-key-id --from-literal=AWS_ACCESS_KEY_ID=AKIAU3RO7UKDOP2753EJ
+kubectl create secret generic aws-secret-access-key --from-literal=AWS_SECRET_ACCESS_KEY=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

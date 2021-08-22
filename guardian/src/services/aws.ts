@@ -3,7 +3,7 @@ import {
     PutObjectCommand,
     DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
-import { IUploadOptions, IUploadResponse } from '../types';
+import { IUploadOptions } from '../types';
 
 const S3 = new S3Client({
     region: 'ap-south-1',
