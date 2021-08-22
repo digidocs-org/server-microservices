@@ -3,3 +3,4 @@ export * from './base-publisher';
 export * from './subjects';
 export * from './user-events';
 export * from './email-events'
+export * from './document-events'

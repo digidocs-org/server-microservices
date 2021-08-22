@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { DocumentStatus } from 'document-service/types';
+import { DocumentStatus } from '@digidocs/guardian';
 
 export interface IDocument extends Document {
     name: string
@@ -14,7 +14,8 @@ export interface IDocument extends Document {
     validTill?: string
     timeToSign?: string
     createdAt: string
-    updatedAt: string
+    updatedAt: string,
+    version: number
 }
 
 const documentSchema: Schema = new Schema(

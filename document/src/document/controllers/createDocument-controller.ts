@@ -13,7 +13,9 @@ import {
     BadRequestError,
     parseUploadData
 } from '@digidocs/guardian'
-import { DocumentStatus } from 'document-service/types';
+import { DocumentStatus } from '@digidocs/guardian';
+import { CreateDocumentPublisher } from 'src/events/publishers/create-document-publisher';
+import { natsWrapper } from 'src/nats-wrapper';
 
 export const createDocument = async (req: Request, res: Response) => {
     const ownerId = req.currentUser?.id;
@@ -82,6 +84,21 @@ export const createDocument = async (req: Request, res: Response) => {
                 document: document.id,
                 access: true,
             });
+
+            new CreateDocumentPublisher(natsWrapper.client).publish({
+                name: document.name,
+                message: document.message,
+                inOrder: document.inOrder,
+                publicKeyId: document.publicKeyId,
+                documentId: document.documentId,
+                selfSign: document.selfSign,
+                isDrafts: document.isDrafts,
+                status: document.status,
+                userId: document.userId,
+                validTill: document.validTill,
+                timeToSign: document.timeToSign,
+                version: document.version,
+            })
 
             return res.send({ success: true, data: { id: document.id } });
         })

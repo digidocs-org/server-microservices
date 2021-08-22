@@ -1,8 +1,4 @@
 
-export interface IDocumentCreate{
-    
-}
-
 /**
  * @desc field names that can be added by the user
  */
@@ -26,17 +22,6 @@ export const enum FieldType {
     TEXT = 'TEXT',
     CHECK_BOX = 'CHECK_BOX',
     DATE = 'DATE',
-}
-
-/**
- * @desc document status for doc owner
- */
-export const enum DocumentStatus {
-    COMPLETED = 'COMPLETED',
-    CANCELLED = 'CANCELLED',
-    PENDING = 'PENDING',
-    VOIDED = 'VOIDED',
-    DRAFTS = 'DRAFTS'
 }
 
 /**

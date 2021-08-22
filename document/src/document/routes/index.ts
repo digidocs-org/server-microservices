@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { body } from 'express-validator';
 import { createDocument } from 'document-service/controllers'
 
-export class AuthRouter {
+export class DocumentRouter {
     private static router = Router()
 
     public static route() {
@@ -18,21 +18,6 @@ export class AuthRouter {
             validateRequest,
             currentUser,
             createDocument
-        );
-
-        /**
-         * @Route  POST 'api/v1/document/:id/update'
-         * @Desc   Update a document
-         * @Access Public
-         */
-        this.router.post(
-            '/api/document/:id/update-fields',
-            headerValidators('token'),
-            bodyValidators('actions'),
-            body('actions').isArray().withMessage('actions should be an array!!!'),
-            validateRequest,
-            currentUser,
-            updateFields
         );
 
         /**
@@ -76,15 +61,6 @@ export class AuthRouter {
             indexDocument
         );
 
-        this.router.post(
-            '/api/document/:id/add-recipients',
-            headerValidators('token'),
-            validateRequest,
-            currentUser,
-            hasDocumentAccess,
-            addRecipient
-        );
-
         this.router.delete(
             '/api/document/:id',
             headerValidators('token'),
@@ -93,12 +69,6 @@ export class AuthRouter {
             deleteDocument
         );
 
-        this.router.get(
-            '/api/document/:id/detail',
-            headerValidators('token'),
-            currentUser,
-            hasDocumentAccess,
-            documentDetail
-        );
+        return this.router
     }
 }
