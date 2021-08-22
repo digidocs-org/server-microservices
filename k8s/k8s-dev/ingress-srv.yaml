@@ -14,3 +14,7 @@ spec:
             backend:
               serviceName: auth-srv
               servicePort: 3000
+          - path: /api/document/?(.*)
+            backend:
+              serviceName: document-srv
+              servicePort: 3000

@@ -12,3 +12,6 @@ export * from './middlewares';
 
 // Services
 export * from './services'
+
+//Types
+export * from './types'
