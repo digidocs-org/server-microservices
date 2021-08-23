@@ -18,3 +18,10 @@ export const enum DocumentStatus {
     VOIDED = 'VOIDED',
     DRAFTS = 'DRAFTS'
 }
+
+export interface IEmailOptions {
+    senderEmail: string;
+    clientEmail: string;
+    subject: string;
+    body?: string;
+}

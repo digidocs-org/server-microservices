@@ -1,7 +1,7 @@
 import { headerValidators, bodyValidators, validateRequest, currentUser } from '@digidocs/guardian'
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { createDocument, downloadDocument } from 'document-service/controllers'
+import { createDocument, downloadDocument, sendDocument } from 'document-service/controllers'
 import { hasDocumentAccess } from 'document-service/middlewares/documentAccess';
 
 export class DocumentRouter {
@@ -21,19 +21,19 @@ export class DocumentRouter {
             createDocument
         );
 
-        // /**
-        //  * @Route  POST 'api/v1/document/:id/send'
-        //  * @Desc   Update a document
-        //  * @Access Public
-        //  */
-        // this.router.post(
-        //     '/api/document/:id/send',
-        //     headerValidators('token'),
-        //     validateRequest,
-        //     currentUser,
-        //     hasDocumentAccess,
-        //     sendDocument
-        // );
+        /**
+         * @Route  POST 'api/v1/document/:id/send'
+         * @Desc   Update a document
+         * @Access Public
+         */
+        this.router.post(
+            '/api/document/:id/send',
+            headerValidators('token'),
+            validateRequest,
+            currentUser,
+            hasDocumentAccess,
+            sendDocument
+        );
 
         /**
          * @Route  GET 'api/v1/document/:id/download'
