@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, mongo } from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 /**
  *
  */
@@ -40,6 +41,9 @@ const userSchema: Schema = new Schema(
         }
     }
 );
+
+userSchema.set('versionKey', 'version');
+userSchema.plugin(updateIfCurrentPlugin);
 
 /**
  *

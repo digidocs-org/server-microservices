@@ -5,6 +5,7 @@ import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';
 import { DocumentRouter } from './document/routes';
 import { CreateUserListener } from './events/listeners/user-created-listener';
+import fileUpload from 'express-fileupload';
 
 export class Application {
     private app: App;
@@ -33,7 +34,8 @@ export class Application {
         this.app = new App(
             [DocumentRouter.route()],
             [
-                json()
+                json(),
+                fileUpload()
             ]
         );
     }

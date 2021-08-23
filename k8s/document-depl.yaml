@@ -48,6 +48,12 @@ spec:
                   name: aws-secret-access-key
                   key: AWS_SECRET_ACCESS_KEY
 
+            - name: FILE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: file-key
+                  key: FILE_KEY
+
             - name: CLOUDFRONT_URI
               value: https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com
             

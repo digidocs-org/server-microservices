@@ -7,3 +7,4 @@ kubectl create secret generic google-client-id --from-literal=GOOGLE_CLIENT_ID=2
 kubectl create secret generic google-client-secret --from-literal=GOOGLE_CLIENT_SECRET=mM6G0Pz4zJL6ZIpMbzTH17DI
 kubectl create secret generic aws-access-key-id --from-literal=AWS_ACCESS_KEY_ID=AKIAU3RO7UKDOP2753EJ
 kubectl create secret generic aws-secret-access-key --from-literal=AWS_SECRET_ACCESS_KEY=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
+kubectl create secret generic file-key --from-literal=FILE_KEY=pU9+uZm1KBXOpnl/coMBjKRDPp6wdhLs0sRlNHRKqbc=
