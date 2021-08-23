@@ -1,10 +1,10 @@
 import { json } from 'body-parser';
 import { App } from '@digidocs/guardian';
-import cookieSession from 'cookie-session';
 
 import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';
 import { DocumentRouter } from './document/routes';
+import { CreateUserListener } from './events/listeners/user-created-listener';
 
 export class Application {
     private app: App;
@@ -16,7 +16,9 @@ export class Application {
                 process.env.NATS_CLUSTER_ID!,
                 process.env.NATS_CLIENT_ID!,
                 process.env.NATS_URI!
-            );
+            ).then(() => {
+                new CreateUserListener(natsWrapper.client).listen()
+            });
 
             natsWrapper.client.on('close', () => {
                 console.log('NATS connection closed.');
@@ -31,11 +33,7 @@ export class Application {
         this.app = new App(
             [DocumentRouter.route()],
             [
-                json(),
-                cookieSession({
-                    signed: false,
-                    secure: process.env.NODE_ENV !== 'test',
-                }),
+                json()
             ]
         );
     }

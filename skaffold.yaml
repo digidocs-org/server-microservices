@@ -24,3 +24,11 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
+    - image: digidocs/document
+      context: ./
+      docker:
+        dockerfile: ./document/Dockerfile
+      sync:
+        manual:
+          - src: 'src/***/*.ts'
+            dest: .

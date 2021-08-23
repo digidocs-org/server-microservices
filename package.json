@@ -8,7 +8,8 @@
   "scripts": {
     "clean": "docker system prune -a",
     "start-auth":"yarn workspace @digidocs/auth start",
-    "start-email":"yarn workspace @digidocs/email start"
+    "start-email":"yarn workspace @digidocs/email start",
+    "start-document":"yarn workspace @digidocs/document start"
   },
   "private": true,
   "workspaces": [

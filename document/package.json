@@ -1,7 +1,7 @@
 {
   "name": "@digidocs/document",
   "version": "1.0.0",
-  "description": "Authentication service",
+  "description": "Document service",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

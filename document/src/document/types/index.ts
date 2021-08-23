@@ -48,3 +48,5 @@ export const enum ActionStatus {
     DECLINED = 'DECLINED',
     RECEIVED = 'RECEIVED',
 }
+
+export const queueGroupName = "document-service"

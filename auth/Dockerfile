@@ -8,6 +8,7 @@ COPY guardian guardian
 COPY auth auth
 COPY package.json .
 COPY yarn.lock .
+COPY .npmrc .npmrc
 
 RUN yarn install --pure-lockfile --non-interactive --cache-folder ./ycache; rm -rf ./ycache
 

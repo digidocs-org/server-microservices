@@ -20,54 +20,54 @@ export class DocumentRouter {
             createDocument
         );
 
-        /**
-         * @Route  POST 'api/v1/document/:id/send'
-         * @Desc   Update a document
-         * @Access Public
-         */
-        this.router.post(
-            '/api/document/:id/send',
-            headerValidators('token'),
-            validateRequest,
-            currentUser,
-            hasDocumentAccess,
-            sendDocument
-        );
+        // /**
+        //  * @Route  POST 'api/v1/document/:id/send'
+        //  * @Desc   Update a document
+        //  * @Access Public
+        //  */
+        // this.router.post(
+        //     '/api/document/:id/send',
+        //     headerValidators('token'),
+        //     validateRequest,
+        //     currentUser,
+        //     hasDocumentAccess,
+        //     sendDocument
+        // );
 
-        /**
-         * @Route  GET 'api/v1/document/:id/download'
-         * @Desc   download a document
-         * @Access Public
-         */
-        this.router.get(
-            '/api/document/:id/download',
-            headerValidators('token'),
-            validateRequest,
-            currentUser,
-            hasDocumentAccess,
-            downloadDocument
-        );
+        // /**
+        //  * @Route  GET 'api/v1/document/:id/download'
+        //  * @Desc   download a document
+        //  * @Access Public
+        //  */
+        // this.router.get(
+        //     '/api/document/:id/download',
+        //     headerValidators('token'),
+        //     validateRequest,
+        //     currentUser,
+        //     hasDocumentAccess,
+        //     downloadDocument
+        // );
 
-        /**
-         * @Route  GET 'api/v1/document/index'
-         * @Desc   index all the documents
-         * @Access Public
-         */
-        this.router.get(
-            '/api/document/index',
-            headerValidators('token'),
-            validateRequest,
-            currentUser,
-            indexDocument
-        );
+        // /**
+        //  * @Route  GET 'api/v1/document/index'
+        //  * @Desc   index all the documents
+        //  * @Access Public
+        //  */
+        // this.router.get(
+        //     '/api/document/index',
+        //     headerValidators('token'),
+        //     validateRequest,
+        //     currentUser,
+        //     indexDocument
+        // );
 
-        this.router.delete(
-            '/api/document/:id',
-            headerValidators('token'),
-            currentUser,
-            hasDocumentAccess,
-            deleteDocument
-        );
+        // this.router.delete(
+        //     '/api/document/:id',
+        //     headerValidators('token'),
+        //     currentUser,
+        //     hasDocumentAccess,
+        //     deleteDocument
+        // );
 
         return this.router
     }

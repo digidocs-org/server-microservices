@@ -19,10 +19,5 @@ if (!process.env.NATS_URI) {
 if (!process.env.NATS_CLUSTER_ID) {
     throw new Error('NATS_CLUSTER_ID is required.');
 }
-
-if (!process.env.TIME_BASED_TOKEN_SECRET) {
-    throw new Error('NATS_CLUSTER_ID is required.');
-}
-
 const application = new Application();
 application.start(3000);
