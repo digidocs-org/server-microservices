@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { DocumentStatus } from '@digidocs/guardian';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 export interface IDocument extends Document {
     name: string
@@ -41,5 +42,8 @@ const documentSchema: Schema = new Schema(
         }
     }
 );
+
+documentSchema.set('versionKey', 'version');
+documentSchema.plugin(updateIfCurrentPlugin);
 
 export default mongoose.model<IDocument>('document', documentSchema);

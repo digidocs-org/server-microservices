@@ -1,7 +1,8 @@
 import { headerValidators, bodyValidators, validateRequest, currentUser } from '@digidocs/guardian'
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { createDocument } from 'document-service/controllers'
+import { createDocument, downloadDocument } from 'document-service/controllers'
+import { hasDocumentAccess } from 'document-service/middlewares/documentAccess';
 
 export class DocumentRouter {
     private static router = Router()
@@ -34,19 +35,19 @@ export class DocumentRouter {
         //     sendDocument
         // );
 
-        // /**
-        //  * @Route  GET 'api/v1/document/:id/download'
-        //  * @Desc   download a document
-        //  * @Access Public
-        //  */
-        // this.router.get(
-        //     '/api/document/:id/download',
-        //     headerValidators('token'),
-        //     validateRequest,
-        //     currentUser,
-        //     hasDocumentAccess,
-        //     downloadDocument
-        // );
+        /**
+         * @Route  GET 'api/v1/document/:id/download'
+         * @Desc   download a document
+         * @Access Public
+         */
+        this.router.get(
+            '/api/document/:id/download',
+            headerValidators('token'),
+            validateRequest,
+            currentUser,
+            hasDocumentAccess,
+            downloadDocument
+        );
 
         // /**
         //  * @Route  GET 'api/v1/document/index'
