@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { IDocument } from 'document-service/models';
 import { BadRequestError, decryptDocument, fetchData } from '@digidocs/guardian';
 
-export const downloadDocument = async (req: Request, res: Response, next:NextFunction) => {
+export const downloadDocument = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const document = req.documentUserMap?.document as IDocument;
 

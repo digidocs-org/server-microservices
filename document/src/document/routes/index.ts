@@ -1,7 +1,7 @@
 import { headerValidators, bodyValidators, validateRequest, currentUser } from '@digidocs/guardian'
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { createDocument, downloadDocument, sendDocument } from 'document-service/controllers'
+import { createDocument, deleteDocument, downloadDocument, indexDocument, sendDocument } from 'document-service/controllers'
 import { hasDocumentAccess } from 'document-service/middlewares/documentAccess';
 
 export class DocumentRouter {
@@ -49,26 +49,31 @@ export class DocumentRouter {
             downloadDocument
         );
 
-        // /**
-        //  * @Route  GET 'api/v1/document/index'
-        //  * @Desc   index all the documents
-        //  * @Access Public
-        //  */
-        // this.router.get(
-        //     '/api/document/index',
-        //     headerValidators('token'),
-        //     validateRequest,
-        //     currentUser,
-        //     indexDocument
-        // );
+        /**
+         * @Route  GET 'api/v1/document/index'
+         * @Desc   index all the documents
+         * @Access Public
+         */
+        this.router.get(
+            '/api/document',
+            headerValidators('token'),
+            validateRequest,
+            currentUser,
+            indexDocument
+        );
 
-        // this.router.delete(
-        //     '/api/document/:id',
-        //     headerValidators('token'),
-        //     currentUser,
-        //     hasDocumentAccess,
-        //     deleteDocument
-        // );
+        /**
+         * @Route  GET 'api/v1/document/:id'
+         * @Desc   delete specific document
+         * @Access Private
+         */
+        this.router.delete(
+            '/api/document/:id',
+            headerValidators('token'),
+            currentUser,
+            hasDocumentAccess,
+            deleteDocument
+        );
 
         return this.router
     }
