@@ -18,3 +18,7 @@ spec:
             backend:
               serviceName: document-srv
               servicePort: 3000
+          - path: /api/esign/?(.*)
+            backend:
+              serviceName: signing-srv
+              servicePort: 3000

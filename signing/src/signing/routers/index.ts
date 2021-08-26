@@ -1,6 +1,6 @@
 import { headerValidators, bodyValidators, validateRequest, currentUser } from '@digidocs/guardian'
 import { Router } from 'express';
-import { aadharEsignRequest } from 'signing-service/controllers';
+import { aadharEsignRequest, esignCallback } from 'signing-service/controllers';
 
 export class SigningRouter {
     private static router = Router()
@@ -21,15 +21,15 @@ export class SigningRouter {
         );
 
 
-        // /**
-        //  * @Route  POST 'api/v1/sign/aadhar-esign/callback'
-        //  * @Desc   Callback route for signing document
-        //  * @Access Private
-        //  */
-        // this.router.post(
-        //     '/api/esign/aadhar/callback',
-        //     esignCallback
-        // );
+        /**
+         * @Route  POST 'api/v1/sign/aadhar-esign/callback'
+         * @Desc   Callback route for signing document
+         * @Access Private
+         */
+        this.router.post(
+            '/api/esign/aadhar/callback',
+            esignCallback
+        );
 
         // /**
         //  * @Route  POST 'api/v1/sign/aadhar-esign/redirect'

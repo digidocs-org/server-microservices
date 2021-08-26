@@ -59,6 +59,21 @@ spec:
             
             - name: AWS_S3_BUCKET
               value: digidocs-local-bucket
+
+            - name: ASP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: asp-id
+                  key: ASP_ID
+
+            - name: PFX_FILE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: pfx-file-pass
+                  key: PFX_FILE_PASS
+
+            - name: ESIGN_RESPONSE_URL
+              value: https://digidocs.dev/api/esign/aadhar/callback
 ---
 apiVersion: v1
 kind: Service

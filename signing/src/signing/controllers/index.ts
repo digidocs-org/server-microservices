@@ -1,2 +1,2 @@
-export * from './aadharEsignCallback-controller'
+export * from './aadhar-esign-callback-controller'
 export * from './aadharEsignRequest-controller'
