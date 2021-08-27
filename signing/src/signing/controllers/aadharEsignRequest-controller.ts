@@ -42,6 +42,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             })
         }
     } catch (error) {
-        throw new BadRequestError("Error while parsing error!!!")
+        throw new BadRequestError("Error while parsing data!!!")
     }
 }

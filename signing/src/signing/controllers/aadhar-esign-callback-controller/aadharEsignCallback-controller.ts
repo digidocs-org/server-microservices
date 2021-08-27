@@ -27,7 +27,6 @@ export const esignCallback = async (req: Request, res: Response) => {
 
     const encryptedFile = await fetchData(documentURL);
     const publicKeyBuffer = await fetchData(publicKeyURL);
-    const signatureBuffer = await fetchData(signatureURL);
 
     const publicKey = publicKeyBuffer.toString();
 
@@ -37,10 +36,9 @@ export const esignCallback = async (req: Request, res: Response) => {
 
 
 
-    const esignRequest = {
-        eSignXMLData: espXmlResponse,
-        pdfBuffer: decryptedFile.toString("base64"),
-        signImageBuffer: signatureBuffer.toString("base64"),
+    const data = {
+        pdfFile: `./temp-${tempFileName}/unsigned.pdf`,
+        signImageFile: '',
         serverTime: "15",
         pageNumberToInsertStamp: "1",
         nameToShowOnStamp: "Naman Singh",
@@ -49,13 +47,32 @@ export const esignCallback = async (req: Request, res: Response) => {
         xCoordinateOfStamp: "40",
         yCoordinateOfStamp: "60",
         stampWidth: "150",
-        stampHeight: "50"
+        stampHeight: "100",
+        finalPdfPath: `./temp-${tempFileName}`
     }
 
     try {
         await writeFile(`temp-${tempFileName}/unsigned.pdf`, decryptedFile, "base64")
 
-        const { stdout, stderr } = await exec(`java -jar ./java-utility-jar/eSign2.1 2 ${espXmlResponse} temp-${tempFileName}/unsigned.pdf "./tick.jpeg" 15 1 "Ganesh" "Pune" "Security" 40 60 150 50 "" "" 2>&1`)
+        const { stdout, stderr } = await exec(`java -jar 
+        ./java-utility-jar/eSign2.1 2 
+        ${espXmlResponse} 
+        ${data.pdfFile}
+        "./tick.jpeg" 
+        ${data.serverTime} 
+        ${data.pageNumberToInsertStamp}
+        ${data.nameToShowOnStamp}
+        ${data.locationToShowOnStamp}
+        ${data.reasonToShowOnStamp}
+        ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}
+        ${data.stampWidth} ${data.stampHeight}
+        "" 
+        ${data.finalPdfPath} 2>&1`)
+
+        if (stderr) {
+            console.log(stderr)
+            return res.redirect("redirect?type=failed")
+        }
 
         return res.redirect("redirect?type=failed")
     } catch (error) {
