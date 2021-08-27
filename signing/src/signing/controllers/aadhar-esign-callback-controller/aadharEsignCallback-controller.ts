@@ -10,7 +10,9 @@ const exec = promisify(require('child_process').exec);
 
 
 export const esignCallback = async (req: Request, res: Response) => {
+    console.log(req.body)
     const espXmlResponse = req.body.msg
+    console.log(espXmlResponse)
     const response = verifyEsignResponse(espXmlResponse)
     if (response?.actionType == EsignResponse.CANCELLED) {
         return res.redirect("redirect?type=cancelled")

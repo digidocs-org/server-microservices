@@ -9,13 +9,15 @@
     "clean": "docker system prune -a",
     "start-auth":"yarn workspace @digidocs/auth start",
     "start-email":"yarn workspace @digidocs/email start",
-    "start-document":"yarn workspace @digidocs/document start"
+    "start-document":"yarn workspace @digidocs/document start",
+    "start-signing":"yarn workspace @digidocs/signing start"
   },
   "private": true,
   "workspaces": [
     "auth",
     "guardian",
     "email",
-    "document"
+    "document",
+    "signing"
   ]
 }

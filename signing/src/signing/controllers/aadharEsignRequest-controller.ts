@@ -28,7 +28,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 
     try {
         if (decryptedFile) {
-            const pfxFilePath = path.resolve(__dirname + "../key/digidocs-sign.pfx");
+            const pfxFilePath = path.resolve(__dirname + "/../key/digidocs-sign.pfx");
             const pfxFile = fs.readFileSync(pfxFilePath);
             const fileChecksum = generateChecksum(decryptedFile, "hex");
             const xml = generateXml({
@@ -37,11 +37,12 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
                 checksum: fileChecksum
             })
             const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml })
-            res.render('esign-views/esignRequest', {
+            res.render('esignRequest', {
                 esignRequestXMLData: signedXML
             })
         }
     } catch (error) {
+        console.log(error)
         throw new BadRequestError("Error while parsing data!!!")
     }
 }

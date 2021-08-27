@@ -32,3 +32,11 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
+    - image: digidocs/signing
+      context: ./
+      docker:
+        dockerfile: ./signing/Dockerfile
+      sync:
+        manual:
+          - src: 'src/***/*.ts'
+            dest: .

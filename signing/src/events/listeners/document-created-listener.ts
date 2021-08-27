@@ -3,7 +3,7 @@ import { queueGroupName } from 'signing-service/types'
 import { Message } from 'node-nats-streaming';
 import Document from 'signing-service/models/document'
 
-export class CreateUserListener extends Listener<CreateDocumentEvent>{
+export class CreateDocumentListener extends Listener<CreateDocumentEvent>{
     subject: Subjects.CreateDocument = Subjects.CreateDocument;
     queueGroupName = queueGroupName;
 
