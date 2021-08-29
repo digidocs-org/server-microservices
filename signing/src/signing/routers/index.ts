@@ -14,7 +14,7 @@ export class SigningRouter {
         * @Access Private
         */
         this.router.get(
-            '/api/esign/aadhar/:id',
+            '/api/esign/aadhar/request/:id',
             // headerValidators('token'),
             // validateRequest,
             // currentUser,

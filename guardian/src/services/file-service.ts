@@ -1,7 +1,6 @@
 import { PDFDocument } from 'pdf-lib';
 import fetch from 'node-fetch';
 import fs from 'fs/promises'
-import { BaseEncodingOptions } from 'fs'
 import { dirname as getDirName } from 'path'
 
 export const checkForBase64String = (str: string) =>
@@ -43,7 +42,7 @@ export const writeFile = async (path: string, contents: any, type: BufferEncodin
 
 export const deleteFile = async (path: string) => {
     try {
-        await fs.rmdir(path, { recursive: true })
+        await fs.rmdir(getDirName(path), { recursive: true })
     } catch (error) {
         throw error
     }

@@ -1,18 +1,17 @@
 import { Request, Response } from 'express';
 import Document from 'signing-service/models/document'
-import { decryptDocument, fetchData, writeFile } from '@digidocs/guardian';
+import { decryptDocument, deleteFile, fetchData, writeFile } from '@digidocs/guardian';
 import { verifyEsignResponse } from 'signing-service/utils';
 import { EsignResponse } from 'signing-service/types';
 import { v4 as uuidv4 } from 'uuid'
 import { promisify } from 'util'
+import path, { dirname as getDirName } from 'path'
 
-const exec = promisify(require('child_process').exec);
-
+const exec = promisify(require('child_process').exec)
+const convertToString = (str: string) => JSON.stringify(str)
 
 export const esignCallback = async (req: Request, res: Response) => {
-    console.log(req.body)
     const espXmlResponse = req.body.msg
-    console.log(espXmlResponse)
     const response = verifyEsignResponse(espXmlResponse)
     if (response?.actionType == EsignResponse.CANCELLED) {
         return res.redirect("redirect?type=cancelled")
@@ -20,64 +19,49 @@ export const esignCallback = async (req: Request, res: Response) => {
     const documentId = req.query.id
     const document = await Document.findById(documentId)
     if (!document) {
+        console.log("not found document")
         return res.redirect("redirect?type=failed")
     }
 
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
     const publicKeyURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/keys/${document.publicKeyId}`;
-    const signatureURL = `${process.env.CLOUDFRONT_URI}/signature/signature.jpeg`
 
     const encryptedFile = await fetchData(documentURL);
     const publicKeyBuffer = await fetchData(publicKeyURL);
 
     const publicKey = publicKeyBuffer.toString();
-
     const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
     const tempFileName = uuidv4()
-
-
+    const jarFilePath = `${__dirname}/"java-utility-jar/esign-java-utility.jar"`;
+    const unsignedFilePath = `${__dirname}/temp-${tempFileName}/unsigned.pdf`;
+    const signedFilePath = `${__dirname}/temp-${tempFileName}/signed.pdf`;
+    const signImageFilePath = `${__dirname}/sign.jpeg`
 
     const data = {
-        pdfFile: `./temp-${tempFileName}/unsigned.pdf`,
-        signImageFile: '',
-        serverTime: "15",
+        esignResponse: convertToString(espXmlResponse),
+        tempUnsignedPdfPath: convertToString(unsignedFilePath),
+        tempSignedPdfPath: convertToString(signedFilePath),
+        signImageFile: convertToString(signImageFilePath),
+        nameToShowOnStamp: convertToString("Naman Singh"),
+        locationToShowOnStamp: convertToString("India"),
+        reasonToShowOnStamp: convertToString("Aadhar E-signature"),
         pageNumberToInsertStamp: "1",
-        nameToShowOnStamp: "Naman Singh",
-        locationToShowOnStamp: "India",
-        reasonToShowOnStamp: "Aadhar E-signature",
         xCoordinateOfStamp: "40",
         yCoordinateOfStamp: "60",
-        stampWidth: "150",
-        stampHeight: "100",
-        finalPdfPath: `./temp-${tempFileName}`
     }
 
     try {
-        await writeFile(`temp-${tempFileName}/unsigned.pdf`, decryptedFile, "base64")
-
-        const { stdout, stderr } = await exec(`java -jar 
-        ./java-utility-jar/eSign2.1 2 
-        ${espXmlResponse} 
-        ${data.pdfFile}
-        "./tick.jpeg" 
-        ${data.serverTime} 
-        ${data.pageNumberToInsertStamp}
-        ${data.nameToShowOnStamp}
-        ${data.locationToShowOnStamp}
-        ${data.reasonToShowOnStamp}
-        ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}
-        ${data.stampWidth} ${data.stampHeight}
-        "" 
-        ${data.finalPdfPath} 2>&1`)
-
+        await writeFile(unsignedFilePath, decryptedFile, "base64")
+        const { stdout, stderr } = exec(`java -jar ${jarFilePath} ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}`)
         if (stderr) {
-            console.log(stderr)
+            deleteFile(signedFilePath)
             return res.redirect("redirect?type=failed")
         }
 
         return res.redirect("redirect?type=failed")
     } catch (error) {
+        console.log(error)
         return res.redirect("redirect?type=failed")
     }
 }
