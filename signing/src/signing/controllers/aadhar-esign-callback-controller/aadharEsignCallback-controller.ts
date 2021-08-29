@@ -53,11 +53,12 @@ export const esignCallback = async (req: Request, res: Response) => {
 
     try {
         await writeFile(unsignedFilePath, decryptedFile, "base64")
-        const { stdout, stderr } = exec(`java -jar ${jarFilePath} ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}`)
+        const { stdout, stderr } = await exec(`java -jar ${jarFilePath} ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}`)
         if (stderr) {
             deleteFile(signedFilePath)
             return res.redirect("redirect?type=failed")
         }
+        deleteFile(signedFilePath)
 
         return res.redirect("redirect?type=failed")
     } catch (error) {
