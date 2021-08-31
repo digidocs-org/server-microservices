@@ -132,9 +132,3 @@ kubectl apply -f certificate.yaml
 # check the cert has been issued 
 
 kubectl describe certificate example-app
-
-# TLS created as a secret
-kubectl get secrets
-NAME                  TYPE                                  DATA   AGE
-example-app-tls       kubernetes.io/tls                     2      84m
-```
