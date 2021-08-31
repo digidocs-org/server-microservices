@@ -6,7 +6,7 @@
 
 You can find the latest release for `cert-manager` on their [GitHub Releases page](https://github.com/jetstack/cert-manager/) <br/>
 
-For this demo, I will use K8s 1.19 and `cert-manager` [v1.0.4](https://github.com/jetstack/cert-manager/releases/tag/v1.0.4)
+For this demo, I will use K8s 1.19 and `cert-manager` [v1.5.3](https://github.com/jetstack/cert-manager/releases/tag/v1.5.3)
 
 ```
 
@@ -30,13 +30,13 @@ certmanager-control-plane   Ready    master   3m6s   v1.19.1
 # get cert-manager 
 
 cd kubernetes/cert-manager/
-curl -LO https://github.com/jetstack/cert-manager/releases/download/v1.0.4/cert-manager.yaml
+curl -LO https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml
 
-mv cert-manager.yaml cert-manager-1.0.4.yaml
+mv cert-manager.yaml cert-manager-1.5.3.yaml
 
 # install cert-manager 
 
-kubectl apply --validate=false -f cert-manager-1.0.4.yaml
+kubectl apply --validate=false -f cert-manager-1.5.3.yaml
 ```
 
 ## Cert Manager Resources
