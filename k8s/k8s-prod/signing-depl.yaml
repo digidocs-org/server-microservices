@@ -17,7 +17,7 @@ spec:
           image: asia.gcr.io/earnest-reactor-324513/signing
           env:
             - name: MONGO_URI
-              value: mongodb://host.docker.internal/signing
+              value: mongodb+srv://admin:MbKpGWDVO7HHD3BY@digidocs-cluster.1rbi3.mongodb.net/signing
 
             - name: NATS_CLIENT_ID
               valueFrom:
