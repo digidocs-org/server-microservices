@@ -10,7 +10,9 @@
     "start-auth":"yarn workspace @digidocs/auth start",
     "start-email":"yarn workspace @digidocs/email start",
     "start-document":"yarn workspace @digidocs/document start",
-    "start-signing":"yarn workspace @digidocs/signing start"
+    "start-signing":"yarn workspace @digidocs/signing start",
+    "start-dev": "yarn workspace @digidocs/skaffold skaffold-dev",
+    "start-prod": "yarn workspace @digidocs/skaffold skaffold-prod"
   },
   "private": true,
   "workspaces": [
@@ -18,6 +20,7 @@
     "guardian",
     "email",
     "document",
-    "signing"
+    "signing",
+    "skaffold"
   ]
 }

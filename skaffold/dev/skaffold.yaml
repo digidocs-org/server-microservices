@@ -3,13 +3,13 @@ kind: Config
 deploy:
   kubectl:
     manifests:
-      - ./k8s/*
+      - ../../k8s/k8s-dev/*
 build:
   local:
     push: false
   artifacts:
     - image: digidocs/auth
-      context: ./
+      context: ../../
       docker:
         dockerfile: ./auth/Dockerfile
       sync:
@@ -17,7 +17,7 @@ build:
           - src: 'src/***/*.ts'
             dest: .
     - image: digidocs/email
-      context: ./
+      context: ../../
       docker:
         dockerfile: ./email/Dockerfile
       sync:
@@ -25,7 +25,7 @@ build:
           - src: 'src/***/*.ts'
             dest: .
     - image: digidocs/document
-      context: ./
+      context: ../../
       docker:
         dockerfile: ./document/Dockerfile
       sync:
@@ -33,7 +33,7 @@ build:
           - src: 'src/***/*.ts'
             dest: .
     - image: digidocs/signing
-      context: ./
+      context: ../../
       docker:
         dockerfile: ./signing/Dockerfile
       sync:

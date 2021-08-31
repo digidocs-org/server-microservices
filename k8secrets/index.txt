@@ -10,3 +10,4 @@ kubectl create secret generic aws-secret-access-key --from-literal=AWS_SECRET_AC
 kubectl create secret generic file-key --from-literal=FILE_KEY=pU9+uZm1KBXOpnl/coMBjKRDPp6wdhLs0sRlNHRKqbc=
 kubectl create secret generic asp-id --from-literal=ASP_ID=ASPDTPLUAT004911
 kubectl create secret generic pfx-file-pass --from-literal=PFX_FILE_PASS=123456
+kubectl create secret generic client-url --from-literal=CLIENT_URL=https://accounts.digidocs.one

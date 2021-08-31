@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: asia.gcr.io/earnest-reactor-324513/auth
+          env:
+            - name: MONGO_URI
+              value: mongodb://host.docker.internal/authentication
+
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name 
+
+            - name: NATS_URI
+              value: 'http://nats-srv:4222'
+
+            - name: NATS_CLUSTER_ID
+              value: digidocs
+
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: access-token-secret
+                  key: ACCESS_TOKEN_SECRET
+
+            - name: ACCESS_TOKEN_EXP
+              valueFrom:
+                secretKeyRef:
+                  name: access-token-exp
+                  key: ACCESS_TOKEN_EXP
+
+            - name: REFRESH_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: refresh-token-secret
+                  key: REFRESH_TOKEN_SECRET
+
+            - name: REFRESH_TOKEN_EXP
+              valueFrom:
+                secretKeyRef:
+                  name: refresh-token-exp
+                  key: REFRESH_TOKEN_EXP
+
+            - name: TIME_BASED_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: time-based-token-secret
+                  key: TIME_BASED_TOKEN_SECRET
+
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-id
+                  key: GOOGLE_CLIENT_ID
+
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-secret
+                  key: GOOGLE_CLIENT_SECRET
+
+            - name: CLIENT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: client-url
+                  key: CLIENT_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

@@ -58,8 +58,8 @@ export const esignCallback = async (req: Request, res: Response) => {
             deleteFile(signedFilePath)
             return res.redirect("redirect?type=failed")
         }
+        
         deleteFile(signedFilePath)
-
         return res.redirect("redirect?type=failed")
     } catch (error) {
         console.log(error)
