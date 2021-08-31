@@ -12,6 +12,7 @@ const convertToString = (str: string) => JSON.stringify(str)
 
 export const esignCallback = async (req: Request, res: Response) => {
     const espXmlResponse = req.body.msg
+    console.log(req.body)
     const response = verifyEsignResponse(espXmlResponse)
     if (response?.actionType == EsignResponse.CANCELLED) {
         return res.redirect("redirect?type=cancelled")

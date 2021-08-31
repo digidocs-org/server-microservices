@@ -1,5 +1,7 @@
-import { json } from 'body-parser';
+import express from 'express'
 import { App } from '@digidocs/guardian';
+import cors from 'cors'
+import fileUpload from 'express-fileupload';
 
 import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';
@@ -36,7 +38,10 @@ export class Application {
         this.app = new App(
             [SigningRouter.route()],
             [
-                json()
+                cors(),
+                express.urlencoded({ extended: true }),
+                express.json(),
+                fileUpload()
             ],
             [
                 {
