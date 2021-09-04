@@ -5,12 +5,8 @@ deploy:
     manifests:
       - ../../k8s/k8s-prod/*
 build:
-  # local:
-  #   push: false
-  googleCloudBuild:
-    projectId: earnest-reactor-324513
   artifacts:
-    - image: asia.gcr.io/earnest-reactor-324513/auth
+    - image: registry.digitalocean.com/digidocs/auth
       context: ../../
       docker:
         dockerfile: ./auth/Dockerfile
@@ -18,7 +14,7 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
-    - image: asia.gcr.io/earnest-reactor-324513/email
+    - image: registry.digitalocean.com/digidocs/email
       context: ../../
       docker:
         dockerfile: ./email/Dockerfile
@@ -26,7 +22,7 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
-    - image: asia.gcr.io/earnest-reactor-324513/document
+    - image: registry.digitalocean.com/digidocs/document
       context: ../../
       docker:
         dockerfile: ./document/Dockerfile
@@ -34,7 +30,7 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
-    - image: asia.gcr.io/earnest-reactor-324513/signing
+    - image: registry.digitalocean.com/digidocs/signing
       context: ../../
       docker:
         dockerfile: ./signing/Dockerfile

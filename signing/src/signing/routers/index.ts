@@ -2,6 +2,7 @@ import { headerValidators, bodyValidators, validateRequest, currentUser } from '
 import { Router } from 'express';
 import { aadharEsignRequest, esignCallback } from 'signing-service/controllers';
 import { redirectionHandler } from 'signing-service/controllers/redirectionHandle-controller';
+import {digitalSignRequest} from 'signing-service/controllers/digitalSignRequest-controller'
 
 export class SigningRouter {
     private static router = Router()
@@ -40,6 +41,16 @@ export class SigningRouter {
         this.router.get(
             '/api/esign/aadhar/redirect',
             redirectionHandler
+        )
+
+        /**
+         * @Route  POST 'api/v1/sign/aadhar-esign/redirect'
+         * @Desc   redirect route for validating signing
+         * @Access Private
+         */
+         this.router.post(
+            '/api/esign/digi-sign/:id',
+            digitalSignRequest
         )
 
         return this.router

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: asia.gcr.io/earnest-reactor-324513/auth
+          image: registry.digitalocean.com/digidocs/auth
           env:
             - name: MONGO_URI
               value: mongodb+srv://admin:MbKpGWDVO7HHD3BY@digidocs-cluster.1rbi3.mongodb.net/authentication

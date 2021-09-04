@@ -36,7 +36,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
                 responseUrl: `${process.env.ESIGN_RESPONSE_URL!}?id=${documentId}`,
                 checksum: fileChecksum
             })
-            const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml })
+            const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml, rootElementName: 'Esign' })
             res.render('esignRequest', {
                 esignRequestXMLData: signedXML
             })

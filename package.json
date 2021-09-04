@@ -12,7 +12,7 @@
     "start-document":"yarn workspace @digidocs/document start",
     "start-signing":"yarn workspace @digidocs/signing start",
     "start-dev": "yarn workspace @digidocs/skaffold skaffold-dev",
-    "start-prod": "yarn workspace @digidocs/skaffold skaffold-prod"
+    "start-prod": "yarn workspace @digidocs/k8s install-certis && yarn workspace @digidocs/skaffold skaffold-prod"
   },
   "private": true,
   "workspaces": [
@@ -21,6 +21,7 @@
     "email",
     "document",
     "signing",
-    "skaffold"
+    "skaffold",
+    "k8s"
   ]
 }

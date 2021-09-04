@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: email
-          image: asia.gcr.io/earnest-reactor-324513/email
+          image: registry.digitalocean.com/digidocs/email
           env:
             - name: NODEMAILER_EMAIL
               value: 'notifications@digidocsapp.com'
