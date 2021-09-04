@@ -10,14 +10,12 @@ import {verifyEsignResponse} from 'signing-service/utils';
 import {EsignResponse} from 'signing-service/types';
 import {v4 as uuidv4} from 'uuid';
 import {promisify} from 'util';
-import path, {dirname as getDirName} from 'path';
 
 const exec = promisify(require('child_process').exec);
 const convertToString = (str: string) => JSON.stringify(str);
 
 export const esignCallback = async (req: Request, res: Response) => {
   const espXmlResponse = req.body.msg;
-  console.log(req.body);
   const response = verifyEsignResponse(espXmlResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
     return res.redirect('redirect?type=cancelled');
@@ -71,6 +69,7 @@ export const esignCallback = async (req: Request, res: Response) => {
     return res.redirect('redirect?type=failed');
   } catch (error) {
     console.log(error);
+    deleteFile(signedFilePath);
     return res.redirect('redirect?type=failed');
   }
 };
