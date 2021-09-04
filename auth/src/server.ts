@@ -1,5 +1,9 @@
 import {Application} from './app-config';
 
+if (!process.env.PORT) {
+  throw new Error('PORT is required.');
+}
+
 if (!process.env.ACCESS_TOKEN_SECRET) {
   throw new Error('JWT_KEY is required.');
 }
@@ -21,8 +25,8 @@ if (!process.env.NATS_CLUSTER_ID) {
 }
 
 if (!process.env.TIME_BASED_TOKEN_SECRET) {
-    throw new Error('NATS_CLUSTER_ID is required.');
-  }
+  throw new Error('NATS_CLUSTER_ID is required.');
+}
 
 const application = new Application();
-application.start(3000);
+application.start(parseInt(process.env.PORT));
