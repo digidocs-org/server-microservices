@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esign Request</title>
+</head>
+
+<body>
+    <form id="ASPRequestForm" name="URL" method="POST"
+        action="https://pregw.esign.egov-nsdl.com/nsdl-esp/authenticate/esign-doc/" enctype="multipart/form-data">
+        <input type="hidden" name="msg" value='<%=esignRequestXMLData %>' />
+    </form>
+    <script>
+        window.addEventListener("load", () => {
+            document.getElementById("ASPRequestForm").submit();
+        })
+    </script>
+</body>
+
+</html>

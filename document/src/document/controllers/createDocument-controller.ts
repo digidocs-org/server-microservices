@@ -86,6 +86,7 @@ export const createDocument = async (req: Request, res: Response) => {
             });
 
             new CreateDocumentPublisher(natsWrapper.client).publish({
+                id: document.id,
                 name: document.name,
                 message: document.message,
                 inOrder: document.inOrder,

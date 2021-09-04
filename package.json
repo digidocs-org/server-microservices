@@ -14,13 +14,18 @@
     "start-nats": "docker run -p 4222:4222 -p 8222:8222 nats-streaming -p 8222 -m 8222 -hbi 5s -hbt 5s -hbf 2 -SD -cid digidocs",
     "start-auth-dev": "dotenv -e ./auth/.env yarn workspace @digidocs/auth start",
     "start-email-dev": "dotenv -e ./email/.env yarn workspace @digidocs/email start",
-    "start-document-dev": "dotenv -e ./document/.env yarn workspace @digidocs/document start"
+    "start-document-dev": "dotenv -e ./document/.env yarn workspace @digidocs/document start",
+    "start-signing":"yarn workspace @digidocs/signing start",
+    "start-stage": "yarn workspace @digidocs/skaffold skaffold-dev",
+    "start-prod": "yarn workspace @digidocs/skaffold skaffold-prod"
   },
   "private": true,
   "workspaces": [
     "auth",
     "guardian",
     "email",
-    "document"
+    "document",
+    "signing",
+    "skaffold"
   ]
 }

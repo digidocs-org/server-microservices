@@ -1,5 +1,5 @@
-import { Publisher, Subjects, CreateDocument } from '@digidocs/guardian'
+import { Publisher, Subjects, CreateDocumentEvent } from '@digidocs/guardian'
 
-export class CreateDocumentPublisher extends Publisher<CreateDocument> {
+export class CreateDocumentPublisher extends Publisher<CreateDocumentEvent> {
     subject: Subjects.CreateDocument = Subjects.CreateDocument;
 }

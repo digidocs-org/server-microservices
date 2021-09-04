@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-srv
@@ -6,15 +6,32 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
+  tls:
+    - hosts:
+      - digidocs.dev
+      secretName: digidocs-app-tls
   rules:
     - host: digidocs.dev
       http:
         paths:
           - path: /api/auth/?(.*)
+            pathType: Prefix
             backend:
-              serviceName: auth-srv
-              servicePort: 3000
+              service: 
+                name: auth-srv
+                port: 
+                  number: 3000
           - path: /api/document/?(.*)
+            pathType: Prefix
             backend:
-              serviceName: document-srv
-              servicePort: 3000
+              service: 
+                name: document-srv
+                port: 
+                  number: 3000
+          - path: /api/esign/?(.*)
+            pathType: Prefix
+            backend:
+              service: 
+                name: signing-srv
+                port: 
+                  number: 3000

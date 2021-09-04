@@ -1,9 +1,10 @@
 import { DocumentStatus } from '../../types';
 import { Subjects } from '../subjects';
 
-export interface CreateDocument {
+export interface CreateDocumentEvent {
     subject: Subjects.CreateDocument;
     data: {
+        id: string
         name: string
         message?: string
         inOrder?: boolean
