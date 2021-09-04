@@ -1,19 +1,19 @@
 import { Request, Response } from 'express';
 import fs from 'fs';
-import path from 'path'
+import path from 'path';
 import { decryptDocument, BadRequestError, fetchData } from '@digidocs/guardian';
-import { createSignedXML, generateChecksum } from '@digidocs-org/rsa-crypt'
+import { createSignedXML, generateChecksum } from '@digidocs-org/rsa-crypt';
 import { generateXml } from 'signing-service/utils';
-import Document from 'signing-service/models/document'
+import Document from 'signing-service/models/document';
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     // const documentUserMapId = req.documentUserMap?.id
     // const document = req.documentUserMap?.document as IDocument;
-    const documentId = req.params.id
+    const documentId = req.params.id;
 
-    const document = await Document.findById(documentId)
+    const document = await Document.findById(documentId);
     if (!document) {
-        throw new BadRequestError("Document not found!!!")
+        throw new BadRequestError('Document not found!!!');
     }
 
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
@@ -24,7 +24,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     const publicKey = publicKeyBuffer.toString();
 
     const decryptedFile = decryptDocument(encryptedFile, publicKey);
-
 
     try {
         if (decryptedFile) {

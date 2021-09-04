@@ -1,8 +1,8 @@
 export enum Subjects {
-    UserCreated = 'user:created',
-    UserUpdated = 'user:updated',
+  UserCreated = 'user:created',
+  UserUpdated = 'user:updated',
 
-    SendEmail = 'email:send',
+  SendEmail = 'email:send',
 
-    CreateDocument = 'document:create'
+  CreateDocument = 'document:create',
 }
