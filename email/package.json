@@ -12,8 +12,7 @@
     "tsconfig-paths": "^3.10.1"
   },
   "scripts": {
-    "start": "nodemon",
-    "start-dev": "nodemon"
+    "start": "nodemon"
   },
   "dependencies": {
     "@digidocs/guardian": "1.0.0",

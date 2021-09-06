@@ -1,13 +1,17 @@
 import express from 'express';
-import { Request, Response, Router, Express } from 'express';
+import {Request, Response, Router, Express} from 'express';
 import 'express-async-errors';
 
-import { errorHandler } from './middlewares';
-import { NotFoundError } from './errors';
+import {errorHandler} from './middlewares';
+import {NotFoundError} from './errors';
 
 class App {
   private app: Express;
-  constructor(private routes: Router[], private middlewares: any[], private views?: { viewPath: string, engine: string }[]) {
+  constructor(
+    private routes: Router[],
+    private middlewares: any[],
+    private views?: {viewPath: string; engine: string}[]
+  ) {
     this.app = express();
     this.app.set('trust proxy', true);
 
@@ -15,7 +19,7 @@ class App {
       this.views.forEach(data => {
         this.app.set('views', data.viewPath);
         this.app.set('view engine', data.engine);
-      })
+      });
     }
 
     // Configure Middlewares
@@ -38,7 +42,7 @@ class App {
   }
 
   public start(portNumber: number) {
-    this.app.listen(portNumber);
+    this.app.listen(portNumber || 3000);
     console.log(`Server listening on ${portNumber}.`);
   }
 
@@ -47,4 +51,4 @@ class App {
   }
 }
 
-export { App };
+export {App};

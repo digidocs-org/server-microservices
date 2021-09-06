@@ -4,11 +4,11 @@ metadata:
   name: ingress-srv
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   tls:
     - hosts:
-      - digidocs.dev
+        - digidocs.dev
       secretName: digidocs-app-tls
   rules:
     - host: digidocs.dev
@@ -17,21 +17,28 @@ spec:
           - path: /api/auth/?(.*)
             pathType: Prefix
             backend:
-              service: 
+              service:
                 name: auth-srv
-                port: 
+                port:
+                  number: 3000
+          - path: /api/document/?(^[0-9a-fA-F]{24}$)/recipient
+            pathType: Prefix
+            backend:
+              service:
+                name: recipient-srv
+                port:
                   number: 3000
           - path: /api/document/?(.*)
             pathType: Prefix
             backend:
-              service: 
+              service:
                 name: document-srv
-                port: 
+                port:
                   number: 3000
           - path: /api/esign/?(.*)
             pathType: Prefix
             backend:
-              service: 
+              service:
                 name: signing-srv
-                port: 
+                port:
                   number: 3000
