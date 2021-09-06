@@ -2,7 +2,7 @@ import { headerValidators, bodyValidators, validateRequest, currentUser } from '
 import { Router } from 'express';
 import { aadharEsignRequest, esignCallback } from 'signing-service/controllers';
 import { redirectionHandler } from 'signing-service/controllers/redirectionHandle-controller';
-import {digitalSignRequest} from 'signing-service/controllers/digitalSignRequest-controller'
+import {digitalSignRequest} from 'signing-service/controllers/digital-sign-controller'
 
 export class SigningRouter {
     private static router = Router()
@@ -49,7 +49,7 @@ export class SigningRouter {
          * @Access Private
          */
          this.router.post(
-            '/api/esign/digi-sign/:id',
+            '/api/esign/digital-sign/:id',
             digitalSignRequest
         )
 

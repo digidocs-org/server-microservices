@@ -37,11 +37,11 @@ export const esignCallback = async (req: Request, res: Response) => {
   const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
   const tempFileName = uuidv4();
-  const jarFilePath = `${__dirname}/"java-utility-jar/esign-java-utility.jar"`;
+  const jarFilePath = `${__dirname}/../../java-esign-utility/esign-java-utility.jar`;
   const unsignedFilePath = `${__dirname}/temp-${tempFileName}/unsigned.pdf`;
   const signedFilePath = `${__dirname}/temp-${tempFileName}/signed.pdf`;
   const signImageFilePath = `${__dirname}/sign.jpeg`;
-
+    
   const data = {
     esignResponse: convertToString(espXmlResponse),
     tempUnsignedPdfPath: convertToString(unsignedFilePath),
@@ -58,7 +58,7 @@ export const esignCallback = async (req: Request, res: Response) => {
   try {
     await writeFile(unsignedFilePath, decryptedFile, 'base64');
     const {stdout, stderr} = await exec(
-      `java -jar ${jarFilePath} ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}`
+      `java -jar ${jarFilePath} "AADHAR_SIGN" ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}`
     );
     if (stderr) {
       deleteFile(signedFilePath);
