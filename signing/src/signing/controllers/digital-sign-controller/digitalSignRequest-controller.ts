@@ -3,6 +3,7 @@ import Document from 'signing-service/models/document'
 import { BadRequestError, decryptDocument, deleteFile, fetchData, writeFile } from '@digidocs/guardian'
 import {v4 as uuidv4} from 'uuid';
 import {promisify} from 'util';
+import { generateChecksum } from '@digidocs-org/rsa-crypt';
 
 const exec = promisify(require('child_process').exec);
 const convertToString = (str: string) => JSON.stringify(str);
@@ -22,16 +23,17 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
     const publicKeyBuffer = await fetchData(publicKeyURL);
     const publicKey = publicKeyBuffer.toString();
 
-    const decryptedFile = decryptDocument(encryptedFile, publicKey);
+    const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
     const jarFilePath = `${__dirname}/../../java-esign-utility/esign-java-utility.jar`;
     const tempFileName = uuidv4();
     const unsignedFilePath = `${__dirname}/temp-${tempFileName}/unsigned.pdf`;
     const signedFilePath = `${__dirname}/temp-${tempFileName}/signed.pdf`;
     const signImageFilePath = `${__dirname}/sign.jpeg`;
+    const pfxFilePath = `${__dirname}/../../key/digidocs-sign.pfx`;
 
     const data = {
-        esignResponse: convertToString(""),
+        esignResponse: convertToString(generateChecksum(decryptedFile,"hex")),
         tempUnsignedPdfPath: convertToString(unsignedFilePath),
         tempSignedPdfPath: convertToString(signedFilePath),
         signImageFile: convertToString(signImageFilePath),
@@ -41,13 +43,16 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         pageNumberToInsertStamp: '1',
         xCoordinateOfStamp: '40',
         yCoordinateOfStamp: '60',
+        pfxFilePath,
+        pfxPass: convertToString(process.env.PFX_FILE_PASS!)
     };
     
     try {
         await writeFile(unsignedFilePath, decryptedFile, 'base64');
         const { stdout, stderr } = await exec(
-            `java -jar ${jarFilePath} "DIGITAL_SIGN" ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}`
+            `java -jar ${jarFilePath} "DIGITAL_SIGN" ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp} ${data.pfxFilePath} ${data.pfxPass}`
         );
+        
         if (stderr) {
             // deleteFile(signedFilePath);
             return res.redirect('redirect?type=failed');
@@ -57,7 +62,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         return res.redirect('redirect?type=failed');
     } catch (error) {
         console.log(error);
-        deleteFile(signedFilePath);
+        // deleteFile(signedFilePath);
         return res.redirect('redirect?type=failed');
     }
 }

@@ -39,11 +39,12 @@ export const esignCallback = async (req: Request, res: Response) => {
   const tempFileName = uuidv4();
   const jarFilePath = `${__dirname}/../../java-esign-utility/esign-java-utility.jar`;
   const unsignedFilePath = `${__dirname}/temp-${tempFileName}/unsigned.pdf`;
+  const responseTextFile = `${__dirname}/temp-${tempFileName}/response.txt`
   const signedFilePath = `${__dirname}/temp-${tempFileName}/signed.pdf`;
   const signImageFilePath = `${__dirname}/sign.jpeg`;
     
   const data = {
-    esignResponse: convertToString(espXmlResponse),
+    esignResponse: convertToString(responseTextFile),
     tempUnsignedPdfPath: convertToString(unsignedFilePath),
     tempSignedPdfPath: convertToString(signedFilePath),
     signImageFile: convertToString(signImageFilePath),
@@ -57,6 +58,7 @@ export const esignCallback = async (req: Request, res: Response) => {
 
   try {
     await writeFile(unsignedFilePath, decryptedFile, 'base64');
+    await writeFile(responseTextFile, espXmlResponse,'utf-8');
     const {stdout, stderr} = await exec(
       `java -jar ${jarFilePath} "AADHAR_SIGN" ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}`
     );
@@ -64,12 +66,12 @@ export const esignCallback = async (req: Request, res: Response) => {
       deleteFile(signedFilePath);
       return res.redirect('redirect?type=failed');
     }
-
-    deleteFile(signedFilePath);
-    return res.redirect('redirect?type=failed');
+    console.log(stdout)
+    // deleteFile(signedFilePath);
+    return res.redirect('redirect?type=success');
   } catch (error) {
     console.log(error);
-    deleteFile(signedFilePath);
+    // deleteFile(signedFilePath);
     return res.redirect('redirect?type=failed');
   }
 };
