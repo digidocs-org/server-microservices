@@ -1,4 +1,4 @@
-import { convertToString } from "@digidocs/guardian"
+import { convertToString, SignTypes } from "@digidocs/guardian"
 import { EsignRequest, Files } from 'signing-service/types'
 import { v4 as uuidv4 } from 'uuid'
 import crypto from 'crypto';
@@ -6,7 +6,7 @@ import crypto from 'crypto';
 export const createJarSigningReq = (rootDir: string, signType: string, requestData: EsignRequest) => {
     const tempFileName = uuidv4();
     const unsignedFilePath = `${rootDir}/temp-${tempFileName}/unsigned.pdf`;
-    const responseTextFile = signType == "AADHAR_SIGN" ? `${rootDir}/temp-${tempFileName}/response.txt` : "";
+    const responseTextFile = signType == SignTypes.AADHAR_SIGN ? `${rootDir}/temp-${tempFileName}/response.txt` : "";
     const signedFilePath = `${rootDir}/temp-${tempFileName}/signed.pdf`;
     const signImageFilePath = `${rootDir}/sign.jpeg`;
     const unsignedFieldPath = `${rootDir}/temp-${tempFileName}/signedField.pdf`
@@ -18,7 +18,7 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
         unsignedPdfPath: convertToString(unsignedFilePath),
         tempSignedPdfPath: convertToString(signedFilePath),
         signImageFile: convertToString(signImageFilePath),
-        nameToShowOnStamp: convertToString(`Naman Singh`),
+        nameToShowOnStamp: convertToString("Naman Singh"),
         locationToShowOnStamp: convertToString("India"),
         reasonToShowOnStamp: convertToString("Aadhar E-signature"),
         unsignedFieldPath: convertToString(unsignedFieldPath),

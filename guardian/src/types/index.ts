@@ -25,3 +25,9 @@ export interface IEmailOptions {
     subject: string;
     body?: string;
 }
+
+export enum SignTypes {
+    ESIGN_REQUEST = "ESIGN_REQUEST",
+    AADHAR_SIGN = "AADHAR_SIGN",
+    DIGITAL_SIGN = "DIGITAL_SIGN"
+}

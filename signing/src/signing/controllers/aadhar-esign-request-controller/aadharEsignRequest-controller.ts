@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import fs from 'fs';
-import { decryptDocument, BadRequestError, fetchData, exec, convertToString, writeFile, deleteFile } from '@digidocs/guardian';
+import { decryptDocument, BadRequestError, fetchData, exec, convertToString, writeFile, deleteFile, SignTypes, readFile } from '@digidocs/guardian';
 import { createSignedXML, generateChecksum } from '@digidocs-org/rsa-crypt';
 import { createJarSigningReq, generateXml } from 'signing-service/utils';
 import Document from 'signing-service/models/document';
@@ -39,25 +39,27 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             ]
         }
     }
-    const esignRequest = createJarSigningReq(__dirname, "ESIGN_REQUEST", signFieldData);
+    const esignRequest = createJarSigningReq(__dirname, SignTypes.ESIGN_REQUEST, signFieldData);
 
     try {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
         const { stdout, stderr } = await exec(esignRequest.signingRequest);
         if (stderr) {
-            // deleteFile(esignRequest.signedFilePath);
+            deleteFile(esignRequest.signedFilePath);
             return res.redirect('redirect?type=failed');
         }
 
-        
-        // const pfxFile = fs.readFileSync(Files.pfxKey);
-        // const fileChecksum = generateChecksum(decryptedFile, "hex");
-        // const xml = generateXml({
-        //     aspId: process.env.ASP_ID!,
-        //     responseUrl: `${process.env.ESIGN_RESPONSE_URL!}?id=${documentId}`,
-        //     checksum: fileChecksum
-        // })
-        // const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml, rootElementName: 'Esign' })
+        const unsignedFieldBuffer = await readFile(esignRequest.unsignedFieldPath);
+
+        const pfxFile = await readFile(Files.pfxKey);
+        const fileChecksum = generateChecksum(unsignedFieldBuffer, "hex");
+        const xml = generateXml({
+            aspId: process.env.ASP_ID!,
+            responseUrl: `${process.env.ESIGN_RESPONSE_URL!}?id=${documentId}`,
+            checksum: fileChecksum
+        })
+        const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml, rootElementName: 'Esign' })
+        console.log(signedXML)
         // res.render('esignRequest', {
         //     esignRequestXMLData: signedXML
         // })

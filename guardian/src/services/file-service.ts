@@ -49,5 +49,14 @@ export const deleteFile = async (path: string) => {
 
 }
 
+export const readFile = async (path: string) => {
+    try {
+        const data = await fs.readFile(path)
+        return data;
+    } catch (error) {
+        throw error
+    }
+}
+
 // writeFile('temp/sample.txt', "this is me", (err) => err)
 // deleteFile('temp', (err) => console.log(err))
