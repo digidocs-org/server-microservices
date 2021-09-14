@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import fs from 'fs';
-import { decryptDocument, BadRequestError, fetchData, exec, convertToString, writeFile, deleteFile, SignTypes, readFile } from '@digidocs/guardian';
+import { decryptDocument, BadRequestError, fetchData, exec, writeFile, deleteFile, SignTypes, readFile } from '@digidocs/guardian';
 import { createSignedXML, generateChecksum } from '@digidocs-org/rsa-crypt';
 import { createJarSigningReq, generateXml } from 'signing-service/utils';
 import Document from 'signing-service/models/document';
@@ -58,14 +57,13 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             responseUrl: `${process.env.ESIGN_RESPONSE_URL!}?id=${documentId}`,
             checksum: fileChecksum
         })
-        const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml, rootElementName: 'Esign' })
-        console.log(signedXML)
-        // res.render('esignRequest', {
-        //     esignRequestXMLData: signedXML
-        // })
-
+        const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml })
+        deleteFile(esignRequest.signedFilePath);
+        res.render('esignRequest', {
+            esignRequestXMLData: signedXML
+        })
     } catch (error) {
-        console.log(error)
+        deleteFile(esignRequest.signedFilePath);
         throw new BadRequestError("Error while parsing data!!!")
     }
 }

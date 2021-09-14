@@ -21,7 +21,7 @@
     "tsconfig-paths": "^3.10.1"
   },
   "dependencies": {
-    "@digidocs-org/rsa-crypt": "^2.0.5",
+    "@digidocs-org/rsa-crypt": "^2.0.6",
     "@digidocs/guardian": "1.0.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
