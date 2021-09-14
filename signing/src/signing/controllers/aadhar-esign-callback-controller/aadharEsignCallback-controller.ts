@@ -5,14 +5,12 @@ import {
   deleteFile,
   fetchData,
   writeFile,
+  exec,
+  convertToString
 } from '@digidocs/guardian';
 import {verifyEsignResponse} from 'signing-service/utils';
 import {EsignResponse} from 'signing-service/types';
 import {v4 as uuidv4} from 'uuid';
-import {promisify} from 'util';
-
-const exec = promisify(require('child_process').exec);
-const convertToString = (str: string) => JSON.stringify(str);
 
 export const esignCallback = async (req: Request, res: Response) => {
   const espXmlResponse = req.body.msg;
