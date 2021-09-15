@@ -4,6 +4,7 @@ import { createSignedXML, generateChecksum } from '@digidocs-org/rsa-crypt';
 import { createJarSigningReq, generateXml } from 'signing-service/utils';
 import Document from 'signing-service/models/document';
 import { EsignRequest, Files } from 'signing-service/types';
+import crypto from 'crypto'
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     // const documentUserMapId = req.documentUserMap?.id
@@ -14,7 +15,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     if (!document) {
         throw new BadRequestError('Document not found!!!');
     }
-
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
     const publicKeyURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/keys/${document.publicKeyId}`;
 
@@ -23,11 +23,15 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     const publicKey = publicKeyBuffer.toString();
 
     const decryptedFile = decryptDocument(encryptedFile, publicKey);
+    const timeOfDocSign = new Date().toString();
+    const docId = crypto.randomInt(100000, 1000000)
 
     const signFieldData: EsignRequest = {
         name: "Naman Singh",
         location: "India",
         reason: "Aadhar E-Sign",
+        timeOfDocSign,
+        docId,
         signatureFieldData: {
             data: [
                 {
@@ -38,15 +42,12 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             ]
         }
     }
+
     const esignRequest = createJarSigningReq(__dirname, SignTypes.ESIGN_REQUEST, signFieldData);
 
     try {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
-        const { stdout, stderr } = await exec(esignRequest.signingRequest);
-        if (stderr) {
-            deleteFile(esignRequest.signedFilePath);
-            return res.redirect('redirect?type=failed');
-        }
+        await exec(esignRequest.signingRequest);
 
         const unsignedFieldBuffer = await readFile(esignRequest.unsignedFieldPath);
 
@@ -58,12 +59,15 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             checksum: fileChecksum
         })
         const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml })
+        //TODO: create a field in documentUserMap for time of signing and documentId
+        //TODO: create a field in documentUserMap for docId 
         deleteFile(esignRequest.signedFilePath);
         res.render('esignRequest', {
             esignRequestXMLData: signedXML
         })
     } catch (error) {
         deleteFile(esignRequest.signedFilePath);
-        throw new BadRequestError("Error while parsing data!!!")
+        console.log(error)
+        return res.redirect('redirect?type=failed');
     }
 }

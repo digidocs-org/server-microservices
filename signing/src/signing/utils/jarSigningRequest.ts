@@ -1,7 +1,6 @@
 import { convertToString, SignTypes } from "@digidocs/guardian"
 import { EsignRequest, Files } from 'signing-service/types'
 import { v4 as uuidv4 } from 'uuid'
-import crypto from 'crypto';
 
 export const createJarSigningReq = (rootDir: string, signType: string, requestData: EsignRequest) => {
     const tempFileName = uuidv4();
@@ -11,7 +10,6 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
     const signImageFilePath = `${rootDir}/sign.jpeg`;
     const unsignedFieldPath = `${rootDir}/temp-${tempFileName}/signedField.pdf`
 
-    const docId = crypto.randomInt(100000, 1000000);
 
     const data = {
         esignResponse: convertToString(responseTextFile),
@@ -23,8 +21,8 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
         reasonToShowOnStamp: convertToString("Aadhar E-signature"),
         unsignedFieldPath: convertToString(unsignedFieldPath),
         signType: convertToString(signType),
-        date: convertToString(new Date().toString()),
-        docId: convertToString(docId.toString()),
+        date: convertToString(requestData.timeOfDocSign),
+        docId: convertToString(requestData.docId.toString()),
         pfxPath: convertToString(Files.pfxKey),
         pfxPass: convertToString(process.env.PFX_FILE_PASS!),
         signFieldData: JSON.stringify(convertToString(requestData.signatureFieldData))

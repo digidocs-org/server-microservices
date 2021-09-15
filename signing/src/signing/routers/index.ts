@@ -49,7 +49,7 @@ export class SigningRouter {
          * @Access Private
          */
          this.router.post(
-            '/api/esign/digital-sign/:id',
+            '/api/esign/digital/:id',
             digitalSignRequest
         )
 

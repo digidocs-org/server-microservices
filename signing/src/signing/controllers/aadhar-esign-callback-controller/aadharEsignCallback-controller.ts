@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import Document from 'signing-service/models/document';
 import {
   decryptDocument,
@@ -6,11 +6,11 @@ import {
   fetchData,
   writeFile,
   exec,
-  convertToString
+  SignTypes
 } from '@digidocs/guardian';
-import {verifyEsignResponse} from 'signing-service/utils';
-import {EsignResponse} from 'signing-service/types';
-import {v4 as uuidv4} from 'uuid';
+import { createJarSigningReq, verifyEsignResponse } from 'signing-service/utils';
+import { EsignRequest, EsignResponse } from 'signing-service/types';
+import crypto from 'crypto';
 
 export const esignCallback = async (req: Request, res: Response) => {
   const espXmlResponse = req.body.msg;
@@ -34,42 +34,39 @@ export const esignCallback = async (req: Request, res: Response) => {
   const publicKey = publicKeyBuffer.toString();
   const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
-  const tempFileName = uuidv4();
-  const jarFilePath = `${__dirname}/../../java-esign-utility/esign-java-utility.jar`;
-  const unsignedFilePath = `${__dirname}/temp-${tempFileName}/unsigned.pdf`;
-  const responseTextFile = `${__dirname}/temp-${tempFileName}/response.txt`
-  const signedFilePath = `${__dirname}/temp-${tempFileName}/signed.pdf`;
-  const signImageFilePath = `${__dirname}/sign.jpeg`;
-    
-  const data = {
-    esignResponse: convertToString(responseTextFile),
-    tempUnsignedPdfPath: convertToString(unsignedFilePath),
-    tempSignedPdfPath: convertToString(signedFilePath),
-    signImageFile: convertToString(signImageFilePath),
-    nameToShowOnStamp: convertToString('Naman Singh'),
-    locationToShowOnStamp: convertToString('India'),
-    reasonToShowOnStamp: convertToString('Aadhar E-signature'),
-    pageNumberToInsertStamp: '1',
-    xCoordinateOfStamp: '40',
-    yCoordinateOfStamp: '60',
-  };
+  //TODO: Import time and doc id from the docUserMap 
+  const timeOfDocSign = new Date().toString();
+  const docId = crypto.randomInt(100000, 1000000);
+
+  const signFieldData: EsignRequest = {
+    name: "Naman Singh",
+    location: "India",
+    reason: "Aadhar E-Sign",
+    docId,
+    timeOfDocSign,
+    signatureFieldData: {
+      data: [
+        {
+          pageNo: 1,
+          xCoord: 50,
+          yCoord: 50
+        }
+      ]
+    }
+  }
+  const esignRequest = createJarSigningReq(__dirname, SignTypes.AADHAR_SIGN, signFieldData);
 
   try {
-    await writeFile(unsignedFilePath, decryptedFile, 'base64');
-    await writeFile(responseTextFile, espXmlResponse,'utf-8');
-    const {stdout, stderr} = await exec(
-      `java -jar ${jarFilePath} "AADHAR_SIGN" ${data.esignResponse} ${data.tempUnsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} ${data.locationToShowOnStamp} ${data.reasonToShowOnStamp} ${data.pageNumberToInsertStamp} ${data.xCoordinateOfStamp} ${data.yCoordinateOfStamp}`
-    );
-    if (stderr) {
-      deleteFile(signedFilePath);
-      return res.redirect('redirect?type=failed');
-    }
-    console.log(stdout)
+    await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
+    await writeFile(esignRequest.responseTextFile, espXmlResponse, 'utf-8');
+    await exec(esignRequest.signingRequest);
+
+
     // deleteFile(signedFilePath);
     return res.redirect('redirect?type=success');
   } catch (error) {
     console.log(error);
-    // deleteFile(signedFilePath);
+    deleteFile(esignRequest.signedFilePath);
     return res.redirect('redirect?type=failed');
   }
 };
