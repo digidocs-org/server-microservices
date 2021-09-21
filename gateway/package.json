@@ -1,0 +1,8 @@
+{
+  "name": "@digidocs/gateway",
+  "version": "1.0.0",
+  "description": "Api gateway for digidocs",
+  "main": "index.js",
+  "author": "Naman Singh",
+  "license": "MIT"
+}
