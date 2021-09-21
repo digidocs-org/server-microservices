@@ -1,6 +1,7 @@
 import { json } from 'body-parser';
 import { App } from '@digidocs/guardian';
 import fileUpload from 'express-fileupload';
+import { ApiRouter } from 'gateway/routes'
 
 
 export class Application {

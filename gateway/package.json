@@ -4,5 +4,8 @@
   "description": "Api gateway for digidocs",
   "main": "index.js",
   "author": "Naman Singh",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.4"
+  }
 }
