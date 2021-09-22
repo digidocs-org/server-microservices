@@ -1,6 +1,18 @@
 import { bodyValidators, headerValidators, validateRequest } from '@digidocs/guardian';
 import { Router } from 'express';
-import { signup } from 'gateway/controllers/auth-controller';
+import {
+    signup,
+    signin, 
+    getUserProfile, 
+    refreshToken, 
+    verifyOtp, 
+    sendOTPEmail, 
+    forgotPasswordVerifyOtp, 
+    resetPassword, 
+    sendForgotPassOtp,
+    googleSignin,
+    googleSigninCallback
+} from 'gateway/controllers/auth-controller';
 
 const router = Router();
 
@@ -64,9 +76,7 @@ router.get(
 
 router.get(
     '/google',
-    passport.authenticate('google', {
-        scope: ['profile', 'email'],
-    })
+    googleSignin
 );
 
 /**
@@ -74,7 +84,7 @@ router.get(
  * @Desc   redirect route
  * @Access Private
  */
-router.get('/google/callback', passport.authenticate('google'), googlePassport);
+router.get('/google/callback', googleSigninCallback);
 
 /**
  * @Route  POST 'api/v1/auth/verify-email'
@@ -86,7 +96,7 @@ router.post(
     headerValidators('token'),
     bodyValidators('otp'),
     validateRequest,
-    verifyOTP
+    verifyOtp
 );
 
 /**
@@ -110,7 +120,7 @@ router.post(
     '/forgotPassword/send-otp',
     bodyValidators('email'),
     validateRequest,
-    forgotPasswordOtp
+    sendForgotPassOtp
 );
 
 /**
