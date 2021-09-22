@@ -11,7 +11,6 @@ import {
     resetPassword, 
     sendForgotPassOtp,
     googleSignin,
-    googleSigninCallback
 } from 'gateway/controllers/auth-controller';
 
 const router = Router();
@@ -78,13 +77,6 @@ router.get(
     '/google',
     googleSignin
 );
-
-/**
- * @Route  POST 'api/v1/auth/google'
- * @Desc   redirect route
- * @Access Private
- */
-router.get('/google/callback', googleSigninCallback);
 
 /**
  * @Route  POST 'api/v1/auth/verify-email'

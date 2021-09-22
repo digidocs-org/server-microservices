@@ -64,7 +64,7 @@ export const verifyOtp = async (req: Request, res: Response) => {
 
 export const sendOTPEmail = async (req: Request, res: Response) => {
     try {
-        const { data } = await api.post(authService.sendOTPEmail,req.body, {
+        const { data } = await api.post(authService.sendOTPEmail, req.body, {
             headers: {
                 token: req.header('token')
             },
@@ -111,19 +111,15 @@ export const resetPassword = async (req: Request, res: Response) => {
 }
 
 export const googleSignin = async (req: Request, res: Response) => {
-    try {
-        const { data } = await api.get(authService.googleSignin)
-        return res.send(data)
-    } catch (error) {
-        return errorResponseParser(error, res)
-    }
+   return res.redirect("http://localhost:8000/api/auth/google")
 }
 
-export const googleSigninCallback = async (req: Request, res: Response) => {
-    try {
-        const { data } = await api.get(authService.googleSigninCallback)
-        return res.send(data)
-    } catch (error) {
-        return errorResponseParser(error, res)
-    }
-}
+// export const googleSigninCallback = async (req: Request, res: Response) => {
+//     try {
+//         console.log("here")
+//         const { data } = await api.get(authService.googleSigninCallback)
+//         return res.send(data)
+//     } catch (error) {
+//         return errorResponseParser(error, res)
+//     }
+// }

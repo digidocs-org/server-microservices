@@ -1,13 +1,13 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import passport from 'passport';
-import {Signin, googlePassport} from 'auth/controllers/signin-controller';
-import {Signup} from 'auth/controllers/signup-controller';
-import {refreshToken} from 'auth/controllers/refreshToken-controller';
+import { Signin, googlePassport } from 'auth/controllers/signin-controller';
+import { Signup } from 'auth/controllers/signup-controller';
+import { refreshToken } from 'auth/controllers/refreshToken-controller';
 import {
   getUserProfile,
   resetPassword,
 } from 'auth/controllers/userProfile-controller';
-import {sendOTPEmail, verifyOTP} from 'auth/controllers/verifyEmail-controller';
+import { sendOTPEmail, verifyOTP } from 'auth/controllers/verifyEmail-controller';
 import {
   forgotPasswordOtp,
   forgotPasswordVerifyOtp,
@@ -18,14 +18,14 @@ import {
   headerValidators,
   bodyValidators,
 } from '@digidocs/guardian';
-import {verifyToken} from 'auth/middlewares/vertfyToken';
+import { verifyToken } from 'auth/middlewares/vertfyToken';
 
 export class AuthRouter {
   private static router = Router();
 
   public static route() {
     this.router.get('/api/auth', (req, res) => {
-      res.send({message: 'auth service is up and running'});
+      res.send({ message: 'auth service is up and running' });
     });
 
     /**
