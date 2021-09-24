@@ -3,7 +3,7 @@ import { EsignResponse } from 'signing-service/types'
 import { BadRequestError } from '@digidocs/guardian'
 
 export const redirectionHandler = (req: Request, res: Response) => {
-    const type = req.query.type as string
+    const type = req.body.resType
 
     if (!type) {
         throw new BadRequestError("some error occured!!!")

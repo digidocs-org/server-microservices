@@ -5,7 +5,7 @@ if(!process.env.PORT){
 }
 
 if(!process.env.AUTH_SERVICE_BASE_URL){
-    throw new Error('Port is required');
+    throw new Error('AUTH_SERVICE_BASE_URL is required');
 }
 
 const application = new Application();

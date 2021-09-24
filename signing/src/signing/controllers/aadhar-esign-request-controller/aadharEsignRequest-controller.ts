@@ -9,7 +9,7 @@ import crypto from 'crypto'
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     // const documentUserMapId = req.documentUserMap?.id
     // const document = req.documentUserMap?.document as IDocument;
-    const documentId = req.params.id;
+    const documentId = req.body.documentId;
 
     const document = await Document.findById(documentId);
     if (!document) {

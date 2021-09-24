@@ -49,7 +49,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         await exec(esignRequest.signingRequest);
 
         // deleteFile(signedFilePath);
-        return res.redirect('redirect?type=failed');
+        return res.send('redirect?type=failed');
     } catch (error) {
         console.log(error);
         // deleteFile(signedFilePath);

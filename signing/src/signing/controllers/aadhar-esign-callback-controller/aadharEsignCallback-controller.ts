@@ -13,16 +13,16 @@ import { EsignRequest, EsignResponse } from 'signing-service/types';
 import crypto from 'crypto';
 
 export const esignCallback = async (req: Request, res: Response) => {
-  const espXmlResponse = req.body.msg;
+  const espXmlResponse = req.body.espResponse;
   const response = verifyEsignResponse(espXmlResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
-    return res.redirect('redirect?type=cancelled');
+    return res.send('redirect?type=cancelled');
   }
   const documentId = req.query.id;
   const document = await Document.findById(documentId);
   if (!document) {
     console.log('not found document');
-    return res.redirect('redirect?type=failed');
+    return res.send('redirect?type=failed');
   }
 
   const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
@@ -63,10 +63,10 @@ export const esignCallback = async (req: Request, res: Response) => {
 
 
     // deleteFile(signedFilePath);
-    return res.redirect('redirect?type=success');
+    return res.send('redirect?type=success');
   } catch (error) {
     console.log(error);
     deleteFile(esignRequest.signedFilePath);
-    return res.redirect('redirect?type=failed');
+    return res.send('redirect?type=failed');
   }
 };

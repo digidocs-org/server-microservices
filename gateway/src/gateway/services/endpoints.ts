@@ -9,7 +9,13 @@ export const endpoints = {
         sendForgotPassOTP: '/api/auth/forgotPassword/send-otp',
         verifyForgotPassOTP: '/api/auth/forgotPassword/verify-otp',
         resetPassword: "/api/auth/reset-password",
-        googleSignin:"/api/auth/google",
-        googleSigninCallback:"/api/auth/google/callback"
+        googleSignin: "/api/auth/google",
+        googleSigninCallback: "/api/auth/google/callback"
+    },
+    esignService: {
+        aadharEsignRequest: "/api/esign/aadhar/request",
+        aadharEsignCallback: "/api/esign/aadhar/callback",
+        redirectCallback: "/api/esign/aadhar/redirect",
+        digitalSignRequest: "/api/esign/digital"
     }
 }

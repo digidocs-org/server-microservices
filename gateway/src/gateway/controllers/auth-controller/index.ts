@@ -113,13 +113,3 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const googleSignin = async (req: Request, res: Response) => {
    return res.redirect("http://localhost:8000/api/auth/google")
 }
-
-// export const googleSigninCallback = async (req: Request, res: Response) => {
-//     try {
-//         console.log("here")
-//         const { data } = await api.get(authService.googleSigninCallback)
-//         return res.send(data)
-//     } catch (error) {
-//         return errorResponseParser(error, res)
-//     }
-// }
