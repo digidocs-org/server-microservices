@@ -62,12 +62,12 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         //TODO: create a field in documentUserMap for time of signing and documentId
         //TODO: create a field in documentUserMap for docId 
         deleteFile(esignRequest.signedFilePath);
-        res.render('esignRequest', {
+        return res.render('esignRequest', {
             esignRequestXMLData: signedXML
         })
     } catch (error) {
         deleteFile(esignRequest.signedFilePath);
         console.log(error)
-        return res.redirect('redirect?type=failed');
+        return res.send('redirect?type=failed');
     }
 }

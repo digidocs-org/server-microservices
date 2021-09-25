@@ -1,16 +1,16 @@
 import { bodyValidators, headerValidators, validateRequest } from '@digidocs/guardian';
 import { Router } from 'express';
-import { aadharEsignCallback, aadharEsignRequest, redirectCallback } from 'gateway/controllers/esign-controller';
+import { aadharEsignCallback, aadharEsignRequest, digitalSignRequest, redirectCallback } from 'gateway/controllers/esign-controller';
 
 const router = Router();
 
 /**
-        * @Route  GET 'api/v1/sign/aadhar-esign'
-        * @Desc   create a esign request to NSDL
-        * @Access Private
-        */
+* @Route  GET 'api/v1/sign/aadhar-esign'
+* @Desc   create a esign request to NSDL
+* @Access Private
+*/
 router.get(
-    '/api/esign/aadhar/request/:id',
+    '/aadhar/request/:id',
     // headerValidators('token'),
     // validateRequest,
     // currentUser,
@@ -24,7 +24,7 @@ router.get(
  * @Access Private
  */
 router.post(
-    '/api/esign/aadhar/callback',
+    '/aadhar/callback',
     bodyValidators("msg"),
     aadharEsignCallback
 );
@@ -35,7 +35,7 @@ router.post(
  * @Access Private
  */
 router.get(
-    '/api/esign/aadhar/redirect',
+    '/aadhar/redirect',
     redirectCallback
 )
 
@@ -45,7 +45,7 @@ router.get(
  * @Access Private
  */
 router.post(
-    '/api/esign/digital/:id',
+    '/digital/:id',
     digitalSignRequest
 )
 

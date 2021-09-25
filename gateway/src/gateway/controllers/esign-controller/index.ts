@@ -10,7 +10,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         const { data } = await api.post(esignService.aadharEsignRequest, {
             documentId: req.params.id
         })
-        console.log(data)
         return res.send(data)
     } catch (error) {
         return errorResponseParser(error, res)
