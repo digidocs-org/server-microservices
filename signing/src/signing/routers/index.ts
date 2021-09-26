@@ -31,7 +31,7 @@ export class SigningRouter {
          */
         this.router.post(
             '/api/esign/aadhar/callback',
-            bodyValidators("espResponse"),
+            bodyValidators("espResponse","signingData"),
             validateRequest,
             esignCallback
         );

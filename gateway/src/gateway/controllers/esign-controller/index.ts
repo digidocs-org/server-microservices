@@ -19,9 +19,11 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 export const aadharEsignCallback = async (req: Request, res: Response) => {
     try {
         const msg = req.body.msg
+        const { data: signingData } = req.query
 
         const { data } = await api.post(esignService.aadharEsignCallback, {
-            espResponse: msg
+            espResponse: msg,
+            signingData
         })
         return res.redirect(data)
     } catch (error) {

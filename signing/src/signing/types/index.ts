@@ -27,3 +27,9 @@ export interface SignField {
   xCoord: number
   yCoord: number
 }
+
+export interface AadharEsignPayload {
+  signTime: string
+  docSignId: number
+  documentId: string
+}

@@ -12,7 +12,9 @@ export interface IDocument extends Document {
     isDrafts?: boolean
     status?: DocumentStatus
     userId: string
-    validTill?: string
+    validTill?: string,
+    signedTime?: string,
+    signDocID?: number,
     timeToSign?: string
     createdAt: string
     updatedAt: string,
@@ -32,6 +34,8 @@ const documentSchema: Schema = new Schema(
         userId: String,
         validTill: String,
         timeToSign: String,
+        signedTime: String,
+        signDocID: Number,
     },
     {
         timestamps: { createdAt: true, updatedAt: true }, toJSON: {

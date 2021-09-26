@@ -9,11 +9,14 @@ import {
   SignTypes
 } from '@digidocs/guardian';
 import { createJarSigningReq, verifyEsignResponse } from 'signing-service/utils';
-import { EsignRequest, EsignResponse } from 'signing-service/types';
+import { AadharEsignPayload, EsignRequest, EsignResponse } from 'signing-service/types';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken'
 
 export const esignCallback = async (req: Request, res: Response) => {
-  const espXmlResponse = req.body.espResponse;
+  const { espXmlResponse, signingData } = req.body;
+  const decodedData = jwt.verify(signingData, process.env.ESIGN_SALT!) as AadharEsignPayload
+  console.log(decodedData)
   const response = verifyEsignResponse(espXmlResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
     return res.send('redirect?type=cancelled');

@@ -17,5 +17,7 @@ export interface CreateDocumentEvent {
         validTill?: string
         timeToSign?: string
         version: number
+        signedTime?: string,
+        signDocID?: number,
     };
 }
