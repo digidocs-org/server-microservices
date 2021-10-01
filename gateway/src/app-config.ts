@@ -1,27 +1,20 @@
-import { json } from 'body-parser';
+import { json } from 'express';
 import { App } from '@digidocs/guardian';
 import fileUpload from 'express-fileupload';
-import { ApiRouter } from 'gateway/routes'
-
+import { ApiRouter } from 'gateway/routes';
 
 export class Application {
-    private app: App;
+  private app: App;
 
-    constructor() {
-        this.app = new App(
-            [ApiRouter.route()],
-            [
-                json(),
-                fileUpload()
-            ]
-        );
-    }
+  constructor() {
+    this.app = new App([ApiRouter.route()], [json(), fileUpload()]);
+  }
 
-    public async start(portNumber: number) {
-        this.app.start(portNumber);
-    }
+  public async start(portNumber: number) {
+    this.app.start(portNumber);
+  }
 
-    public getApp() {
-        return this.app.getApp();
-    }
+  public getApp() {
+    return this.app.getApp();
+  }
 }

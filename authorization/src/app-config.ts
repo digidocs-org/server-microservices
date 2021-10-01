@@ -1,11 +1,13 @@
+/* eslint-disable no-process-exit */
 import { json } from 'express';
 import { App } from '@digidocs/guardian';
 
 import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';
-import { DocumentRouter } from './document/routes';
-import { CreateUserListener } from './events/listeners/user-created-listener';
 import fileUpload from 'express-fileupload';
+import { DocumentAuthorizationRouter } from './authorization/routes';
+import { CreateDocumentListener } from './events/listeners/document-created-listener';
+import { CreateUserListener } from './events/listeners/user-created-listener';
 
 export class Application {
   private app: App;
@@ -19,12 +21,12 @@ export class Application {
           process.env.NATS_URI!
         )
         .then(() => {
+          new CreateDocumentListener(natsWrapper.client).listen();
           new CreateUserListener(natsWrapper.client).listen();
         });
 
       natsWrapper.client.on('close', () => {
         console.log('NATS connection closed.');
-        // eslint-disable-next-line no-process-exit
         process.exit();
       });
 
@@ -33,7 +35,7 @@ export class Application {
     }
 
     this.app = new App(
-      [DocumentRouter.route()],
+      [DocumentAuthorizationRouter.route()],
       [json({ limit: '50mb' }), fileUpload()]
     );
   }

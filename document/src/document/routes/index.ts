@@ -4,8 +4,8 @@ import {
   validateRequest,
   currentUser,
 } from '@digidocs/guardian';
-import {Router} from 'express';
-import {body} from 'express-validator';
+import { Router } from 'express';
+
 import {
   createDocument,
   deleteDocument,
@@ -13,27 +13,26 @@ import {
   indexDocument,
   sendDocument,
 } from 'document-service/controllers';
-import {hasDocumentAccess} from 'document-service/middlewares/documentAccess';
+import { hasDocumentAccess } from 'document-service/middlewares/documentAccess';
 
 export class DocumentRouter {
   private static router = Router();
 
   public static route() {
     /**
-     * @Route  POST 'api/v1/document/create'
+     * @Route  POST 'api/document/create'
      * @Desc   Create a document
      * @Access Public
      */
     this.router.post(
       '/api/document/create',
-      headerValidators('token'),
+      bodyValidators('userId', 'file'),
       validateRequest,
-      currentUser,
       createDocument
     );
 
     /**
-     * @Route  POST 'api/v1/document/:id/send'
+     * @Route  POST 'api/document/send'
      * @Desc   Update a document
      * @Access Public
      */
@@ -47,29 +46,26 @@ export class DocumentRouter {
     );
 
     /**
-     * @Route  GET 'api/v1/document/:id/download'
+     * @Route  GET 'api/document/download'
      * @Desc   download a document
      * @Access Public
      */
-    this.router.get(
-      '/api/document/:id/download',
-      headerValidators('token'),
+    this.router.post(
+      '/api/document/download',
+      bodyValidators('documentId'),
       validateRequest,
-      currentUser,
-      hasDocumentAccess,
       downloadDocument
     );
 
     /**
-     * @Route  GET 'api/v1/document/index'
+     * @Route  GET 'api/document/index'
      * @Desc   index all the documents
      * @Access Public
      */
-    this.router.get(
-      '/api/document',
-      headerValidators('token'),
+    this.router.post(
+      '/api/document/index',
+      bodyValidators('documentId'),
       validateRequest,
-      currentUser,
       indexDocument
     );
 

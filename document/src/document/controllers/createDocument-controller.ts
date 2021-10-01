@@ -4,107 +4,87 @@ import { UploadedFile } from 'express-fileupload';
 import Document from 'document-service/models/document';
 import DocumentUserMap from 'document-service/models/document-user';
 import {
-    encryptDocument, IUploadOptions,
-    uploadToS3Bucket,
-    IUploadResponse,
-    checkForBase64String,
-    checkForPdf,
-    checkForProtectedPdf,
-    BadRequestError,
-    parseUploadData
-} from '@digidocs/guardian'
+  encryptDocument,
+  IUploadOptions,
+  uploadToS3Bucket,
+  IUploadResponse,
+  checkForBase64String,
+  checkForPdf,
+  checkForProtectedPdf,
+  BadRequestError,
+  parseUploadData,
+} from '@digidocs/guardian';
 import { DocumentStatus } from '@digidocs/guardian';
 import { CreateDocumentPublisher } from 'src/events/publishers/create-document-publisher';
 import { natsWrapper } from 'src/nats-wrapper';
 
 export const createDocument = async (req: Request, res: Response) => {
-    const ownerId = req.currentUser?.id;
+  const { userId: ownerId, file } = req.body;
 
-    // Fetch the document from request
-    const { files } = req;
+  const fileData = Buffer.from(file.data.data);
+  const fileName = file.name;
 
-    if (!files) {
-        throw new BadRequestError('Please upload a PDF file!');
-    }
+  if (!file || !checkForPdf(fileData)) {
+    throw new BadRequestError('Please upload a PDF file!');
+  }
 
-    if (files && Object.keys(files).length > 1) {
-        throw new BadRequestError('Multilpe files upload is not allowed!');
-    }
+  const isPasswordProtected = await checkForProtectedPdf(fileData);
 
-    // eslint-disable-next-line prefer-destructuring
-    const file = files.file as UploadedFile;
+  if (isPasswordProtected) {
+    throw new BadRequestError('Cannot upload password protected file!');
+  }
 
-    const fileData = file.data;
-    const fileName = file.name;
+  // Encrypt the document.
+  const { encryptedFile, publicKey } = encryptDocument(fileData);
 
-    if (!file || !checkForPdf(fileData)) {
-        throw new BadRequestError('Please upload a PDF file!');
-    }
+  // Export public key.
+  const exportPublicKey = publicKey.export({
+    format: 'pem',
+    type: 'spki',
+  });
 
-    if (req.body.file && !checkForBase64String(req.body.file)) {
-        throw new BadRequestError('Not a valid file!');
-    }
+  const parsedFiles = parseUploadData(encryptedFile, exportPublicKey, ownerId!);
 
-    const isPasswordProtected = await checkForProtectedPdf(fileData);
+  // Upload document and key to s3.
+  Promise.all<IUploadResponse>(
+    parsedFiles.map((parsedFile: IUploadOptions) =>
+      uploadToS3Bucket(parsedFile)
+    )
+  )
+    .then(async data => {
+      const documentID = data[0].name;
+      const publicKeyID = data[1].name;
 
-    if (isPasswordProtected) {
-        throw new BadRequestError('Cannot upload password protected file!');
-    }
+      // Add the document in Document schema
+      const document = await Document.create({
+        name: fileName,
+        documentId: documentID,
+        publicKeyId: publicKeyID,
+        status: DocumentStatus.DRAFTS,
+        isDrafts: true,
+        userId: ownerId,
+      });
 
-    // Encrypt the document.
-    const { encryptedFile, publicKey } = encryptDocument(fileData);
+      new CreateDocumentPublisher(natsWrapper.client).publish({
+        id: document.id,
+        name: document.name,
+        message: document.message,
+        inOrder: document.inOrder,
+        publicKeyId: document.publicKeyId,
+        documentId: document.documentId,
+        selfSign: document.selfSign,
+        isDrafts: document.isDrafts,
+        status: document.status,
+        userId: document.userId,
+        validTill: document.validTill,
+        timeToSign: document.timeToSign,
+        version: document.version,
+      });
 
-    // Export public key.
-    const exportPublicKey = publicKey.export({
-        format: 'pem',
-        type: 'spki',
+      return res.send({ success: true, data: { id: document.id } });
+    })
+    .catch(err => {
+      console.log(err);
+      throw new BadRequestError('Upload failed!!!');
     });
-
-    const parsedFiles = parseUploadData(encryptedFile, exportPublicKey, ownerId!);
-
-    // Upload document and key to s3.
-    Promise.all<IUploadResponse>(parsedFiles.map((parsedFile: IUploadOptions) => uploadToS3Bucket(parsedFile)))
-        .then(async (data) => {
-            const documentID = data[0].name;
-            const publicKeyID = data[1].name;
-
-            // Add the document in Document schema
-            const document = await Document.create({
-                name: fileName,
-                documentId: documentID,
-                publicKeyId: publicKeyID,
-                status: DocumentStatus.DRAFTS,
-                isDrafts: true,
-                userId: ownerId,
-            });
-
-            // Add the owner permission in Document User Map Schema.
-            await DocumentUserMap.create({
-                user: ownerId,
-                document: document.id,
-                access: true,
-            });
-
-            new CreateDocumentPublisher(natsWrapper.client).publish({
-                id: document.id,
-                name: document.name,
-                message: document.message,
-                inOrder: document.inOrder,
-                publicKeyId: document.publicKeyId,
-                documentId: document.documentId,
-                selfSign: document.selfSign,
-                isDrafts: document.isDrafts,
-                status: document.status,
-                userId: document.userId,
-                validTill: document.validTill,
-                timeToSign: document.timeToSign,
-                version: document.version,
-            })
-
-            return res.send({ success: true, data: { id: document.id } });
-        })
-        .catch((err) => {
-            console.log(err);
-            throw new BadRequestError('Upload failed!!!');
-        });
 };

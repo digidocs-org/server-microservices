@@ -1,3 +1,5 @@
+export const queueGroupName = 'authorization-service';
+
 /**
  * @desc field names that can be added by the user
  */
@@ -47,5 +49,3 @@ export const enum ActionStatus {
   DECLINED = 'DECLINED',
   RECEIVED = 'RECEIVED',
 }
-
-export const queueGroupName = 'document-service';

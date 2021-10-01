@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { DocumentStatus,BadRequestError } from '@digidocs/guardian';
-import { IDocumentActions,IDocument } from 'document-service/models';
+import { DocumentStatus, BadRequestError } from '@digidocs/guardian';
+import { IDocumentActions, IDocument } from 'document-service/models';
 import DocumentUserModel from 'document-service/models/document-user';
 import User from 'document-service/models/user';
 
@@ -12,16 +12,16 @@ export const indexDocument = async (req: Request, res: Response) => {
     .populate('action')
     .populate('document');
 
-  if (documentUserMap.length == 0) {
+  if (documentUserMap.length === 0) {
     return res.send({ success: true, data: [] });
   }
 
   try {
-    let index = await Promise.all(
-      documentUserMap.map(async (list) => {
+    const index = await Promise.all(
+      documentUserMap.map(async list => {
         const document = list.document as IDocument;
         const action = list?.action as IDocumentActions;
-        let actionsList = [];
+        const actionsList = [];
         if (action) {
           actionsList.push({
             email: action.recepientEmail,

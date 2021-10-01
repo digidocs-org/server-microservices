@@ -1,16 +1,20 @@
-import { bodyValidators, headerValidators, validateRequest } from '@digidocs/guardian';
+import {
+  bodyValidators,
+  headerValidators,
+  validateRequest,
+} from '@digidocs/guardian';
 import { Router } from 'express';
 import {
-    signup,
-    signin, 
-    getUserProfile, 
-    refreshToken, 
-    verifyOtp, 
-    sendOTPEmail, 
-    forgotPasswordVerifyOtp, 
-    resetPassword, 
-    sendForgotPassOtp,
-    googleSignin,
+  signup,
+  signin,
+  getUserProfile,
+  refreshToken,
+  verifyOtp,
+  sendOTPEmail,
+  forgotPasswordVerifyOtp,
+  resetPassword,
+  sendForgotPassOtp,
+  googleSignin,
 } from 'gateway/controllers/auth-controller';
 
 const router = Router();
@@ -22,10 +26,10 @@ const router = Router();
  */
 
 router.post(
-    '/signup',
-    bodyValidators('email', 'password', 'firstname', 'lastname'),
-    validateRequest,
-    signup
+  '/signup',
+  bodyValidators('email', 'password', 'firstname', 'lastname'),
+  validateRequest,
+  signup
 );
 
 /**
@@ -35,10 +39,10 @@ router.post(
  */
 
 router.post(
-    '/signin',
-    bodyValidators('email', 'password'),
-    validateRequest,
-    signin
+  '/signin',
+  bodyValidators('email', 'password'),
+  validateRequest,
+  signin
 );
 
 /**
@@ -48,10 +52,10 @@ router.post(
  */
 
 router.get(
-    '/user-profile',
-    headerValidators('token'),
-    validateRequest,
-    getUserProfile
+  '/user-profile',
+  headerValidators('token'),
+  validateRequest,
+  getUserProfile
 );
 
 /**
@@ -61,10 +65,10 @@ router.get(
  */
 
 router.get(
-    '/refresh-token',
-    headerValidators('refreshToken'),
-    validateRequest,
-    refreshToken
+  '/refresh-token',
+  headerValidators('refreshToken'),
+  validateRequest,
+  refreshToken
 );
 
 /**
@@ -73,10 +77,7 @@ router.get(
  * @Access Public
  */
 
-router.get(
-    '/google',
-    googleSignin
-);
+router.get('/google', googleSignin);
 
 /**
  * @Route  POST 'api/v1/auth/verify-email'
@@ -84,11 +85,11 @@ router.get(
  * @Access Private
  */
 router.post(
-    '/verify-otp',
-    headerValidators('token'),
-    bodyValidators('otp'),
-    validateRequest,
-    verifyOtp
+  '/verify-otp',
+  headerValidators('token'),
+  bodyValidators('otp'),
+  validateRequest,
+  verifyOtp
 );
 
 /**
@@ -97,10 +98,10 @@ router.post(
  * @Access Private
  */
 router.post(
-    '/send-otp-email',
-    headerValidators('token'),
-    validateRequest,
-    sendOTPEmail
+  '/send-otp-email',
+  headerValidators('token'),
+  validateRequest,
+  sendOTPEmail
 );
 
 /**
@@ -109,10 +110,10 @@ router.post(
  * @Access Private
  */
 router.post(
-    '/forgotPassword/send-otp',
-    bodyValidators('email'),
-    validateRequest,
-    sendForgotPassOtp
+  '/forgotPassword/send-otp',
+  bodyValidators('email'),
+  validateRequest,
+  sendForgotPassOtp
 );
 
 /**
@@ -121,10 +122,10 @@ router.post(
  * @Access Private
  */
 router.post(
-    '/forgotPassword/verify-otp',
-    bodyValidators('email', 'otp'),
-    validateRequest,
-    forgotPasswordVerifyOtp
+  '/forgotPassword/verify-otp',
+  bodyValidators('email', 'otp'),
+  validateRequest,
+  forgotPasswordVerifyOtp
 );
 
 /**
@@ -133,11 +134,11 @@ router.post(
  * @Access Private
  */
 router.post(
-    '/reset-password',
-    headerValidators('reset-token'),
-    bodyValidators('password'),
-    validateRequest,
-    resetPassword
+  '/reset-password',
+  headerValidators('reset-token'),
+  bodyValidators('password'),
+  validateRequest,
+  resetPassword
 );
 
 export = router;
