@@ -10,21 +10,24 @@ import {
 } from '@digidocs/guardian';
 import { createJarSigningReq, verifyEsignResponse } from 'signing-service/utils';
 import { AadharEsignPayload, EsignRequest, EsignResponse } from 'signing-service/types';
-import crypto from 'crypto';
 import jwt from 'jsonwebtoken'
 
 export const esignCallback = async (req: Request, res: Response) => {
-  const { espXmlResponse, signingData } = req.body;
+  const { espResponse, signingData } = req.body;
   const decodedData = jwt.verify(signingData, process.env.ESIGN_SALT!) as AadharEsignPayload
-  console.log(decodedData)
-  const response = verifyEsignResponse(espXmlResponse);
+  const { documentId, docSignId, signTime } = decodedData
+  const response = verifyEsignResponse(espResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
     return res.send('redirect?type=cancelled');
   }
-  const documentId = req.query.id;
+  if (!documentId || !docSignId || signTime) {
+    console.log("field missing")
+    return res.send('redirect?type=failed');
+  }
+
   const document = await Document.findById(documentId);
   if (!document) {
-    console.log('not found document');
+    console.log("document not found")
     return res.send('redirect?type=failed');
   }
 
@@ -37,16 +40,12 @@ export const esignCallback = async (req: Request, res: Response) => {
   const publicKey = publicKeyBuffer.toString();
   const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
-  //TODO: Import time and doc id from the docUserMap 
-  const timeOfDocSign = new Date().toString();
-  const docId = crypto.randomInt(100000, 1000000);
-
   const signFieldData: EsignRequest = {
     name: "Naman Singh",
     location: "India",
     reason: "Aadhar E-Sign",
-    docId,
-    timeOfDocSign,
+    docId: docSignId,
+    timeOfDocSign: signTime,
     signatureFieldData: {
       data: [
         {
@@ -61,7 +60,7 @@ export const esignCallback = async (req: Request, res: Response) => {
 
   try {
     await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
-    await writeFile(esignRequest.responseTextFile, espXmlResponse, 'utf-8');
+    await writeFile(esignRequest.responseTextFile, espResponse, 'utf-8');
     await exec(esignRequest.signingRequest);
 
 
