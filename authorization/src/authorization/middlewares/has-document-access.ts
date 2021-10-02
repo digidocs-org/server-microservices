@@ -34,7 +34,7 @@ const hasDocumentAccess = async (
     .populate('action')
     .populate('user');
 
-  if (!docUserMap) {
+  if (!docUserMap || docUserMap.access) {
     throw new BadRequestError('Cannot access the document!!');
   }
 

@@ -1,12 +1,13 @@
-import {json} from 'body-parser';
-import {App} from '@digidocs/guardian';
+import { json } from 'express';
+import { App } from '@digidocs/guardian';
 import cookieSession from 'cookie-session';
 
-import {DatabaseConfig} from './db-config';
-import {natsWrapper} from './nats-wrapper';
-import {AuthRouter} from './auth/routes';
+import { DatabaseConfig } from './db-config';
+import { natsWrapper } from './nats-wrapper';
+import { AuthRouter } from './auth/routes';
 import passport from 'passport';
 import passportInit from 'auth/services/passport';
+import { CreateGuestUserListener } from './events/listeners/create-guest-user-listener';
 
 export class Application {
   private app: App;
@@ -15,11 +16,15 @@ export class Application {
     if (process.env.NODE_ENV !== 'test') {
       passportInit();
 
-      natsWrapper.connect(
-        process.env.NATS_CLUSTER_ID!,
-        process.env.NATS_CLIENT_ID!,
-        process.env.NATS_URI!
-      );
+      natsWrapper
+        .connect(
+          process.env.NATS_CLUSTER_ID!,
+          process.env.NATS_CLIENT_ID!,
+          process.env.NATS_URI!
+        )
+        .then(() => {
+          new CreateGuestUserListener(natsWrapper.client).listen();
+        });
 
       natsWrapper.client.on('close', () => {
         console.log('NATS connection closed.');

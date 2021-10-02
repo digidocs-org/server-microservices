@@ -1,14 +1,15 @@
+import { Request, Response } from 'express';
 import { IDocument } from 'authorization-service/models/Document';
 import {
   ActionStatus,
   ActionType,
   AuthType,
 } from 'authorization-service/types';
-import { Request, Response } from 'express';
 import { BadRequestError, NotAuthorizedError } from '@digidocs/guardian';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
 import Actions from 'authorization-service/models/Actions';
 import User from 'authorization-service/models/User';
+import createGuestUser from 'authorization-service/services/user/create-guest-user';
 
 interface Recipient {
   type: ActionType;
@@ -16,7 +17,7 @@ interface Recipient {
   authType: AuthType;
   recepientName: string;
   actionStatus: ActionStatus;
-  recepientEmail: string;
+  recipientEmail: string;
   signOrder: number;
 }
 
@@ -41,7 +42,7 @@ const addRecipientsController = async (req: Request, res: Response) => {
   // recipients array.
   if (document.selfSign) {
     const idx = recipients.findIndex(
-      recipient => recipient.recepientEmail === loggedInUser.email
+      recipient => recipient.recipientEmail === loggedInUser.email
     );
 
     if (idx === -1) {
@@ -76,13 +77,13 @@ const addRecipientsController = async (req: Request, res: Response) => {
 
     // Create action and document user maps of recipients
     for (const recipient of recipients) {
-      const { recepientEmail } = recipient;
-      const user = await User.findOne({ email: recepientEmail });
+      const { recipientEmail } = recipient;
+      const user = await User.findOne({ email: recipientEmail });
 
       let userId = user?.id;
 
       if (!user) {
-        // userId = await createGuestUser(recepientEmail);
+        userId = await createGuestUser(recipientEmail);
       }
 
       const action = await Actions.create(recipient);
@@ -90,7 +91,7 @@ const addRecipientsController = async (req: Request, res: Response) => {
       await DocumentUserMap.create({
         user: userId,
         document: document.id,
-        access: recepientEmail === loggedInUser.email,
+        access: recipientEmail === loggedInUser.email,
         action: action.id,
       });
     }
