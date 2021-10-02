@@ -17,17 +17,19 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 };
 
 export const aadharEsignCallback = async (req: Request, res: Response) => {
-  try {
-    const msg = req.body.msg;
+    try {
+        const msg = req.body.msg
+        const { data: signingData } = req.query
 
-    const { data } = await api.post(esignService.aadharEsignCallback, {
-      espResponse: msg,
-    });
-    return res.redirect(data);
-  } catch (error) {
-    return errorResponseParser(error, res);
-  }
-};
+        const { data } = await api.post(esignService.aadharEsignCallback, {
+            espResponse: msg,
+            signingData
+        })
+        return res.redirect(data)
+    } catch (error) {
+        return errorResponseParser(error, res)
+    }
+}
 
 export const redirectCallback = async (req: Request, res: Response) => {
   try {

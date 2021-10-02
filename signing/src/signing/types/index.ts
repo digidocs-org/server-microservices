@@ -23,7 +23,13 @@ export interface EsignRequest {
 }
 
 export interface SignField {
-  pageNo: number;
-  xCoord: number;
-  yCoord: number;
+  pageNo: number
+  xCoord: number
+  yCoord: number
+}
+
+export interface AadharEsignPayload {
+  signTime: string
+  docSignId: number
+  documentId: string
 }

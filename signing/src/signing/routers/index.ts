@@ -13,6 +13,7 @@ export class SigningRouter {
   private static router = Router();
 
   public static route() {
+    
     /**
      * @Route  GET 'api/v1/sign/aadhar-esign'
      * @Desc   create a esign request to NSDL
@@ -25,18 +26,6 @@ export class SigningRouter {
       validateRequest,
       // currentUser,
       aadharEsignRequest
-    );
-
-    /**
-     * @Route  POST 'api/v1/sign/aadhar-esign/callback'
-     * @Desc   Callback route for signing document
-     * @Access Private
-     */
-    this.router.post(
-      '/api/esign/aadhar/callback',
-      bodyValidators('espResponse'),
-      validateRequest,
-      esignCallback
     );
 
     /**
@@ -61,6 +50,18 @@ export class SigningRouter {
       bodyValidators('documentId'),
       validateRequest,
       digitalSignRequest
+    );
+
+    /**
+     * @Route  POST 'api/v1/sign/aadhar-esign/callback'
+     * @Desc   Callback route for signing document
+     * @Access Private
+     */
+    this.router.post(
+      '/api/esign/aadhar/callback',
+      bodyValidators("espResponse", "signingData"),
+      validateRequest,
+      esignCallback
     );
 
     return this.router;

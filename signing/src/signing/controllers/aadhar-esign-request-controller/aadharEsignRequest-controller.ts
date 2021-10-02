@@ -1,14 +1,12 @@
 import { Request, Response } from 'express';
 import { decryptDocument, BadRequestError, fetchData, exec, writeFile, deleteFile, SignTypes, readFile } from '@digidocs/guardian';
 import { createSignedXML, generateChecksum } from '@digidocs-org/rsa-crypt';
-import { createJarSigningReq, generateXml } from 'signing-service/utils';
+import { createJarSigningReq, generateXml, generateToken } from 'signing-service/utils';
 import Document from 'signing-service/models/document';
 import { EsignRequest, Files } from 'signing-service/types';
 import crypto from 'crypto'
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
-    // const documentUserMapId = req.documentUserMap?.id
-    // const document = req.documentUserMap?.document as IDocument;
     const documentId = req.body.documentId;
 
     const document = await Document.findById(documentId);
@@ -53,14 +51,21 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 
         const pfxFile = await readFile(Files.pfxKey);
         const fileChecksum = generateChecksum(unsignedFieldBuffer, "hex");
+        const jwt = generateToken({
+            documentId,
+            docSignId: docId,
+            signTime: timeOfDocSign
+        },
+            process.env.ESIGN_SALT!,
+            process.env.ESIGN_SALT_EXPIRE!
+        )
+
         const xml = generateXml({
             aspId: process.env.ASP_ID!,
-            responseUrl: `${process.env.ESIGN_RESPONSE_URL!}?id=${documentId}`,
+            responseUrl: `${process.env.ESIGN_RESPONSE_URL!}?data=${jwt}`,
             checksum: fileChecksum
         })
         const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml })
-        //TODO: create a field in documentUserMap for time of signing and documentId
-        //TODO: create a field in documentUserMap for docId 
         deleteFile(esignRequest.signedFilePath);
         return res.render('esignRequest', {
             esignRequestXMLData: signedXML
