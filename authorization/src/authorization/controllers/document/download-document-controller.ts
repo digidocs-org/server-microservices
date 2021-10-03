@@ -3,7 +3,7 @@ import { BadRequestError } from '@digidocs/guardian';
 import downloadDocumentService from 'authorization-service/services/document/download-document-service';
 import { IDocument } from 'authorization-service/models/Document';
 
-const downloadDocumentController = async (req: Request, res: Response) => {
+export const downloadDocumentController = async (req: Request, res: Response) => {
   const { docUserMap } = req;
   const documentData = docUserMap?.document as IDocument
 
@@ -14,5 +14,3 @@ const downloadDocumentController = async (req: Request, res: Response) => {
   const document = await downloadDocumentService(documentData.id);
   return res.send(document);
 };
-
-export default downloadDocumentController;

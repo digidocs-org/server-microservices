@@ -6,7 +6,7 @@ import DocumentUserMap from 'src/authorization/models/DocumentUserMap';
 import Actions from 'authorization-service/models/Actions';
 import { ActionType } from 'authorization-service/types';
 
-const createDocumentController = async (req: Request, res: Response) => {
+export const createDocumentController = async (req: Request, res: Response) => {
   const user = req.currentUser;
 
   if (!user) {
@@ -41,5 +41,3 @@ const createDocumentController = async (req: Request, res: Response) => {
 
   return res.send(data);
 };
-
-export default createDocumentController;

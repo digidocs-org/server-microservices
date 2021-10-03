@@ -1,92 +1,26 @@
 import { Router } from 'express';
-import {
-  bodyValidators,
-  currentUser,
-  headerValidators,
-  validateRequest,
-} from '@digidocs/guardian';
-import hasDocumentAccess from 'authorization-service/middlewares/has-document-access';
-import createDocumentController from '../controllers/document/create-document-controller';
-import downloadDocumentController from '../controllers/document/download-document-controller';
-import indexDocumentController from 'authorization-service/controllers/document/index-document-controller';
-import addRecipientsController from 'authorization-service/controllers/add-recipients-controller';
-import sendDocumentController from 'authorization-service/controllers/document/send-document-controller';
+import esignRouter from './esign-router';
+import documentRouter from './document-router';
+import recipientRouter from './recipient-router'
 
-export class DocumentAuthorizationRouter {
-  public static router = Router();
+export class ApiRouter {
+  private static router = Router();
 
   public static route() {
     /**
-     * @Route  GET '/api/v1/document'
-     * @Desc   Create new document
-     * @Access Public
+     * @description Esign Router
      */
-    this.router.post(
-      '/api/v1/document',
-      headerValidators('token'),
-      validateRequest,
-      currentUser,
-      createDocumentController
-    );
+    this.router.use('/api/authorization/esign', esignRouter);
 
     /**
-     * @Route  GET '/api/v1/document/:id/download'
-     * @Desc   Download the document
-     * @Access Public
+     * @description Document Router
      */
-    this.router.get(
-      '/api/v1/document/download',
-      headerValidators('token','documentId'),
-      validateRequest,
-      currentUser,
-      hasDocumentAccess,
-      downloadDocumentController
-    );
+    this.router.use('api/authorization/document', documentRouter);
 
     /**
-     * @Route  GET '/api/v1/document/index'
-     * @Desc   index all the documents
-     * @Access Public
-     */
-    this.router.get(
-      '/api/v1/document/index',
-      headerValidators('token','documentId'),
-      validateRequest,
-      currentUser,
-      hasDocumentAccess,
-      indexDocumentController
-    );
-
-    /**
-     * @Route  GET '/api/v1/document/send'
-     * @Desc   Send Document to the recipients
-     * @Access Public
-     */
-    this.router.post(
-      '/api/v1/document/send',
-      headerValidators('token','documentId'),
-      validateRequest,
-      currentUser,
-      hasDocumentAccess,
-      sendDocumentController
-    );
-
-    /**
-     * @Route  GET '/api/v1/document/add-recipients'
-     * @Desc   Add Recipients of the document
-     * @Access Public
-     */
-    this.router.post(
-      '/api/v1/document/add-recipients',
-      headerValidators('token','documentId'),
-      validateRequest,
-      currentUser,
-      hasDocumentAccess,
-      addRecipientsController
-    );
-
-      
-
+    * @description Document Router
+    */
+    this.router.use('api/authorization/recipient', documentRouter);
     return this.router;
   }
 }

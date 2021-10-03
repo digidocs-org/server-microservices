@@ -4,7 +4,7 @@ import Document, { IDocument } from 'authorization-service/models/Document';
 import { BadRequestError } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 
-const sendDocumentController = async (req: Request, res: Response) => {
+export const sendDocumentController = async (req: Request, res: Response) => {
   const documentData = req.docUserMap?.document as IDocument
 
   const { id: documentId } = documentData.id
@@ -49,5 +49,3 @@ const sendDocumentController = async (req: Request, res: Response) => {
 
   return res.send({ success: true });
 };
-
-export default sendDocumentController;

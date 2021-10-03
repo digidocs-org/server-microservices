@@ -21,7 +21,7 @@ interface Recipient {
   signOrder: number;
 }
 
-const addRecipientsController = async (req: Request, res: Response) => {
+export const addRecipientsController = async (req: Request, res: Response) => {
   const recipients = req.body.recipients as Recipient[];
   const document = req.docUserMap?.document as IDocument;
   const loggedInUser = req.currentUser;
@@ -99,5 +99,3 @@ const addRecipientsController = async (req: Request, res: Response) => {
 
   return res.send({ success: true });
 };
-
-export default addRecipientsController;
