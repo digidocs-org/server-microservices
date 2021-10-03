@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { apiAdapter, errorResponseParser } from 'gateway/services/apiAdapter';
-import { endpoints } from 'gateway/services/endpoints';
+import { endpoints } from 'gateway/types/endpoints';
 
 const api = apiAdapter(process.env.AUTH_SERVICE_BASE_URL!);
 const authService = endpoints.authService;

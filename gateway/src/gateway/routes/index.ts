@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import authRouter from './auth-router';
-import esignRouter from './esign-router';
-import documentRouter from './document-router';
+import { authorizationRedirect } from 'gateway/controllers/authorization-controller';
 
 export class ApiRouter {
   private static router = Router();
@@ -12,15 +11,11 @@ export class ApiRouter {
      */
     this.router.use('/api/v1/auth', authRouter);
 
-    /**
-     * @description Esign Router
-     */
-    this.router.use('/api/v1/esign', esignRouter);
 
     /**
      * @description Document Router
      */
-    this.router.use('api/v1/document', documentRouter);
+    this.router.all('/api/v1/authorization/*', authorizationRedirect);
 
     return this.router;
   }

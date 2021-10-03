@@ -3,7 +3,7 @@ import esignRouter from './esign-router';
 import documentRouter from './document-router';
 import recipientRouter from './recipient-router'
 
-export class ApiRouter {
+export class DocumentAuthorizationRouter {
   private static router = Router();
 
   public static route() {
@@ -21,6 +21,7 @@ export class ApiRouter {
     * @description Document Router
     */
     this.router.use('api/authorization/recipient', documentRouter);
+
     return this.router;
   }
 }
