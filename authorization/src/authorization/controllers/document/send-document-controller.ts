@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
-import Document from 'authorization-service/models/Document';
+import Document, { IDocument } from 'authorization-service/models/Document';
 import { BadRequestError } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 
 const sendDocumentController = async (req: Request, res: Response) => {
-  const { id: documentId } = req.params;
+  const documentData = req.docUserMap?.document as IDocument
+
+  const { id: documentId } = documentData.id
 
   const document = await Document.findById(documentId);
 

@@ -20,11 +20,7 @@ export const endpoints = {
     digitalSignRequest: '/api/esign/digital',
   },
 
-  documentService: {
-    index: '/api/document/',
-    create: '/api/document/create',
-    send: '/api/document/:id/send',
-  },
+  authorizationService: {
 
-  authorizationService: {},
+  },
 };

@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { BadRequestError } from '@digidocs/guardian';
-import { DOCUMENT_ROUTES } from '../../routes/document';
+import { endpoints } from 'authorization-service/types/endpoints';
 
 const downloadDocumentService = async (documentId: string) => {
   try {
+    const { DOCUMENT_ROUTES } = endpoints
     const response = await axios.post(DOCUMENT_ROUTES.downloadDocument, {
       documentId,
     });

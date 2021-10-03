@@ -35,8 +35,8 @@ export class DocumentAuthorizationRouter {
      * @Access Public
      */
     this.router.get(
-      '/api/v1/document/:id/download',
-      headerValidators('token'),
+      '/api/v1/document/download',
+      headerValidators('token','documentId'),
       validateRequest,
       currentUser,
       hasDocumentAccess,
@@ -49,8 +49,8 @@ export class DocumentAuthorizationRouter {
      * @Access Public
      */
     this.router.get(
-      '/api/v1/document/:id/index',
-      headerValidators('token'),
+      '/api/v1/document/index',
+      headerValidators('token','documentId'),
       validateRequest,
       currentUser,
       hasDocumentAccess,
@@ -63,8 +63,8 @@ export class DocumentAuthorizationRouter {
      * @Access Public
      */
     this.router.post(
-      '/api/v1/document/:id/send',
-      headerValidators('token'),
+      '/api/v1/document/send',
+      headerValidators('token','documentId'),
       validateRequest,
       currentUser,
       hasDocumentAccess,
@@ -77,13 +77,15 @@ export class DocumentAuthorizationRouter {
      * @Access Public
      */
     this.router.post(
-      '/api/v1/document/:id/add-recipients',
-      headerValidators('token'),
+      '/api/v1/document/add-recipients',
+      headerValidators('token','documentId'),
       validateRequest,
       currentUser,
       hasDocumentAccess,
       addRecipientsController
     );
+
+      
 
     return this.router;
   }
