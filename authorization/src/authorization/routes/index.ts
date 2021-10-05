@@ -10,17 +10,17 @@ export class DocumentAuthorizationRouter {
     /**
      * @description Esign Router
      */
-    this.router.use('/api/authorization/esign', esignRouter);
+    this.router.use('/api/v1/authorization/esign', esignRouter);
 
     /**
      * @description Document Router
      */
-    this.router.use('api/authorization/document', documentRouter);
+    this.router.use('/api/v1/authorization/document', documentRouter);
 
     /**
     * @description Document Router
     */
-    this.router.use('api/authorization/recipient', documentRouter);
+    this.router.use('/api/v1/authorization/recipient', documentRouter);
 
     return this.router;
   }

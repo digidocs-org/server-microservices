@@ -24,7 +24,7 @@ const hasDocumentAccess = async (
     throw new BadRequestError('Cannot access the document!!');
   }
 
-  const documentId = req.body.documentId;
+  const documentId = req.params.documentId;
 
   const docUserMap = await DocumentUserMap.findOne({
     user: userId,

@@ -29,9 +29,8 @@ router.post(
  * @Access Public
  */
 router.get(
-    '/download',
+    '/download/:documentId',
     headerValidators('token'),
-    bodyValidators('documentId'),
     validateRequest,
     currentUser,
     hasDocumentAccess,

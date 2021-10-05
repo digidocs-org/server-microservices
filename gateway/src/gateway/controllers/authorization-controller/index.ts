@@ -1,12 +1,20 @@
+import { Method } from 'axios';
 import { Request, Response } from 'express';
 import { apiAdapter, errorResponseParser } from 'gateway/services/apiAdapter';
-import { endpoints } from 'gateway/types/endpoints';
 
+const api = apiAdapter(process.env.AUTHORIZATION_SERVICE_BASE_URL!);
 
 export const authorizationRedirect = async (req: Request, res: Response) => {
   try {
-    console.log(req.path)
+    const { data } = await api({
+      url: req.path,
+      data: req.body,
+      method: req.method as Method,
+      headers: req.headers,
+      params: req.query
+    })
+    return res.send(data)
   } catch (error) {
-      
+    return errorResponseParser(error, res);
   }
 };
