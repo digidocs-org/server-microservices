@@ -20,7 +20,7 @@ export class DocumentAuthorizationRouter {
     /**
     * @description Document Router
     */
-    this.router.use('/api/v1/authorization/recipient', documentRouter);
+    this.router.use('/api/v1/authorization/recipient', recipientRouter);
 
     return this.router;
   }

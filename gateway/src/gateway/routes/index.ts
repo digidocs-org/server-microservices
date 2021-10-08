@@ -13,7 +13,7 @@ export class ApiRouter {
 
 
     /**
-     * @description Document Router
+     * @description authorization Router
      */
     this.router.all('/api/v1/authorization/*', authorizationRedirect);
 

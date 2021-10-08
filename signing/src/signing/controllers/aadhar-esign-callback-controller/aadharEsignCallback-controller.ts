@@ -6,9 +6,12 @@ import {
   fetchData,
   writeFile,
   exec,
-  SignTypes
+  SignTypes,
+  encryptDocument,
+  uploadToS3Bucket,
+  readFile
 } from '@digidocs/guardian';
-import { createJarSigningReq, verifyEsignResponse } from 'signing-service/utils';
+import { createJarSigningReq, parseUploadData, verifyEsignResponse } from 'signing-service/utils';
 import { AadharEsignPayload, EsignRequest, EsignResponse } from 'signing-service/types';
 import jwt from 'jsonwebtoken'
 
@@ -63,8 +66,17 @@ export const esignCallback = async (req: Request, res: Response) => {
     await writeFile(esignRequest.responseTextFile, espResponse, 'utf-8');
     await exec(esignRequest.signingRequest);
 
+    const dataBuffer = await readFile(esignRequest.signedFilePath)
 
-    // deleteFile(signedFilePath);
+    const { encryptedFile, publicKey } = encryptDocument(dataBuffer);
+    const exportPublicKey = publicKey.export({
+      format: 'pem',
+      type: 'spki',
+    });
+    const parsedFiles = parseUploadData(encryptedFile, document.documentId, exportPublicKey, document.publicKeyId, document.userId);
+    await Promise.all(parsedFiles.map((parsedFile) => uploadToS3Bucket(parsedFile)))
+
+    deleteFile(esignRequest.signedFilePath);
     return res.send('redirect?type=success');
   } catch (error) {
     console.log(error);
