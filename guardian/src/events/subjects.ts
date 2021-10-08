@@ -6,4 +6,6 @@ export enum Subjects {
   SendEmail = 'email:send',
 
   CreateDocument = 'document:create',
+
+  SigningSuccess = 'signing:success'
 }

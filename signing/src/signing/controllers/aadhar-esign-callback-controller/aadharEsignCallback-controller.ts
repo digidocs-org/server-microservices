@@ -75,6 +75,7 @@ export const esignCallback = async (req: Request, res: Response) => {
     });
     const parsedFiles = parseUploadData(encryptedFile, document.documentId, exportPublicKey, document.publicKeyId, document.userId);
     await Promise.all(parsedFiles.map((parsedFile) => uploadToS3Bucket(parsedFile)))
+    
 
     deleteFile(esignRequest.signedFilePath);
     return res.send('redirect?type=success');
