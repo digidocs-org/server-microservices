@@ -1,7 +1,7 @@
 import { SignTypes } from '../../types';
 import { Subjects } from '../subjects';
 
-export interface CreateDocumentEvent {
+export interface EsignSuccessEvent {
     subject: Subjects.SigningSuccess;
     data: {
         type: SignTypes

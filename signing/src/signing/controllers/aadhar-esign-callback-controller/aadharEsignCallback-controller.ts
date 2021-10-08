@@ -14,6 +14,8 @@ import {
 import { createJarSigningReq, parseUploadData, verifyEsignResponse } from 'signing-service/utils';
 import { AadharEsignPayload, EsignRequest, EsignResponse } from 'signing-service/types';
 import jwt from 'jsonwebtoken'
+import { EsignSuccess } from 'src/events/publishers';
+import { natsWrapper } from 'src/nats-wrapper';
 
 export const esignCallback = async (req: Request, res: Response) => {
   const { espResponse, signingData } = req.body;
@@ -75,7 +77,9 @@ export const esignCallback = async (req: Request, res: Response) => {
     });
     const parsedFiles = parseUploadData(encryptedFile, document.documentId, exportPublicKey, document.publicKeyId, document.userId);
     await Promise.all(parsedFiles.map((parsedFile) => uploadToS3Bucket(parsedFile)))
-    
+    new EsignSuccess(natsWrapper.client).publish({
+      type: SignTypes.AADHAR_SIGN
+    })
 
     deleteFile(esignRequest.signedFilePath);
     return res.send('redirect?type=success');

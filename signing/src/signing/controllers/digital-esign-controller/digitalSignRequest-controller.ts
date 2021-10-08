@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
 import Document from 'signing-service/models/document'
-import { BadRequestError, decryptDocument, deleteFile, exec, fetchData, SignTypes, writeFile } from '@digidocs/guardian'
-import { createJarSigningReq } from 'signing-service/utils';
+import { BadRequestError, decryptDocument, deleteFile, encryptDocument, exec, fetchData, readFile, SignTypes, uploadToS3Bucket, writeFile } from '@digidocs/guardian'
+import { createJarSigningReq, parseUploadData } from 'signing-service/utils';
 import crypto from 'crypto'
 import { EsignRequest } from 'signing-service/types';
+import { EsignSuccess } from 'src/events/publishers';
+import { natsWrapper } from 'src/nats-wrapper';
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
     const documentId = req.params.id
@@ -48,11 +50,23 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
         await exec(esignRequest.signingRequest);
 
-        // deleteFile(signedFilePath);
+        const dataBuffer = await readFile(esignRequest.signedFilePath)
+        const { encryptedFile, publicKey } = encryptDocument(dataBuffer);
+        const exportPublicKey = publicKey.export({
+            format: 'pem',
+            type: 'spki',
+        });
+        const parsedFiles = parseUploadData(encryptedFile, document.documentId, exportPublicKey, document.publicKeyId, document.userId);
+        await Promise.all(parsedFiles.map((parsedFile) => uploadToS3Bucket(parsedFile)))
+        new EsignSuccess(natsWrapper.client).publish({
+            type: SignTypes.DIGITAL_SIGN
+        })
+
+        deleteFile(esignRequest.signedFilePath);
         return res.send('redirect?type=failed');
     } catch (error) {
         console.log(error);
-        // deleteFile(signedFilePath);
+        deleteFile(esignRequest.signedFilePath);
         return res.redirect('redirect?type=failed');
     }
 }
