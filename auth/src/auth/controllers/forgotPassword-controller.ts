@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import crypto from 'crypto';
 import { BadRequestError, ForbiddenError } from '@digidocs/guardian';
 import User from 'auth/models';
-// import { sendEmailToClient } from 'auth/auth/utils/email';
 import { generateTimeBasedToken } from 'auth/utils';
+import { SendEmailPublisher } from 'src/events/publishers';
+import { natsWrapper } from 'src/nats-wrapper';
 
 export const forgotPasswordOtp = async (req: Request, res: Response) => {
     const { email } = req.body;
@@ -18,11 +19,12 @@ export const forgotPasswordOtp = async (req: Request, res: Response) => {
     const secureRandom = crypto.randomInt(100000, 1000000);
     user.forgetPasswordOtp!.otp = secureRandom;
     user.forgetPasswordOtp!.expire = currentTimeStamp + 5 * 60000;
-    //   sendEmailToClient({
-    //     clientEmail: user.email,
-    //     subject: 'Account Password Reset',
-    //     body: `Your OTP for password change is: ${user.forgetPasswordOtp!.otp}`,
-    //   });
+    new SendEmailPublisher(natsWrapper.client).publish({
+        senderEmail: 'notifications@digidocs.one',
+        clientEmail: user.email,
+        subject: 'Account Password Reset',
+        body: `Your OTP for password change is: ${user.forgetPasswordOtp!.otp}`,
+    });
     await user.save();
     return res.send({ success: true });
 };

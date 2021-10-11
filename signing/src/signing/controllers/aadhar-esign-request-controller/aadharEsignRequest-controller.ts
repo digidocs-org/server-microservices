@@ -5,9 +5,11 @@ import { createJarSigningReq, generateXml, generateToken } from 'signing-service
 import Document from 'signing-service/models/document';
 import { EsignRequest, Files } from 'signing-service/types';
 import crypto from 'crypto'
+import user from 'signing-service/models/user';
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId;
+    const userId = req.body.userId
 
     const document = await Document.findById(documentId);
     if (!document) {
@@ -54,7 +56,8 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         const jwt = generateToken({
             documentId,
             docSignId: docId,
-            signTime: timeOfDocSign
+            signTime: timeOfDocSign,
+            userId
         },
             process.env.ESIGN_SALT!,
             process.env.ESIGN_SALT_EXPIRE!

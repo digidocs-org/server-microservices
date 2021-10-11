@@ -16,7 +16,7 @@ const router = Router();
  * @Access Public
  */
 router.post(
-    '/',
+    '/create',
     headerValidators('token'),
     validateRequest,
     currentUser,
@@ -45,10 +45,8 @@ router.get(
 router.get(
     '/index',
     headerValidators('token'),
-    bodyValidators('documentId'),
     validateRequest,
     currentUser,
-    hasDocumentAccess,
     indexDocumentController
 );
 

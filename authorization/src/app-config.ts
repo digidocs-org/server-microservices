@@ -1,5 +1,5 @@
 /* eslint-disable no-process-exit */
-import { json } from 'express';
+import { json, urlencoded } from 'express';
 import { App } from '@digidocs/guardian';
 
 import { DatabaseConfig } from './db-config';
@@ -36,7 +36,7 @@ export class Application {
 
     this.app = new App(
       [DocumentAuthorizationRouter.route()],
-      [json({ limit: '50mb' }), fileUpload()]
+      [json({ limit: '50mb' }), urlencoded({ extended: true })]
     );
   }
 

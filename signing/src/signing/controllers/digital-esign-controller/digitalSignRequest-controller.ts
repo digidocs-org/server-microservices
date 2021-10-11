@@ -8,7 +8,8 @@ import { EsignSuccess } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
-    const documentId = req.params.id
+    const documentId = req.body.id
+    const userId = req.body.userId
 
     const document = await Document.findById(documentId)
     if (!document) {
@@ -59,7 +60,9 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         const parsedFiles = parseUploadData(encryptedFile, document.documentId, exportPublicKey, document.publicKeyId, document.userId);
         await Promise.all(parsedFiles.map((parsedFile) => uploadToS3Bucket(parsedFile)))
         new EsignSuccess(natsWrapper.client).publish({
-            type: SignTypes.DIGITAL_SIGN
+            type: SignTypes.DIGITAL_SIGN,
+            userId: userId,
+            docId: documentId
         })
 
         deleteFile(esignRequest.signedFilePath);

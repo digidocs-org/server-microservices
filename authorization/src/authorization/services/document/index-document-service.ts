@@ -18,11 +18,9 @@ const indexDocumentService = async (userId: string) => {
       documentUserMaps.map(async docUserMap => {
         const document = docUserMap.document as IDocument;
         const action = docUserMap.action as IDocumentActions;
-
-        const user = (await User.findById(document.userId).select(
+        const user = await User.findById(document.userId).select(
           '-socialAuthToken -refreshToken -password'
-        )) as IUser;
-
+        ) as IUser;
         const actionList = [];
 
         if (action) {
@@ -42,9 +40,10 @@ const indexDocumentService = async (userId: string) => {
         };
       })
     );
-
+    
     return result;
   } catch (err) {
+    console.log(err)
     throw new BadRequestError('Unable to get Document details');
   }
 };

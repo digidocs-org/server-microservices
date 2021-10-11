@@ -101,7 +101,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { data } = await api.post(authService.resetPassword, req.body, {
       headers: {
-        token: req.header('reset-token'),
+        'reset-token': req.header('reset-token'),
       },
     });
     return res.send(data);

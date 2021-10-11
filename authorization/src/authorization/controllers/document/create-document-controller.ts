@@ -12,9 +12,8 @@ export const createDocumentController = async (req: Request, res: Response) => {
   if (!user) {
     throw new NotAuthorizedError();
   }
-
   // Fetch the document from request
-  const { files } = req;
+  const { files } = req.body;
 
   if (!files) {
     throw new BadRequestError('Please upload a PDF file!');

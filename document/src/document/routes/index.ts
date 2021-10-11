@@ -64,8 +64,10 @@ export class DocumentRouter {
      */
     this.router.post(
       '/api/document/index',
-      bodyValidators('documentId'),
+      headerValidators('token'),
       validateRequest,
+      currentUser,
+      hasDocumentAccess,
       indexDocument
     );
 

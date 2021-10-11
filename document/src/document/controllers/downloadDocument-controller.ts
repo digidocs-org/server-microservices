@@ -18,8 +18,6 @@ export const downloadDocument = async (
 
     const { documentId } = req.body;
 
-    console.log(documentId);
-
     const document = await Document.findById(documentId);
 
     if (!document) {
@@ -36,14 +34,15 @@ export const downloadDocument = async (
     const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
     if (decryptedFile) {
-      res.writeHead(200, {
-        'Content-Type': 'application/pdf',
-        'Content-Length': decryptedFile.length,
-      });
-      return res.end(decryptedFile);
+      // res.writeHead(200, {
+      //   'Content-Type': 'application/pdf',
+      //   'Content-Length': decryptedFile.length,
+      // });
+      // return res.end(decryptedFile);
+      return res.send(decryptedFile.toString("base64"))
     }
     throw new BadRequestError('cannot download document');
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };

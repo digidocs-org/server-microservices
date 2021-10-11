@@ -12,5 +12,6 @@ export const errorResponseParser = (error: any, res: Response) => {
     const { data, status } = error.response;
     return res.status(status).send(data);
   }
-  return res.send(500).send('Something went wrong');
+  console.log(error)
+  return res.status(500).send({ error: 'Something went wrong' });
 };

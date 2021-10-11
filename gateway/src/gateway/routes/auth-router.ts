@@ -123,6 +123,7 @@ router.post(
  */
 router.post(
   '/forgotPassword/verify-otp',
+  headerValidators("token"),
   bodyValidators('email', 'otp'),
   validateRequest,
   forgotPasswordVerifyOtp

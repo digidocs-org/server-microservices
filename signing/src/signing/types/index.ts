@@ -32,4 +32,5 @@ export interface AadharEsignPayload {
   signTime: string
   docSignId: number
   documentId: string
+  userId: string
 }

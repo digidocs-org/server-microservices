@@ -20,12 +20,12 @@ import { natsWrapper } from 'src/nats-wrapper';
 export const esignCallback = async (req: Request, res: Response) => {
   const { espResponse, signingData } = req.body;
   const decodedData = jwt.verify(signingData, process.env.ESIGN_SALT!) as AadharEsignPayload
-  const { documentId, docSignId, signTime } = decodedData
+  const { documentId, docSignId, signTime, userId } = decodedData
   const response = verifyEsignResponse(espResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
     return res.send('redirect?type=cancelled');
   }
-  if (!documentId || !docSignId || signTime) {
+  if (!documentId || !docSignId || !signTime || !userId) {
     console.log("field missing")
     return res.send('redirect?type=failed');
   }
@@ -78,7 +78,9 @@ export const esignCallback = async (req: Request, res: Response) => {
     const parsedFiles = parseUploadData(encryptedFile, document.documentId, exportPublicKey, document.publicKeyId, document.userId);
     await Promise.all(parsedFiles.map((parsedFile) => uploadToS3Bucket(parsedFile)))
     new EsignSuccess(natsWrapper.client).publish({
-      type: SignTypes.AADHAR_SIGN
+      type: SignTypes.AADHAR_SIGN,
+      userId: userId,
+      docId: documentId
     })
 
     deleteFile(esignRequest.signedFilePath);
