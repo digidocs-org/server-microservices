@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-    bodyValidators,
     currentUser,
     headerValidators,
     validateRequest,
@@ -17,8 +16,8 @@ const router = Router();
  * @Access Public
  */
 router.post(
-    '/api/v1/document/add-recipients',
-    headerValidators('token', 'documentId'),
+    '/add-recipients/:documentId',
+    headerValidators('token'),
     validateRequest,
     currentUser,
     hasDocumentAccess,

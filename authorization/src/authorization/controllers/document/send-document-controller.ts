@@ -7,7 +7,7 @@ import { IDocumentActions } from 'authorization-service/models/Actions';
 export const sendDocumentController = async (req: Request, res: Response) => {
   const documentData = req.docUserMap?.document as IDocument
 
-  const { id: documentId } = documentData.id
+  const { id: documentId } = documentData
 
   const document = await Document.findById(documentId);
 
@@ -25,6 +25,10 @@ export const sendDocumentController = async (req: Request, res: Response) => {
     recipients = recipients.filter(recipient => {
       return document.userId !== recipient.user.toString();
     });
+  }
+
+  if(!recipients.length){
+    throw new BadRequestError("No recipients added")
   }
 
   if (document.inOrder) {

@@ -18,6 +18,7 @@ const createGuestUser = async (email: string) => {
 
     return guestUser._id;
   } catch (err) {
+    console.log(err)
     throw new BadRequestError('Cannot create guest user!!!');
   }
 };

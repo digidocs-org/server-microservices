@@ -56,9 +56,8 @@ router.get(
  * @Access Public
  */
 router.post(
-    '/send',
+    '/send/:documentId',
     headerValidators('token'),
-    bodyValidators('documentId'),
     validateRequest,
     currentUser,
     hasDocumentAccess,
