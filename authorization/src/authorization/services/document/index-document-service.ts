@@ -12,21 +12,25 @@ const indexDocumentService = async (userId: string) => {
     })
       .populate('document')
       .populate('user')
-      .populate('actions');
+      .populate('action');
 
     const result = await Promise.all(
       documentUserMaps.map(async docUserMap => {
         const document = docUserMap.document as IDocument;
         const action = docUserMap.action as IDocumentActions;
-        const user = await User.findById(document.userId).select(
+
+        const user = (await User.findById(document.userId).select(
           '-socialAuthToken -refreshToken -password'
-        ) as IUser;
+        )) as IUser;
         const actionList = [];
 
         if (action) {
           actionList.push({
+            type: action.type,
             email: action.recepientEmail,
             status: action.actionStatus,
+            signOrder: action.signOrder,
+            fields: action.fields,
           });
         }
 
@@ -40,10 +44,10 @@ const indexDocumentService = async (userId: string) => {
         };
       })
     );
-    
+
     return result;
   } catch (err) {
-    console.log(err)
+    console.log(err);
     throw new BadRequestError('Unable to get Document details');
   }
 };

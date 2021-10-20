@@ -14,6 +14,8 @@ import {
   sendDocument,
 } from 'document-service/controllers';
 import { hasDocumentAccess } from 'document-service/middlewares/documentAccess';
+import updateDocument from 'document-service/controllers/update-document-controller';
+import documentDetailController from 'document-service/controllers/document-detail-controller';
 
 export class DocumentRouter {
   private static router = Router();
@@ -33,7 +35,7 @@ export class DocumentRouter {
 
     /**
      * @Route  POST 'api/document/send'
-     * @Desc   Update a document
+     * @Desc   Send a document
      * @Access Public
      */
     this.router.post(
@@ -67,7 +69,6 @@ export class DocumentRouter {
       headerValidators('token'),
       validateRequest,
       currentUser,
-      hasDocumentAccess,
       indexDocument
     );
 
@@ -82,6 +83,20 @@ export class DocumentRouter {
       currentUser,
       hasDocumentAccess,
       deleteDocument
+    );
+
+    this.router.post(
+      '/api/document/update/:id',
+      headerValidators('token'),
+      currentUser,
+      updateDocument
+    );
+
+    this.router.get(
+      '/api/document/:id',
+      headerValidators('token'),
+      currentUser,
+      documentDetailController
     );
 
     return this.router;
