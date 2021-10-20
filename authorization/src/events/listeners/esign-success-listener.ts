@@ -7,8 +7,11 @@ import {
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import Document from 'authorization-service/models/Document';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
+import User from 'authorization-service/models/User';
 import { ActionStatus, queueGroupName } from 'authorization-service/types';
 import { Message } from 'node-nats-streaming';
+import { natsWrapper } from 'src/nats-wrapper';
+import { SendEmailPublisher } from '../publishers/send-email-publisher';
 
 export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
   queueGroupName = queueGroupName;
@@ -55,7 +58,14 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
       if (!docUserMap.access) {
         docUserMap.access = true;
         await docUserMap.save();
-        // TODO Send Email to Reciever
+        const action = docUserMap.action as IDocumentActions;
+        // Send Email to Reciever
+        new SendEmailPublisher(natsWrapper.client).publish({
+          senderEmail: 'notification@digidocsapp.com',
+          clientEmail: action.recepientEmail,
+          subject: 'New Document recieved',
+          body: 'You have received a new document. Please login to check.',
+        });
         msg.ack();
         return;
       }
@@ -63,6 +73,14 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
 
     document.status = DocumentStatus.COMPLETED;
     await document.save();
-    // TODO Send email to all users that document is signed completely.
+    // Send email to all users that document is signed completely.
+    const owner = await User.findById(document.userId);
+
+    new SendEmailPublisher(natsWrapper.client).publish({
+      senderEmail: 'notification@digidocsapp.com',
+      clientEmail: owner!.email,
+      subject: 'Document Signed Successfully.',
+      body: 'All the recipients have signed the document.',
+    });
   }
 }
