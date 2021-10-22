@@ -36,6 +36,7 @@ const updateDocument = async (req: Request, res: Response) => {
     selfSign: document.selfSign,
     validTill: document.validTill,
     timeToSign: document.timeToSign,
+    version: document.__v,
   });
   // await documentUserMap.save();
 

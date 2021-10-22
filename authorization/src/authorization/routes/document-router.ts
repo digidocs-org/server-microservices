@@ -1,10 +1,17 @@
 import { Router } from 'express';
-import { createDocumentController, downloadDocumentController, indexDocumentController, sendDocumentController } from 'authorization-service/controllers/document';
 import {
-    bodyValidators,
-    currentUser,
-    headerValidators,
-    validateRequest,
+  createDocumentController,
+  downloadDocumentController,
+  indexDocumentController,
+  sendDocumentController,
+  updateDocumentController,
+  documentDetailsController,
+} from 'authorization-service/controllers/document';
+import {
+  bodyValidators,
+  currentUser,
+  headerValidators,
+  validateRequest,
 } from '@digidocs/guardian';
 import hasDocumentAccess from 'authorization-service/middlewares/has-document-access';
 
@@ -16,11 +23,11 @@ const router = Router();
  * @Access Public
  */
 router.post(
-    '/create',
-    headerValidators('token'),
-    validateRequest,
-    currentUser,
-    createDocumentController
+  '/create',
+  headerValidators('token'),
+  validateRequest,
+  currentUser,
+  createDocumentController
 );
 
 /**
@@ -29,12 +36,12 @@ router.post(
  * @Access Public
  */
 router.get(
-    '/download/:documentId',
-    headerValidators('token'),
-    validateRequest,
-    currentUser,
-    hasDocumentAccess,
-    downloadDocumentController
+  '/download/:documentId',
+  headerValidators('token'),
+  validateRequest,
+  currentUser,
+  hasDocumentAccess,
+  downloadDocumentController
 );
 
 /**
@@ -43,11 +50,11 @@ router.get(
  * @Access Public
  */
 router.get(
-    '/index',
-    headerValidators('token'),
-    validateRequest,
-    currentUser,
-    indexDocumentController
+  '/index',
+  headerValidators('token'),
+  validateRequest,
+  currentUser,
+  indexDocumentController
 );
 
 /**
@@ -56,12 +63,30 @@ router.get(
  * @Access Public
  */
 router.post(
-    '/send/:documentId',
-    headerValidators('token'),
-    validateRequest,
-    currentUser,
-    hasDocumentAccess,
-    sendDocumentController
+  '/send/:documentId',
+  headerValidators('token'),
+  validateRequest,
+  currentUser,
+  hasDocumentAccess,
+  sendDocumentController
 );
 
-export = router
+router.put(
+  '/update/:documentId',
+  headerValidators('token'),
+  validateRequest,
+  currentUser,
+  hasDocumentAccess,
+  updateDocumentController
+);
+
+router.get(
+  '/details/:documentId',
+  headerValidators('token'),
+  validateRequest,
+  currentUser,
+  hasDocumentAccess,
+  documentDetailsController
+);
+
+export = router;

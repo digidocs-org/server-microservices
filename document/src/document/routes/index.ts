@@ -86,7 +86,7 @@ export class DocumentRouter {
     );
 
     this.router.post(
-      '/api/document/update/:id',
+      '/api/document/update/:documentId',
       headerValidators('token'),
       currentUser,
       updateDocument

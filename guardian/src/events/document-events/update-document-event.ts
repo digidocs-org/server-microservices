@@ -10,5 +10,6 @@ export interface UpdateDocumentEvent {
     selfSign?: boolean;
     validTill?: string;
     timeToSign?: string;
+    version: number;
   };
 }
