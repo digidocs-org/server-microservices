@@ -62,7 +62,7 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
         // Send Email to Reciever
         new SendEmailPublisher(natsWrapper.client).publish({
           senderEmail: 'notification@digidocsapp.com',
-          clientEmail: action.recepientEmail,
+          clientEmail: action.recipientEmail,
           subject: 'New Document recieved',
           body: 'You have received a new document. Please login to check.',
         });

@@ -15,7 +15,7 @@ interface Recipient {
   type: ActionType;
   privateMessage: string;
   authType: AuthType;
-  recepientName: string;
+  recipientName: string;
   actionStatus: ActionStatus;
   recipientEmail: string;
   signOrder: number;
@@ -66,11 +66,18 @@ export const addRecipientsController = async (req: Request, res: Response) => {
     await Actions.deleteMany({ _id: actionIds });
     await DocumentUserMap.deleteMany({ _id: documentMapIds });
 
-    // If Self signing is false then add the owner without any action
+    // If Self signing is false then add the owner with VIEW action
     if (!document.selfSign) {
+      const owner = await User.findById(document.userId);
+
+      const action = await Actions.create({
+        type: ActionType.VIEW,
+        recipientEmail: owner!.email,
+      });
       await DocumentUserMap.create({
         user: loggedInUser.id,
         document: document.id,
+        action: action,
         access: true,
       });
     }

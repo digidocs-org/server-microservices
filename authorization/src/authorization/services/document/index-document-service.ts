@@ -17,20 +17,32 @@ const indexDocumentService = async (userId: string) => {
     const result = await Promise.all(
       documentUserMaps.map(async docUserMap => {
         const document = docUserMap.document as IDocument;
-        const action = docUserMap.action as IDocumentActions;
+        const actions = [] as IDocumentActions[];
+
+        const docUserMapsForDoc = await DocumentUserMap.find({
+          document: document._id,
+        }).populate('action');
+
+        docUserMapsForDoc.map(docUserMapForDoc => {
+          const action = docUserMapForDoc.action as IDocumentActions;
+          actions.push(action);
+        });
 
         const user = (await User.findById(document.userId).select(
           '-socialAuthToken -refreshToken -password'
         )) as IUser;
-        const actionList = [];
 
-        if (action) {
-          actionList.push({
-            type: action.type,
-            email: action.recepientEmail,
-            status: action.actionStatus,
-            signOrder: action.signOrder,
-            fields: action.fields,
+        const actionList: any[] = [];
+
+        if (actions && actions.length) {
+          actions.map(action => {
+            actionList.push({
+              type: action.type,
+              email: action.recipientEmail,
+              status: action.actionStatus,
+              signOrder: action.signOrder,
+              fields: action.fields,
+            });
           });
         }
 

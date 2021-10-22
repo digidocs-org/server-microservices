@@ -24,9 +24,9 @@ export interface IDocumentActions extends Document {
   privateMessage: string;
   authType: AuthType;
   authCode: number;
-  recepientName: string;
+  recipientEmail: string;
   actionStatus: ActionStatus;
-  recepientEmail: string;
+  recipientName: string;
   signOrder: number;
   fields?: IActionFields[];
 }
@@ -38,8 +38,8 @@ const actionSchema: Schema = new Schema(
     authType: String,
     authCode: Number,
     actionStatus: String,
-    recepientName: String,
-    recepientEmail: String,
+    recipientName: String,
+    recipientEmail: String,
     signOrder: Number,
     fields: { type: Array, default: [] },
   },
