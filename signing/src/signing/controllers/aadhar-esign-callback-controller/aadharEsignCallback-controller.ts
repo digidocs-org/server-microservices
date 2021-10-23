@@ -16,6 +16,7 @@ import { AadharEsignPayload, EsignRequest, EsignResponse } from 'signing-service
 import jwt from 'jsonwebtoken'
 import { EsignSuccess } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
+import User from 'signing-service/models/user'
 
 export const esignCallback = async (req: Request, res: Response) => {
   const { espResponse, signingData } = req.body;
@@ -25,7 +26,10 @@ export const esignCallback = async (req: Request, res: Response) => {
   if (response?.actionType == EsignResponse.CANCELLED) {
     return res.send('redirect?type=cancelled');
   }
-  if (!documentId || !docSignId || !signTime || !userId) {
+
+  const user = await User.findById(userId)
+
+  if (!documentId || !docSignId || !signTime || !userId || !user) {
     console.log("field missing")
     return res.send('redirect?type=failed');
   }
@@ -35,6 +39,8 @@ export const esignCallback = async (req: Request, res: Response) => {
     console.log("document not found")
     return res.send('redirect?type=failed');
   }
+
+
 
   const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
   const publicKeyURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/keys/${document.publicKeyId}`;
@@ -46,7 +52,7 @@ export const esignCallback = async (req: Request, res: Response) => {
   const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
   const signFieldData: EsignRequest = {
-    name: "Naman Singh",
+    name: `${user.firstname} ${user.lastname}`,
     location: "India",
     reason: "Aadhar E-Sign",
     docId: docSignId,
