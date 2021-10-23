@@ -9,7 +9,7 @@ import user from 'signing-service/models/user';
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId;
-    const userId = req.body.userId
+    const userId = req.body.currentUser;
 
     const document = await Document.findById(documentId);
     if (!document) {

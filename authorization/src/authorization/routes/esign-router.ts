@@ -11,9 +11,6 @@ const router = Router();
 */
 router.get(
     '/aadhar/request/:id',
-    // headerValidators('token'),
-    // validateRequest,
-    // currentUser,
     aadharEsignRequest
 );
 
@@ -44,8 +41,10 @@ router.get(
  * @Desc   redirect route for validating signing
  * @Access Private
  */
-router.post(
-    '/digital/:id',
+router.get(
+    '/digital/request/:id',
+    headerValidators("token"),
+    validateRequest,
     digitalSignRequest
 )
 

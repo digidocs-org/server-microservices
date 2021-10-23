@@ -8,9 +8,8 @@ import { EsignSuccess } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
-    const documentId = req.body.id
-    const userId = req.body.userId
-
+    const documentId = req.body.documentId
+    const userId = req.body.currentUser
     const document = await Document.findById(documentId)
     if (!document) {
         throw new BadRequestError("Document not found!!!")
@@ -66,7 +65,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         })
 
         deleteFile(esignRequest.signedFilePath);
-        return res.send('redirect?type=failed');
+        return res.send('redirect?type=success');
     } catch (error) {
         console.log(error);
         deleteFile(esignRequest.signedFilePath);
