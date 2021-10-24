@@ -24,7 +24,9 @@ interface Recipient {
 export const addRecipientsController = async (req: Request, res: Response) => {
   const recipients = req.body.recipients as Recipient[];
   const document = req.docUserMap?.document as IDocument;
-  const loggedInUser = req.currentUser;
+  const userId = req.currentUser?.id;
+
+  const loggedInUser = await User.findById(userId);
 
   if (!loggedInUser) {
     throw new NotAuthorizedError();

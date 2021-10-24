@@ -7,6 +7,7 @@ import { DocumentRouter } from './document/routes';
 import { CreateUserListener } from './events/listeners/user-created-listener';
 import fileUpload from 'express-fileupload';
 import { CreateGuestUserListener } from './events/listeners/create-guest-user-listener';
+import SendDocumentListener from './events/listeners/send-document-listener';
 
 export class Application {
   private app: App;
@@ -22,6 +23,7 @@ export class Application {
         .then(() => {
           new CreateUserListener(natsWrapper.client).listen();
           new CreateGuestUserListener(natsWrapper.client).listen();
+          new SendDocumentListener(natsWrapper.client).listen();
         });
 
       natsWrapper.client.on('close', () => {

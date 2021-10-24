@@ -33,11 +33,16 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
       return;
     }
 
+    // Update Action
+    const action = signer.action as IDocumentActions;
+    action.actionStatus = ActionStatus.SIGNED;
+
     const signerAction = signer.action as IDocumentActions;
 
     signerAction.actionStatus = ActionStatus.SIGNED;
 
     await signerAction.save();
+    await action.save();
 
     // TODO Send Email to the user who signed the document.
 

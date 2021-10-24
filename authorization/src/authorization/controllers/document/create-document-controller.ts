@@ -5,15 +5,22 @@ import { UploadedFile } from 'express-fileupload';
 import DocumentUserMap from 'src/authorization/models/DocumentUserMap';
 import Actions from 'authorization-service/models/Actions';
 import { ActionType } from 'authorization-service/types';
+import User from 'authorization-service/models/User';
 
 export const createDocumentController = async (req: Request, res: Response) => {
-  const user = req.currentUser;
+  const userId = req.currentUser?.id;
 
-  if (!user) {
+  if (!userId) {
     throw new NotAuthorizedError();
   }
   // Fetch the document from request
   const { files } = req.body;
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new BadRequestError('No user found!!');
+  }
 
   if (!files) {
     throw new BadRequestError('Please upload a PDF file!');
@@ -24,7 +31,7 @@ export const createDocumentController = async (req: Request, res: Response) => {
   }
 
   const file = files.file as UploadedFile;
-  const data = await createDocumentService(user.id, file);
+  const data = await createDocumentService(userId, file);
 
   const action = await Actions.create({
     type: ActionType.VIEW,
