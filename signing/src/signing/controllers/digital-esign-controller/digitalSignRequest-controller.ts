@@ -9,10 +9,13 @@ import { natsWrapper } from 'src/nats-wrapper';
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId
-    const userId = req.body.currentUser
+    const userId = req.currentUser?.id
     const document = await Document.findById(documentId)
     if (!document) {
         throw new BadRequestError("Document not found!!!")
+    }
+    if (!userId) {
+        throw new BadRequestError("User not found!!!")
     }
 
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
@@ -65,10 +68,10 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         })
 
         deleteFile(esignRequest.signedFilePath);
-        return res.send('redirect?type=success');
+        return res.send({ success: true, msg: "document signed successfully!!" });
     } catch (error) {
         console.log(error);
         deleteFile(esignRequest.signedFilePath);
-        return res.redirect('redirect?type=failed');
+        return res.send({ success: false, msg: "document siging failed!!" });
     }
 }

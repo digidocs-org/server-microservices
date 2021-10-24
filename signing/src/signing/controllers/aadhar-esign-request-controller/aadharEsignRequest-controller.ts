@@ -9,11 +9,14 @@ import user from 'signing-service/models/user';
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId;
-    const userId = req.body.currentUser;
+    const userId = req.currentUser?.id;
 
     const document = await Document.findById(documentId);
     if (!document) {
         throw new BadRequestError('Document not found!!!');
+    }
+    if(!userId){
+        throw new BadRequestError("User not found!!!")
     }
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
     const publicKeyURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/keys/${document.publicKeyId}`;

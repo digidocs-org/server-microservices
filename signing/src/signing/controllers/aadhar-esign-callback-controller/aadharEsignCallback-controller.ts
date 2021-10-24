@@ -24,23 +24,21 @@ export const esignCallback = async (req: Request, res: Response) => {
   const { documentId, docSignId, signTime, userId } = decodedData
   const response = verifyEsignResponse(espResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
-    return res.send('redirect?type=cancelled');
+    return res.send(`${process.env.REDIRECT_URI}?type=success`);
   }
-
+  console.log(decodedData)
   const user = await User.findById(userId)
 
   if (!documentId || !docSignId || !signTime || !userId || !user) {
     console.log("field missing")
-    return res.send('redirect?type=failed');
+    return res.send(`${process.env.REDIRECT_URI}?type=success`);
   }
 
   const document = await Document.findById(documentId);
   if (!document) {
     console.log("document not found")
-    return res.send('redirect?type=failed');
+    return res.send(`${process.env.REDIRECT_URI}?type=success`);
   }
-
-
 
   const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
   const publicKeyURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/keys/${document.publicKeyId}`;
@@ -90,10 +88,10 @@ export const esignCallback = async (req: Request, res: Response) => {
     })
 
     deleteFile(esignRequest.signedFilePath);
-    return res.send('redirect?type=success');
+    return res.send(`${process.env.REDIRECT_URI}?type=success`);
   } catch (error) {
     console.log(error);
     deleteFile(esignRequest.signedFilePath);
-    return res.send('redirect?type=failed');
+    return res.send(`${process.env.REDIRECT_URI}?type=success`);
   }
 };

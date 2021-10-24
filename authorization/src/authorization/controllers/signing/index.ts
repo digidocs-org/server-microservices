@@ -41,10 +41,11 @@ export const aadharEsignCallback = async (req: Request, res: Response) => {
 
 export const redirectCallback = async (req: Request, res: Response) => {
   try {
+    console.log("NIGAAA")
     const resType = req.query.type;
 
     const { data } = await api.post(esignService.redirectCallback, { resType });
-    return res.redirect(data);
+    return res.send(data);
   } catch (error) {
     return errorResponseParser(error, res);
   }
@@ -59,8 +60,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         token: req.header('token')
       }
     });
-    console.log(data)
-    return res.redirect(data);
+    return res.send(data)
   } catch (error) {
     return errorResponseParser(error, res);
   }
