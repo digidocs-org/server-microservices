@@ -21,10 +21,10 @@ export class SigningRouter {
      */
     this.router.post(
       '/api/esign/aadhar/request',
-      bodyValidators('documentId','userId'),
-      // headerValidators('token'),
+      bodyValidators('documentId'),
+      headerValidators('token'),
       validateRequest,
-      // currentUser,
+      currentUser,
       aadharEsignRequest
     );
 
@@ -47,8 +47,10 @@ export class SigningRouter {
      */
     this.router.post(
       '/api/esign/digital',
-      bodyValidators('documentId','userId'),
+      bodyValidators('documentId'),
+      headerValidators('token'),
       validateRequest,
+      currentUser,
       digitalSignRequest
     );
 
