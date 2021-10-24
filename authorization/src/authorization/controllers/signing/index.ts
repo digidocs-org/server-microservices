@@ -41,7 +41,6 @@ export const aadharEsignCallback = async (req: Request, res: Response) => {
 
 export const redirectCallback = async (req: Request, res: Response) => {
   try {
-    console.log("NIGAAA")
     const resType = req.query.type;
 
     const { data } = await api.post(esignService.redirectCallback, { resType });

@@ -7,7 +7,7 @@ import {
 } from 'authorization-service/types';
 import { BadRequestError, NotAuthorizedError } from '@digidocs/guardian';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
-import Actions from 'authorization-service/models/Actions';
+import Actions, { IDocumentActions } from 'authorization-service/models/Actions';
 import User from 'authorization-service/models/User';
 import createGuestUser from 'authorization-service/services/user/create-guest-user';
 
@@ -40,33 +40,31 @@ export const addRecipientsController = async (req: Request, res: Response) => {
     throw new BadRequestError('recepients not provided!!!');
   }
 
-  // If self signing is true then check that logged in user should be present in
-  // recipients array.
-  if (document.selfSign) {
-    const idx = recipients.findIndex(
-      recipient => recipient.recipientEmail === loggedInUser.email
-    );
 
-    if (idx === -1) {
-      throw new BadRequestError(
-        'Logged in User should be present in self signed document!!!'
-      );
-    }
-  }
 
   if (recipients && recipients.length) {
     // Get all recipients of document including owner
     const allRecipients = await DocumentUserMap.find({
       document: document.id,
-    });
+    }).populate('action');
 
     // Create array of action ids and document map ids of cocument
-    const actionIds = allRecipients.map(recipient => recipient.action);
-    const documentMapIds = allRecipients.map(recipient => recipient._id);
+    const actionIdsArray: string[] = []
+    const docUserMapIdsArray: string[] = []
+
+    allRecipients.map(recipient => {
+      const recipientAction = recipient.action as IDocumentActions
+      if (recipientAction.recipientEmail != loggedInUser.email){
+        console.log(recipientAction.recipientEmail)
+        actionIdsArray.push(recipientAction._id)
+        docUserMapIdsArray.push(recipient._id)
+      } 
+    });
+
 
     // Delete actions and document maps.
-    await Actions.deleteMany({ _id: actionIds });
-    await DocumentUserMap.deleteMany({ _id: documentMapIds });
+    await Actions.deleteMany({ _id: actionIdsArray });
+    await DocumentUserMap.deleteMany({ _id: docUserMapIdsArray });
 
     // If Self signing is false then add the owner with VIEW action
     if (!document.selfSign) {

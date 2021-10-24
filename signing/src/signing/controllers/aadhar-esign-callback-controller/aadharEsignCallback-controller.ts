@@ -26,7 +26,6 @@ export const esignCallback = async (req: Request, res: Response) => {
   if (response?.actionType == EsignResponse.CANCELLED) {
     return res.send(`${process.env.REDIRECT_URI}?type=success`);
   }
-  console.log(decodedData)
   const user = await User.findById(userId)
 
   if (!documentId || !docSignId || !signTime || !userId || !user) {
@@ -92,6 +91,6 @@ export const esignCallback = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     deleteFile(esignRequest.signedFilePath);
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+    return res.send(`${process.env.REDIRECT_URI}?type=failed`);
   }
 };

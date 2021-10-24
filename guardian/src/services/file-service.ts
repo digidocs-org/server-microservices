@@ -57,6 +57,3 @@ export const readFile = async (path: string) => {
         throw error
     }
 }
-
-// writeFile('temp/sample.txt', "this is me", (err) => err)
-// deleteFile('temp', (err) => console.log(err))

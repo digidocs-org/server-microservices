@@ -41,7 +41,6 @@ const indexDocumentService = async (userId: string) => {
               email: action.recipientEmail,
               status: action.actionStatus,
               signOrder: action.signOrder,
-              fields: action.fields,
             });
           });
         }
