@@ -2,3 +2,5 @@
 node_modules
 *-lock.json
 *.lock
+yarn-error.log
+.DS_store

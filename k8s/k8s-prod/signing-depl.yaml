@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: signing-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: signing
+  template:
+    metadata:
+      labels:
+        app: signing
+    spec:
+      containers:
+        - name: signing
+          image: registry.digitalocean.com/digidocs/signing
+          env:
+            - name: MONGO_URI
+              value: mongodb+srv://admin:MbKpGWDVO7HHD3BY@digidocs-cluster.1rbi3.mongodb.net/signing
+
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name 
+
+            - name: NATS_URI
+              value: 'http://nats-srv:4222'
+
+            - name: NATS_CLUSTER_ID
+              value: digidocs
+
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: access-token-secret
+                  key: ACCESS_TOKEN_SECRET
+
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-access-key-id
+                  key: AWS_ACCESS_KEY_ID
+
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret-access-key
+                  key: AWS_SECRET_ACCESS_KEY
+
+            - name: FILE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: file-key
+                  key: FILE_KEY
+
+            - name: CLOUDFRONT_URI
+              value: https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com
+            
+            - name: AWS_S3_BUCKET
+              value: digidocs-local-bucket
+
+            - name: ASP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: asp-id
+                  key: ASP_ID
+
+            - name: PFX_FILE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: pfx-file-pass
+                  key: PFX_FILE_PASS
+
+            - name: ESIGN_RESPONSE_URL
+              value: https://v2-stage.digidocs.one/api/esign/aadhar/callback
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: signing-srv
+spec:
+  selector:
+    app: signing
+  ports:
+    - name: signing
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

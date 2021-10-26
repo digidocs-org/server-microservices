@@ -1,8 +1,14 @@
 {
-  "extends": "./node_modules/gts/tsconfig-google.json",
+  "extends": "../node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "build"
+    "allowJs": false,
+    "outDir": "build",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports":true,
+    "baseUrl": "./",                
+    "paths": {
+      "auth/*":["src/auth/*"]
+    },
   },
   "include": [
     "src/**/*.ts",
