@@ -2,27 +2,27 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: signing-depl
+  name: authorization-depl
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: signing
+      app: authorization
   template:
     metadata:
       labels:
-        app: signing
+        app: authorization
     spec:
       containers:
-        - name: signing
-          image: digidocs/signing
+        - name: authorization
+          image: digidocs/authorization
           env:
             - name: PORT
               value: '80'
 
             - name: MONGO_URI
-              value: mongodb://host.docker.internal/signing
+              value: 'mongodb://host.docker.internal/auhtorization'
 
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -33,7 +33,7 @@ spec:
               value: 'http://nats-srv:4222'
 
             - name: NATS_CLUSTER_ID
-              value: digidocs
+              value: 'digidocs'
 
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
@@ -60,44 +60,26 @@ spec:
                   key: FILE_KEY
 
             - name: CLOUDFRONT_URI
-              value: https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com
+              value: 'https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com'
 
             - name: AWS_S3_BUCKET
-              value: digidocs-local-bucket
+              value: 'digidocs-local-bucket'
 
-            - name: ASP_ID
-              valueFrom:
-                secretKeyRef:
-                  name: asp-id
-                  key: ASP_ID
+            - name: DOCUMENT_SERVICE_URL
+              value: 'http://document-srv'
 
-            - name: PFX_FILE_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: pfx-file-pass
-                  key: PFX_FILE_PASS
-
-            - name: ESIGN_RESPONSE_URL
-              value: 'https://digidocs.dev/api/v1/authorization/esign/aadhar/callback'
-
-            - name: ESIGN_SALT
-              value: 'aalkjdsf993848ji34ij3i.ewpoef023444a'
-
-            - name: ESIGN_SALT_EXPIRE
-              value: '1000000'
-
-            - name: REDIRECT_URI
-              value: 'http://digidocs.dev/api/v1/authorization/esign/aadhar/redirect'
+            - name: ESIGN_SERVICE_BASE_URL
+              value: 'http://signing-srv'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: signing-srv
+  name: authorization-srv
 spec:
   selector:
-    app: signing
+    app: authorization
   ports:
-    - name: signing
+    - name: authorization
       protocol: TCP
       port: 80
       targetPort: 80
