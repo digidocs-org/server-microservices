@@ -3,6 +3,8 @@ import crypto from 'crypto';
 import User from 'auth/models';
 // import { sendEmailToClient } from 'auth/utils';
 import { BadRequestError } from '@digidocs/guardian';
+import { SendEmailPublisher } from 'src/events/publishers';
+import { natsWrapper } from 'src/nats-wrapper';
 
 export const sendOTPEmail = async (req: Request, res: Response) => {
   try {
@@ -16,11 +18,12 @@ export const sendOTPEmail = async (req: Request, res: Response) => {
     const secureRandom = crypto.randomInt(100000, 1000000);
     user.emailOtp!.otp = secureRandom;
     user.emailOtp!.expire = currentTimeStamp + 10 * 60000;
-    // sendEmailToClient({
-    //   clientEmail: user.email,
-    //   subject: 'Digidocs Verification Code',
-    //   body: `Your email verification code is: ${secureRandom}`,
-    // });
+    new SendEmailPublisher(natsWrapper.client).publish({
+      senderEmail: 'notification@digidocsapp.com',
+      clientEmail: user.email,
+      subject: 'otp for email Verification',
+      body: `Hi, the OTP for email verification is ${secureRandom}`,
+    });
     await user.save();
     return res.send({ success: true });
   } catch (error) {
