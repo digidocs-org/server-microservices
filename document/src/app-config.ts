@@ -2,6 +2,7 @@ import { json } from 'express';
 import { App } from '@digidocs/guardian';
 
 import { DatabaseConfig } from './db-config';
+import cors from 'cors'
 import { natsWrapper } from './nats-wrapper';
 import { DocumentRouter } from './document/routes';
 import { CreateUserListener } from './events/listeners/user-created-listener';
@@ -38,7 +39,7 @@ export class Application {
 
     this.app = new App(
       [DocumentRouter.route()],
-      [json({ limit: '50mb' }), fileUpload()]
+      [cors(),json({ limit: '50mb' }), fileUpload()]
     );
   }
 
