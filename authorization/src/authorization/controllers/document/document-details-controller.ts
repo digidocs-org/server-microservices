@@ -15,7 +15,8 @@ export const documentDetailsController = async (
 
   document = document.toJSON({
     transform: (doc: any, ret: any) => {
-      delete ret.documentId;
+      ret.documentName = ret.name;
+      delete ret.name;
       delete ret.publicKeyId;
       ret.ownerName = `${owner?.firstname} ${owner?.lastname}`;
       ret.ownerEmail = owner?.email;
@@ -32,9 +33,9 @@ export const documentDetailsController = async (
 
     return {
       type: action.type,
-      recipientEmail: action.recipientEmail,
+      email: action.recipientEmail,
       status: action.actionStatus,
-      recipientName: action.recipientName,
+      name: action.recipientName,
       fields: action.fields,
     };
   });
