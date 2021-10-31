@@ -6,7 +6,7 @@ deploy:
       - ../../k8s/k8s-prod/*
 build:
   artifacts:
-    - image: registry.digitalocean.com/digidocs/auth
+    - image: digidocs/auth
       context: ../../
       docker:
         dockerfile: ./auth/Dockerfile
@@ -14,7 +14,7 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
-    - image: registry.digitalocean.com/digidocs/email
+    - image: digidocs/email
       context: ../../
       docker:
         dockerfile: ./email/Dockerfile
@@ -22,7 +22,7 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
-    - image: registry.digitalocean.com/digidocs/document
+    - image: digidocs/document
       context: ../../
       docker:
         dockerfile: ./document/Dockerfile
@@ -30,7 +30,7 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
-    - image: registry.digitalocean.com/digidocs/signing
+    - image: digidocs/signing
       context: ../../
       docker:
         dockerfile: ./signing/Dockerfile
