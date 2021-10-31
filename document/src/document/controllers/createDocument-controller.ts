@@ -75,6 +75,7 @@ export const createDocument = async (req: Request, res: Response) => {
         selfSign: document.selfSign,
         isDrafts: document.isDrafts,
         status: document.status,
+        signType: document.signType,
         userId: document.userId,
         validTill: document.validTill,
         timeToSign: document.timeToSign,

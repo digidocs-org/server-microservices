@@ -8,6 +8,7 @@ export interface UpdateDocumentEvent {
     message?: string;
     inOrder?: boolean;
     selfSign?: boolean;
+    signType?: string;
     validTill?: string;
     timeToSign?: string;
     version: number;

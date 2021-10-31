@@ -44,6 +44,7 @@ export class UpdateDocumentListener extends Listener<UpdateDocumentEvent> {
       selfSign: data.selfSign !== undefined ? data.selfSign : document.selfSign,
       validTill: data.validTill || document.validTill,
       timeToSign: data.timeToSign || document.timeToSign,
+      signType: data.signType !== undefined ? data.signType : document.signType,
     });
 
     await action.save();
