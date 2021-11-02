@@ -19,6 +19,7 @@ export class CreateDocumentListener extends Listener<CreateDocumentEvent> {
         selfSign: data.selfSign,
         isDrafts: data.isDrafts,
         status: data.status,
+        signType: data.signType,
         userId: data.userId,
         validTill: data.validTill,
         timeToSign: data.timeToSign,
