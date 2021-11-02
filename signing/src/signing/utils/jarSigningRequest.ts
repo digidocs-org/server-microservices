@@ -9,7 +9,8 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
     const signedFilePath = `${rootDir}/temp-${tempFileName}/signed.pdf`;
     const signImageFilePath = `${rootDir}/sign.jpeg`;
     const unsignedFieldPath = `${rootDir}/temp-${tempFileName}/sample_encryptTempSigned.pdf`
-
+    const pfxFilePass = process.env.PFX_FILE_PASS
+    const fieldDataFilePath = `${rootDir}/temp-${tempFileName}/field.pdf`
 
     const data = {
         esignResponse: convertToString(responseTextFile),
@@ -24,13 +25,18 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
         docId: convertToString(requestData.docId.toString()),
         pfxPath: convertToString(Files.pfxKey),
         pfxPass: convertToString(process.env.PFX_FILE_PASS!),
-        signFieldData: JSON.stringify(convertToString(requestData.signatureFieldData))
+        signFieldData: JSON.stringify(convertToString(requestData.signatureFieldData)),
+        fieldDataFilePath: convertToString(fieldDataFilePath)
     }
 
     let signingRequest;
     
     if (signType == SignTypes.DIGITAL_SIGN) {
         signingRequest = `java -jar ${Files.javaDigitalUtility} ${data.unsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} "${requestData.name}" "${requestData.location}" "${requestData.reason}" ${data.date} ${data.docId} ${data.signFieldData} ${data.pfxPath} ${data.pfxPass}`
+    }
+
+    if(signType == SignTypes.AADHAR_SIGN){
+        signingRequest = `java -jar ${Files.javaAadhaarUtility} 1 ${data.unsignedPdfPath} "" 1 "" ${Files.pfxKey} ${pfxFilePass} ${data.signImageFile} 15 1 "${requestData.name}" "${requestData.location}" "${requestData.reason}" "" "" ${data.fieldDataFilePath}`
     }
 
 
