@@ -8,7 +8,7 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
     const responseTextFile = signType == SignTypes.AADHAR_SIGN ? `${rootDir}/temp-${tempFileName}/response.txt` : "";
     const signedFilePath = `${rootDir}/temp-${tempFileName}/signed.pdf`;
     const signImageFilePath = `${rootDir}/sign.jpeg`;
-    const unsignedFieldPath = `${rootDir}/temp-${tempFileName}/signedField.pdf`
+    const unsignedFieldPath = `${rootDir}/temp-${tempFileName}/sample_encryptTempSigned.pdf`
 
 
     const data = {
@@ -16,11 +16,10 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
         unsignedPdfPath: convertToString(unsignedFilePath),
         tempSignedPdfPath: convertToString(signedFilePath),
         signImageFile: convertToString(signImageFilePath),
-        nameToShowOnStamp: convertToString("Naman Singh"),
-        locationToShowOnStamp: convertToString("India"),
-        reasonToShowOnStamp: convertToString("Aadhar E-signature"),
+        nameToShowOnStamp: convertToString(requestData.name),
+        locationToShowOnStamp: convertToString(requestData.location),
+        reasonToShowOnStamp: convertToString(requestData.reason),
         unsignedFieldPath: convertToString(unsignedFieldPath),
-        signType: convertToString(signType),
         date: convertToString(requestData.timeOfDocSign),
         docId: convertToString(requestData.docId.toString()),
         pfxPath: convertToString(Files.pfxKey),
@@ -28,7 +27,12 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
         signFieldData: JSON.stringify(convertToString(requestData.signatureFieldData))
     }
 
-    const signingRequest = `java -jar ${Files.javaUtility} ${data.signType} ${data.esignResponse} ${data.unsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} "${requestData.name}" "${requestData.location}" "${requestData.reason}" ${data.date} ${data.docId} ${data.signFieldData} ${data.pfxPath} ${data.pfxPass} ${data.unsignedFieldPath}`
+    let signingRequest;
+    
+    if (signType == SignTypes.DIGITAL_SIGN) {
+        signingRequest = `java -jar ${Files.javaDigitalUtility} ${data.unsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} "${requestData.name}" "${requestData.location}" "${requestData.reason}" ${data.date} ${data.docId} ${data.signFieldData} ${data.pfxPath} ${data.pfxPass}`
+    }
+
 
     return {
         unsignedFilePath,

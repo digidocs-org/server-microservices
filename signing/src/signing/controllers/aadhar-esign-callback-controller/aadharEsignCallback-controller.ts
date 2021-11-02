@@ -71,22 +71,22 @@ export const esignCallback = async (req: Request, res: Response) => {
     await writeFile(esignRequest.responseTextFile, espResponse, 'utf-8');
     await exec(esignRequest.signingRequest);
 
-    const dataBuffer = await readFile(esignRequest.signedFilePath)
+    // const dataBuffer = await readFile(esignRequest.signedFilePath)
 
-    const { encryptedFile, publicKey } = encryptDocument(dataBuffer);
-    const exportPublicKey = publicKey.export({
-      format: 'pem',
-      type: 'spki',
-    });
-    const parsedFiles = parseUploadData(encryptedFile, document.documentId, exportPublicKey, document.publicKeyId, document.userId);
-    await Promise.all(parsedFiles.map((parsedFile) => uploadToS3Bucket(parsedFile)))
-    new EsignSuccess(natsWrapper.client).publish({
-      type: SignTypes.AADHAR_SIGN,
-      userId: userId,
-      docId: documentId
-    })
+    // const { encryptedFile, publicKey } = encryptDocument(dataBuffer);
+    // const exportPublicKey = publicKey.export({
+    //   format: 'pem',
+    //   type: 'spki',
+    // });
+    // const parsedFiles = parseUploadData(encryptedFile, document.documentId, exportPublicKey, document.publicKeyId, document.userId);
+    // await Promise.all(parsedFiles.map((parsedFile) => uploadToS3Bucket(parsedFile)))
+    // new EsignSuccess(natsWrapper.client).publish({
+    //   type: SignTypes.AADHAR_SIGN,
+    //   userId: userId,
+    //   docId: documentId
+    // })
 
-    deleteFile(esignRequest.signedFilePath);
+    // deleteFile(esignRequest.signedFilePath);
     return res.send(`${process.env.REDIRECT_URI}?type=success`);
   } catch (error) {
     console.log(error);

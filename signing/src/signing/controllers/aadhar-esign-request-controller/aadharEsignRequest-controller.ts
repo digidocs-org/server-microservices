@@ -5,7 +5,7 @@ import { createJarSigningReq, generateXml, generateToken } from 'signing-service
 import Document from 'signing-service/models/document';
 import { EsignRequest, Files } from 'signing-service/types';
 import crypto from 'crypto'
-import user from 'signing-service/models/user';
+import User from 'signing-service/models/user';
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId;
@@ -15,7 +15,9 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     if (!document) {
         throw new BadRequestError('Document not found!!!');
     }
-    if(!userId){
+
+    const user = await User.findById(userId);
+    if (!user) {
         throw new BadRequestError("User not found!!!")
     }
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
@@ -30,9 +32,9 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     const docId = crypto.randomInt(100000, 1000000)
 
     const signFieldData: EsignRequest = {
-        name: "Naman Singh",
+        name: `${user.firstname} ${user.lastname}`,
         location: "India",
-        reason: "Aadhar E-Sign",
+        reason: "Aadhaar Sign",
         timeOfDocSign,
         docId,
         signatureFieldData: {
@@ -46,7 +48,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         }
     }
 
-    const esignRequest = createJarSigningReq(__dirname, SignTypes.ESIGN_REQUEST, signFieldData);
+    const esignRequest = createJarSigningReq(__dirname, SignTypes.AADHAR_SIGN, signFieldData);
 
     try {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
@@ -60,7 +62,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             documentId,
             docSignId: docId,
             signTime: timeOfDocSign,
-            userId
+            userId:user._id
         },
             process.env.ESIGN_SALT!,
             process.env.ESIGN_SALT_EXPIRE!
@@ -72,7 +74,9 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             checksum: fileChecksum
         })
         const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml })
-        deleteFile(esignRequest.signedFilePath);
+        // deleteFile(esignRequest.signedFilePath);
+        console.log(signedXML)
+        // return res.send("success")
         return res.render('esignRequest', {
             esignRequestXMLData: signedXML
         })

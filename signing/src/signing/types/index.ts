@@ -10,7 +10,8 @@ export const enum EsignResponse {
 
 export const Files = {
   pfxKey: `${dirname}/../key/digidocs-sign.pfx`,
-  javaUtility: `${dirname}/../java-esign-utility/esign-java-utility.jar`,
+  javaDigitalUtility: `${dirname}/../java-esign-utility/digital-sign.jar`,
+  javaAadhaarUtility: `${dirname}/../java-esign-utility/aadhaar-sign.jar`
 };
 
 export interface EsignRequest {
