@@ -8,7 +8,7 @@ export const createJarSigningReq = (rootDir: string, signType: string, requestDa
     const responseTextFile = signType == SignTypes.AADHAR_SIGN ? `${rootDir}/temp-${tempFileName}/response.txt` : "";
     const signedFilePath = `${rootDir}/temp-${tempFileName}/signed.pdf`;
     const signImageFilePath = `${rootDir}/sign.jpeg`;
-    const unsignedFieldPath = `${rootDir}/temp-${tempFileName}/sample_encryptTempSigned.pdf`
+    const unsignedFieldPath = `${rootDir}/temp-${tempFileName}/unsigned_encryptTempSigned.pdf`
     const pfxFilePass = process.env.PFX_FILE_PASS
     const fieldDataFilePath = `${rootDir}/temp-${tempFileName}/field.pdf`
 

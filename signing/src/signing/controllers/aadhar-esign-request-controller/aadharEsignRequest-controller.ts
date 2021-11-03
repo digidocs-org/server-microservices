@@ -52,6 +52,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 
     try {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
+        console.log(esignRequest)
         await exec(esignRequest.signingRequest);
 
         const unsignedFieldBuffer = await readFile(esignRequest.unsignedFieldPath);
@@ -81,7 +82,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             esignRequestXMLData: signedXML
         })
     } catch (error) {
-        deleteFile(esignRequest.signedFilePath);
+        // deleteFile(esignRequest.signedFilePath);
         console.log(error)
         return res.send('redirect?type=failed');
     }
