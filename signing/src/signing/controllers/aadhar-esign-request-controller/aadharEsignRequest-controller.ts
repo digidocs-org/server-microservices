@@ -28,42 +28,55 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     const publicKey = publicKeyBuffer.toString();
 
     const decryptedFile = decryptDocument(encryptedFile, publicKey);
-    const timeOfDocSign = new Date().toString();
-    const docId = crypto.randomInt(100000, 1000000)
 
     const signFieldData: EsignRequest = {
         name: `${user.firstname} ${user.lastname}`,
         location: "India",
         reason: "Aadhaar Sign",
-        timeOfDocSign,
-        docId,
         signatureFieldData: {
             data: [
                 {
                     pageNo: 1,
                     xCoord: 50,
                     yCoord: 50
+                },
+                {
+                    pageNo: 2,
+                    xCoord: 70,
+                    yCoord: 50
+                },
+                {
+                    pageNo: 3,
+                    xCoord: 100,
+                    yCoord: 50
                 }
             ]
         }
     }
 
-    const esignRequest = createJarSigningReq(__dirname, SignTypes.AADHAR_SIGN, signFieldData);
+    let fieldData = "";
+    signFieldData.signatureFieldData.data.map(field=>{
+        fieldData += `${field.pageNo}-${field.xCoord},${field.yCoord},50,150;`
+    })
+
+    const esignRequest = createJarSigningReq(__dirname, SignTypes.ESIGN_REQUEST, signFieldData);
 
     try {
+        await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
-        console.log(esignRequest)
         await exec(esignRequest.signingRequest);
 
         const unsignedFieldBuffer = await readFile(esignRequest.unsignedFieldPath);
+        const timeStamp = await readFile(esignRequest.timeStampFilePath);
 
         const pfxFile = await readFile(Files.pfxKey);
         const fileChecksum = generateChecksum(unsignedFieldBuffer, "hex");
+
+        console.log(fileChecksum)
         const jwt = generateToken({
             documentId,
-            docSignId: docId,
-            signTime: timeOfDocSign,
-            userId:user._id
+            signTime: timeStamp.toString(),
+            userId: user._id
         },
             process.env.ESIGN_SALT!,
             process.env.ESIGN_SALT_EXPIRE!
@@ -76,7 +89,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         })
         const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml })
         // deleteFile(esignRequest.signedFilePath);
-        console.log(signedXML)
         // return res.send("success")
         return res.render('esignRequest', {
             esignRequestXMLData: signedXML

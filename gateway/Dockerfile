@@ -12,4 +12,4 @@ COPY .npmrc .npmrc
 
 RUN yarn install --pure-lockfile --non-interactive --cache-folder ./ycache; rm -rf ./ycache
 
-CMD ["yarn", "start-auth"]
+CMD ["yarn", "start-gateway"]

@@ -34,8 +34,6 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         name: "Naman Singh",
         location: "India",
         reason: "Aadhar E-Sign",
-        docId,
-        timeOfDocSign,
         signatureFieldData: {
             data: [
                 {
