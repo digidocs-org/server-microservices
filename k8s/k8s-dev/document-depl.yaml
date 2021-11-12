@@ -16,6 +16,9 @@ spec:
         - name: document
           image: digidocs/document
           env:
+            - name: PORT
+              value: '80'
+
             - name: MONGO_URI
               value: mongodb://host.docker.internal/document
 
@@ -70,5 +73,5 @@ spec:
   ports:
     - name: document
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 80
+      targetPort: 80

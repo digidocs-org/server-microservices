@@ -10,16 +10,16 @@ export const enum EsignResponse {
 
 export const Files = {
   pfxKey: `${dirname}/../key/digidocs-sign.pfx`,
-  javaUtility: `${dirname}/../java-esign-utility/esign-java-utility.jar`,
+  javaDigitalUtility: `${dirname}/../java-esign-utility/digital-sign.jar`,
+  javaAadhaarUtility: `${dirname}/../java-esign-utility/aadhaar-sign.jar`,
+  tempSigningDir : `${dirname}/../sign-dir`
 };
 
 export interface EsignRequest {
   name: string;
   location: string;
   reason: string;
-  docId: number;
-  timeOfDocSign: string;
-  signatureFieldData: { data: [SignField] };
+  signatureFieldData?: { data: SignField[] };
 }
 
 export interface SignField {
@@ -29,8 +29,7 @@ export interface SignField {
 }
 
 export interface AadharEsignPayload {
-  signTime: string
-  docSignId: number
   documentId: string
   userId: string
+  fileName: string
 }

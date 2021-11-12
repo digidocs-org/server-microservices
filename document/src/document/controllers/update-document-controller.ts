@@ -25,6 +25,8 @@ const updateDocument = async (req: Request, res: Response) => {
       newParams.selfSign !== undefined ? newParams.selfSign : document.selfSign,
     validTill: newParams.validTill || document.validTill,
     timeToSign: newParams.timeToSign || document.timeToSign,
+    signType:
+      newParams.signType !== undefined ? newParams.signType : document.signType,
   });
 
   await document.save();
@@ -36,6 +38,7 @@ const updateDocument = async (req: Request, res: Response) => {
     selfSign: document.selfSign,
     validTill: document.validTill,
     timeToSign: document.timeToSign,
+    signType: document.signType,
     version: document.__v,
   });
   // await documentUserMap.save();

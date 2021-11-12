@@ -7,7 +7,9 @@ import {
 } from 'authorization-service/types';
 import { BadRequestError, NotAuthorizedError } from '@digidocs/guardian';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
-import Actions, { IDocumentActions } from 'authorization-service/models/Actions';
+import Actions, {
+  IDocumentActions,
+} from 'authorization-service/models/Actions';
 import User from 'authorization-service/models/User';
 import createGuestUser from 'authorization-service/services/user/create-guest-user';
 
@@ -24,9 +26,8 @@ interface Recipient {
 export const addRecipientsController = async (req: Request, res: Response) => {
   const recipients = req.body.recipients as Recipient[];
   const document = req.docUserMap?.document as IDocument;
-  const userId = req.currentUser?.id;
 
-  const loggedInUser = await User.findById(userId);
+  const loggedInUser = await User.findById(document.userId);
 
   if (!loggedInUser) {
     throw new NotAuthorizedError();
@@ -40,8 +41,6 @@ export const addRecipientsController = async (req: Request, res: Response) => {
     throw new BadRequestError('recepients not provided!!!');
   }
 
-
-
   if (recipients && recipients.length) {
     // Get all recipients of document including owner
     const allRecipients = await DocumentUserMap.find({
@@ -49,38 +48,36 @@ export const addRecipientsController = async (req: Request, res: Response) => {
     }).populate('action');
 
     // Create array of action ids and document map ids of cocument
-    const actionIdsArray: string[] = []
-    const docUserMapIdsArray: string[] = []
+    const actionIdsArray: string[] = [];
+    const docUserMapIdsArray: string[] = [];
 
     allRecipients.map(recipient => {
-      const recipientAction = recipient.action as IDocumentActions
-      if (recipientAction.recipientEmail != loggedInUser.email){
-        console.log(recipientAction.recipientEmail)
-        actionIdsArray.push(recipientAction._id)
-        docUserMapIdsArray.push(recipient._id)
-      } 
+      const recipientAction = recipient.action as IDocumentActions;
+      if (recipientAction.recipientEmail != loggedInUser.email) {
+        actionIdsArray.push(recipientAction._id);
+        docUserMapIdsArray.push(recipient._id);
+      }
     });
-
 
     // Delete actions and document maps.
     await Actions.deleteMany({ _id: actionIdsArray });
     await DocumentUserMap.deleteMany({ _id: docUserMapIdsArray });
 
     // If Self signing is false then add the owner with VIEW action
-    if (!document.selfSign) {
-      const owner = await User.findById(document.userId);
+    // if (!document.selfSign) {
+    //   const owner = await User.findById(document.userId);
 
-      const action = await Actions.create({
-        type: ActionType.VIEW,
-        recipientEmail: owner!.email,
-      });
-      await DocumentUserMap.create({
-        user: loggedInUser.id,
-        document: document.id,
-        action: action,
-        access: true,
-      });
-    }
+    //   const action = await Actions.create({
+    //     type: ActionType.VIEW,
+    //     recipientEmail: owner!.email,
+    //   });
+    //   await DocumentUserMap.create({
+    //     user: loggedInUser.id,
+    //     document: document.id,
+    //     action: action,
+    //     access: true,
+    //   });
+    // }
 
     // Create action and document user maps of recipients
     for (const recipient of recipients) {

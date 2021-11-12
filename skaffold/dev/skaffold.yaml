@@ -16,6 +16,14 @@ build:
         manual:
           - src: 'src/***/*.ts'
             dest: .
+    - image: digidocs/authorization
+      context: ../../
+      docker:
+        dockerfile: ./authorization/Dockerfile
+      sync:
+        manual:
+          - src: 'src/***/*.ts'
+            dest: .
     - image: digidocs/email
       context: ../../
       docker:

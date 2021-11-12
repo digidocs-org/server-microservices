@@ -1,7 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: signing-depl
+
 spec:
   replicas: 1
   selector:
@@ -16,13 +18,16 @@ spec:
         - name: signing
           image: digidocs/signing
           env:
+            - name: PORT
+              value: '80'
+
             - name: MONGO_URI
               value: mongodb://host.docker.internal/signing
 
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name 
+                  fieldPath: metadata.name
 
             - name: NATS_URI
               value: 'http://nats-srv:4222'
@@ -56,7 +61,7 @@ spec:
 
             - name: CLOUDFRONT_URI
               value: https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com
-            
+
             - name: AWS_S3_BUCKET
               value: digidocs-local-bucket
 
@@ -73,7 +78,16 @@ spec:
                   key: PFX_FILE_PASS
 
             - name: ESIGN_RESPONSE_URL
-              value: https://digidocs.dev/api/esign/aadhar/callback
+              value: 'https://digidocs.dev/api/v1/authorization/esign/aadhar/callback'
+
+            - name: ESIGN_SALT
+              value: 'aalkjdsf993848ji34ij3i.ewpoef023444a'
+
+            - name: ESIGN_SALT_EXPIRE
+              value: '1000000'
+
+            - name: REDIRECT_URI
+              value: 'http://digidocs.dev/api/v1/authorization/esign/aadhar/redirect'
 ---
 apiVersion: v1
 kind: Service
@@ -85,5 +99,5 @@ spec:
   ports:
     - name: signing
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 80
+      targetPort: 80

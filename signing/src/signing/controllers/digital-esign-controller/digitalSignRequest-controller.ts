@@ -6,6 +6,7 @@ import crypto from 'crypto'
 import { EsignRequest } from 'signing-service/types';
 import { EsignSuccess } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
+import { v4 as uuidv4 } from 'uuid'
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId
@@ -27,15 +28,10 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
 
     const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
-    const timeOfDocSign = new Date().toString();
-    const docId = crypto.randomInt(100000, 1000000);
-
     const signFieldData: EsignRequest = {
         name: "Naman Singh",
         location: "India",
         reason: "Aadhar E-Sign",
-        docId,
-        timeOfDocSign,
         signatureFieldData: {
             data: [
                 {
@@ -46,8 +42,8 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
             ]
         }
     }
-    const esignRequest = createJarSigningReq(__dirname, SignTypes.DIGITAL_SIGN, signFieldData);
-
+    const fileName = `temp-${uuidv4()}`;
+    const esignRequest = createJarSigningReq(SignTypes.DIGITAL_SIGN, signFieldData, fileName);
 
     try {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');

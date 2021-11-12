@@ -43,8 +43,6 @@ router.get(
  */
 router.get(
     '/digital/request/:id',
-    headerValidators("token"),
-    validateRequest,
     digitalSignRequest
 )
 
