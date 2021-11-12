@@ -63,7 +63,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
             docId: documentId
         })
 
-        // deleteFile(esignRequest.signedFilePath);
+        deleteFile(esignRequest.signedFilePath);
         return res.send({ success: true, msg: "document signed successfully!!" });
     } catch (error) {
         console.log(error);

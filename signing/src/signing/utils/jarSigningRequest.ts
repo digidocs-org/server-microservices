@@ -1,4 +1,4 @@
-import { SignTypes } from "@digidocs/guardian"
+import { convertToString, SignTypes } from "@digidocs/guardian"
 import { EsignRequest, Files } from 'signing-service/types'
 
 export const createJarSigningReq = (signType: string, requestData: EsignRequest, fileName: string, responseUrl?: string,) => {
@@ -26,7 +26,7 @@ export const createJarSigningReq = (signType: string, requestData: EsignRequest,
         reasonToShowOnStamp: requestData.reason,
         pfxPath: pfxKey,
         pfxPass: process.env.PFX_FILE_PASS!,
-        signFieldData: JSON.stringify(requestData.signatureFieldData),
+        signFieldData: convertToString(JSON.stringify(requestData.signatureFieldData)),
         fieldDataFilePath: fieldDataFilePath
     }
 

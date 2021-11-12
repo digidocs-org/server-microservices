@@ -52,11 +52,14 @@ export const redirectCallback = async (req: Request, res: Response) => {
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
   try {
+    if (!req.query.token) {
+      return res.status(500).send({ error: 'Token is required!!!' });
+    }
     const { data } = await api.post(esignService.digitalSignRequest, {
       documentId: req.params.id,
     }, {
       headers: {
-        token: req.header('token')
+        token: req.query.token
       }
     });
     return res.send(data)
