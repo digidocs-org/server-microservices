@@ -16,7 +16,9 @@ export const documentDetailsController = async (
   document = document.toJSON({
     transform: (doc: any, ret: any) => {
       ret.documentName = ret.name;
+      ret.id = ret._id;
       delete ret.name;
+      delete ret._id;
       delete ret.publicKeyId;
       ret.ownerName = `${owner?.firstname} ${owner?.lastname}`;
       ret.ownerEmail = owner?.email;
