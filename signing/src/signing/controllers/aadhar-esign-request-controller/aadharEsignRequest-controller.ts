@@ -4,8 +4,8 @@ import { createSignedXML, generateChecksum } from '@digidocs-org/rsa-crypt';
 import { createJarSigningReq, generateXml, generateToken } from 'signing-service/utils';
 import Document from 'signing-service/models/document';
 import { EsignRequest, Files } from 'signing-service/types';
-import crypto from 'crypto'
 import User from 'signing-service/models/user';
+import { v4 as uuidv4 } from 'uuid'
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId;
@@ -55,43 +55,32 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     }
 
     let fieldData = "";
-    signFieldData.signatureFieldData.data.map(field=>{
+    signFieldData.signatureFieldData?.data.map(field => {
         fieldData += `${field.pageNo}-${field.xCoord},${field.yCoord},50,150;`
     })
+    const fileName = `temp-${uuidv4()}`;
+    const jwt = generateToken({
+        documentId,
+        userId: user._id,
+        fileName
+    },
+        process.env.ESIGN_SALT!,
+        process.env.ESIGN_SALT_EXPIRE!
+    )
 
-    const esignRequest = createJarSigningReq(__dirname, SignTypes.ESIGN_REQUEST, signFieldData);
-
+    const esignRequest = createJarSigningReq(SignTypes.ESIGN_REQUEST, signFieldData, fileName, `${process.env.ESIGN_RESPONSE_URL!}?data=${jwt}`);
+    console.log(esignRequest.signingRequest)
     try {
         await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
         await exec(esignRequest.signingRequest);
 
-        const unsignedFieldBuffer = await readFile(esignRequest.unsignedFieldPath);
-        const timeStamp = await readFile(esignRequest.timeStampFilePath);
+        const signedXML = await readFile(esignRequest.requestXmlFilePath)
+        console.log(signedXML.toString())
 
-        const pfxFile = await readFile(Files.pfxKey);
-        const fileChecksum = generateChecksum(unsignedFieldBuffer, "hex");
-
-        console.log(fileChecksum)
-        const jwt = generateToken({
-            documentId,
-            signTime: timeStamp.toString(),
-            userId: user._id
-        },
-            process.env.ESIGN_SALT!,
-            process.env.ESIGN_SALT_EXPIRE!
-        )
-
-        const xml = generateXml({
-            aspId: process.env.ASP_ID!,
-            responseUrl: `${process.env.ESIGN_RESPONSE_URL!}?data=${jwt}`,
-            checksum: fileChecksum
-        })
-        const signedXML = await createSignedXML({ pfxFile, password: process.env.PFX_FILE_PASS!, xml })
-        // deleteFile(esignRequest.signedFilePath);
         // return res.send("success")
         return res.render('esignRequest', {
-            esignRequestXMLData: signedXML
+            esignRequestXMLData: signedXML.toString()
         })
     } catch (error) {
         // deleteFile(esignRequest.signedFilePath);
