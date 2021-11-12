@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import { decryptDocument, BadRequestError, fetchData, exec, writeFile, deleteFile, SignTypes, readFile } from '@digidocs/guardian';
-import { createSignedXML, generateChecksum } from '@digidocs-org/rsa-crypt';
-import { createJarSigningReq, generateXml, generateToken } from 'signing-service/utils';
+import { decryptDocument, BadRequestError, fetchData, exec, writeFile, SignTypes, readFile, deleteFile } from '@digidocs/guardian';
+import { createJarSigningReq, generateToken } from 'signing-service/utils';
 import Document from 'signing-service/models/document';
-import { EsignRequest, Files } from 'signing-service/types';
+import { EsignRequest } from 'signing-service/types';
 import User from 'signing-service/models/user';
 import { v4 as uuidv4 } from 'uuid'
 
@@ -69,21 +68,19 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     )
 
     const esignRequest = createJarSigningReq(SignTypes.ESIGN_REQUEST, signFieldData, fileName, `${process.env.ESIGN_RESPONSE_URL!}?data=${jwt}`);
-    console.log(esignRequest.signingRequest)
     try {
         await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
         await exec(esignRequest.signingRequest);
 
         const signedXML = await readFile(esignRequest.requestXmlFilePath)
-        console.log(signedXML.toString())
 
         // return res.send("success")
         return res.render('esignRequest', {
             esignRequestXMLData: signedXML.toString()
         })
     } catch (error) {
-        // deleteFile(esignRequest.signedFilePath);
+        deleteFile(esignRequest.signedFilePath);
         console.log(error)
         return res.send('redirect?type=failed');
     }
