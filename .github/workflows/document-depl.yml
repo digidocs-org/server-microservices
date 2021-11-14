@@ -15,7 +15,7 @@ jobs:
       - name: Checkout the repo 
         uses: actions/checkout@v2
       - name: Build image 
-        run: cd document && docker build -t digidocs/document .
+        run: docker build -t digidocs/document -f document/Dockerfile .
       - name: Install doctl 
         uses: digitalocean/action-doctl@v2
         with:

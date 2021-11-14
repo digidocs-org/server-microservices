@@ -7,7 +7,6 @@ FROM base AS dependencies
 COPY authorization authorization
 COPY guardian guardian
 COPY package.json .
-COPY yarn.lock .
 COPY .npmrc .npmrc
 
 RUN yarn install --pure-lockfile --non-interactive --cache-folder ./ycache; rm -rf ./ycache
