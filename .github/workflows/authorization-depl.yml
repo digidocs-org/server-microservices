@@ -15,19 +15,15 @@ jobs:
       - name: Checkout the repo 
         uses: actions/checkout@v2
       - name: Build image 
-        run:  docker build -t digidocs/authorization -f authorization/Dockerfile .
+        run:  docker build -t registry.digitalocean.com/digidocs-stage-container/authorization -f authorization/Dockerfile .
       - name: Install doctl 
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - name: Log in to Container Registry 
         run: doctl registry login --expiry-seconds 600
-      - name: Tag image 
-        run:
-          docker tag digidocs/authorization \
-          registry.digitalocean.com/digidocs-stage-container/authorization:latest
       - name: Push image to Container Registry 
-        run: docker push registry.digitalocean.com/digidocs-stage-container/authorization:latest
+        run: docker push registry.digitalocean.com/digidocs-stage-container/authorization
       - name: Config kubernetes
         run: doctl kubernetes cluster kubeconfig save digidocs-stage-cluster
       - name: Restart deployment
