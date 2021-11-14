@@ -6,6 +6,8 @@ on:
       - master
     paths:
       - 'authorization/**'
+  workflow_dispatch:
+  
 jobs:
   build_and_push:
     runs-on: ubuntu-latest

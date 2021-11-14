@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - 'auth/**'
+  workflow_dispatch:
 
 jobs:
   build_and_push:
