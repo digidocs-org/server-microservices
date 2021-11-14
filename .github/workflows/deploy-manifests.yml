@@ -17,7 +17,7 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - name: Config kubernetes
-        run: doctl kubernetes cluster kubeconfig save digidocs-stage
+        run: doctl kubernetes cluster kubeconfig save digidocs-stage-cluster
         run: kubectl apply --validate=false -f infra/k8s/k8s-prod/cert-manager/cert-manager-1.5.3.yaml
         run: kubectl apply -f infra/k8s/k8s-prod
         

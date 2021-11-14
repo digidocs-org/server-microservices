@@ -27,5 +27,5 @@ jobs:
       - name: Push image to Container Registry 
         run: docker push registry.digitalocean.com/digidocs-stage-container/email:latest
       - name: Config kubernetes
-        run: doctl kubernetes cluster kubeconfig save digidocs-stage
+        run: doctl kubernetes cluster kubeconfig save digidocs-stage-cluster
         run: kubectl rollout restart deployment auth-depl
