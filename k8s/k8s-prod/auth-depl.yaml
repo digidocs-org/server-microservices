@@ -16,12 +16,12 @@ spec:
         - name: auth
           image: registry.digitalocean.com/digidocs-stage-container/auth:latest
           env:
-            - name: MONGO_URI
-              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/authentication
-
             - name: PORT
               value: '80'
 
+            - name: MONGO_URI
+              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/authentication
+              
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:

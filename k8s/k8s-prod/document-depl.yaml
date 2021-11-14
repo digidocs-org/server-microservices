@@ -22,9 +22,6 @@ spec:
             - name: PORT
               value: '80'
 
-            - name: MONGO_URI
-              value: mongodb://host.docker.internal/document
-
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
