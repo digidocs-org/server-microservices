@@ -14,15 +14,21 @@ spec:
     spec:
       containers:
         - name: auth
-          image: registry.digitalocean.com/digidocs/auth
+          image: registry.digitalocean.com/digidocs-stage-cluster/auth
           env:
             - name: MONGO_URI
-              value: mongodb+srv://admin:MbKpGWDVO7HHD3BY@digidocs-cluster.1rbi3.mongodb.net/authentication
+              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/authentication
+
+            - name: PORT
+              value: '80'
+
+            - name: MONGO_URI
+              value: mongodb://host.docker.internal/authentication
 
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name 
+                  fieldPath: metadata.name
 
             - name: NATS_URI
               value: 'http://nats-srv:4222'
@@ -88,5 +94,5 @@ spec:
   ports:
     - name: auth
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 80
+      targetPort: 80

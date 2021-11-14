@@ -1,30 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
-  name: document-depl
+  name: authorization-depl
+
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: document
+      app: authorization
   template:
     metadata:
       labels:
-        app: document
+        app: authorization
     spec:
       containers:
-        - name: document
-          image: registry.digitalocean.com/digidocs-stage-cluster/document
+        - name: authorization
+          image: digidocs/authorization
           env:
-            - name: MONGO_URI
-              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/document
-
-            env:
             - name: PORT
               value: '80'
 
             - name: MONGO_URI
-              value: mongodb://host.docker.internal/document
+              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/authorization
 
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -35,7 +33,7 @@ spec:
               value: 'http://nats-srv:4222'
 
             - name: NATS_CLUSTER_ID
-              value: digidocs
+              value: 'digidocs'
 
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
@@ -62,20 +60,26 @@ spec:
                   key: FILE_KEY
 
             - name: CLOUDFRONT_URI
-              value: https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com
+              value: 'https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com'
 
             - name: AWS_S3_BUCKET
-              value: digidocs-local-bucket
+              value: 'digidocs-local-bucket'
+
+            - name: DOCUMENT_SERVICE_URL
+              value: 'http://document-srv'
+
+            - name: ESIGN_SERVICE_BASE_URL
+              value: 'http://signing-srv'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: document-srv
+  name: authorization-srv
 spec:
   selector:
-    app: document
+    app: authorization
   ports:
-    - name: document
+    - name: authorization
       protocol: TCP
       port: 80
       targetPort: 80

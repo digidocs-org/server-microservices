@@ -24,7 +24,7 @@ export class AuthRouter {
   private static router = Router();
 
   public static route() {
-    this.router.get('/api/auth', (req, res) => {
+    this.router.get('/api/v1/auth', (req, res) => {
       res.send({ message: 'auth service is up and running' });
     });
 
@@ -35,7 +35,7 @@ export class AuthRouter {
      */
 
     this.router.post(
-      '/api/auth/signup',
+      '/api/v1/auth/signup',
       bodyValidators('email', 'password', 'firstname', 'lastname'),
       validateRequest,
       Signup
@@ -48,7 +48,7 @@ export class AuthRouter {
      */
 
     this.router.post(
-      '/api/auth/signin',
+      '/api/v1/auth/signin',
       bodyValidators('email', 'password'),
       validateRequest,
       Signin
@@ -61,7 +61,7 @@ export class AuthRouter {
      */
 
     this.router.get(
-      '/api/auth/user-profile',
+      '/api/v1/auth/user-profile',
       headerValidators('token'),
       validateRequest,
       currentUser,
@@ -75,7 +75,7 @@ export class AuthRouter {
      */
 
     this.router.get(
-      '/api/auth/refresh-token',
+      '/api/v1/auth/refresh-token',
       headerValidators('refreshToken'),
       validateRequest,
       refreshToken
@@ -88,7 +88,7 @@ export class AuthRouter {
      */
 
     this.router.get(
-      '/api/auth/google',
+      '/api/v1/auth/google',
       passport.authenticate('google', {
         scope: ['profile', 'email'],
       })
@@ -100,7 +100,7 @@ export class AuthRouter {
      * @Access Private
      */
     this.router.get(
-      '/api/auth/google/callback',
+      '/api/v1/auth/google/callback',
       passport.authenticate('google'),
       googlePassport
     );
@@ -111,7 +111,7 @@ export class AuthRouter {
      * @Access Private
      */
     this.router.post(
-      '/api/auth/verify-otp',
+      '/api/v1/auth/verify-otp',
       headerValidators('token'),
       bodyValidators('otp'),
       validateRequest,
@@ -125,7 +125,7 @@ export class AuthRouter {
      * @Access Private
      */
     this.router.post(
-      '/api/auth/send-otp-email',
+      '/api/v1/auth/send-otp-email',
       headerValidators('token'),
       validateRequest,
       currentUser,
@@ -138,7 +138,7 @@ export class AuthRouter {
      * @Access Private
      */
     this.router.post(
-      '/api/auth/forgotPassword/send-otp',
+      '/api/v1/auth/forgotPassword/send-otp',
       bodyValidators('email'),
       validateRequest,
       forgotPasswordOtp
@@ -150,7 +150,7 @@ export class AuthRouter {
      * @Access Private
      */
     this.router.post(
-      '/api/auth/forgotPassword/verify-otp',
+      '/api/v1/auth/forgotPassword/verify-otp',
       bodyValidators('email', 'otp'),
       validateRequest,
       forgotPasswordVerifyOtp
@@ -162,7 +162,7 @@ export class AuthRouter {
      * @Access Private
      */
     this.router.post(
-      '/api/auth/reset-password',
+      '/api/v1/auth/reset-password',
       headerValidators('reset-token'),
       bodyValidators('password'),
       validateRequest,
