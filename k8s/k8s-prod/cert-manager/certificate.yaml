@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   dnsNames:
-    - v2-stage.digidocs.one
+    - stage.digidocs.one
   secretName: digidocs-app-tls
   issuerRef:
     name: letsencrypt-cluster-issuer
