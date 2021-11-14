@@ -19,7 +19,6 @@ spec:
             - name: MONGO_URI
               value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/document
 
-            env:
             - name: PORT
               value: '80'
 
