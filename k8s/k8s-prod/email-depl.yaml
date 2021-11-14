@@ -14,8 +14,11 @@ spec:
     spec:
       containers:
         - name: email
-          image: registry.digitalocean.com/digidocs/email
+          image: registry.digitalocean.com/digidocs-stage-cluster/email
           env:
+            - name: PORT
+              value: '80'
+              
             - name: NODEMAILER_EMAIL
               value: 'notifications@digidocsapp.com'
 
