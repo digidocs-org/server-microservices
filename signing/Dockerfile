@@ -11,7 +11,6 @@ RUN apt-get install -y curl \
 COPY signing signing
 COPY guardian guardian
 COPY package.json .
-COPY yarn.lock .
 COPY .npmrc .npmrc
 
 RUN npm install -g yarn
