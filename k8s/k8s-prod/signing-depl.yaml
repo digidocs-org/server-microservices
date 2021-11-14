@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: signing
-          image: registry.digitalocean.com/digidocs-stage-container/signing
+          image: registry.digitalocean.com/digidocs-stage-container/signing:latest
           env:
             - name: MONGO_URI
               value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/signing
