@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: document
-          image: registry.digitalocean.com/digidocs-stage-cluster/document
+          image: registry.digitalocean.com/digidocs-stage-container/document
           env:
             - name: MONGO_URI
               value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/document

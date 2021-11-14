@@ -15,8 +15,8 @@ spec:
         app: authorization
     spec:
       containers:
-        - name: authorization
-          image: digidocs/authorization
+        - name: auth
+          image: registry.digitalocean.com/digidocs-stage-container/authorization
           env:
             - name: PORT
               value: '80'
