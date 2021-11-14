@@ -31,7 +31,7 @@ spec:
               value: 'http://nats-srv:4222'
 
             - name: NATS_CLUSTER_ID
-              value: digidocs
+              value: 'digidocs'
 
             - name: ACCESS_TOKEN_SECRET
               valueFrom:

@@ -34,7 +34,7 @@ spec:
               value: 'http://nats-srv:4222'
 
             - name: NATS_CLUSTER_ID
-              value: digidocs
+              value: 'digidocs'
 
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
@@ -61,10 +61,10 @@ spec:
                   key: FILE_KEY
 
             - name: CLOUDFRONT_URI
-              value: https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com
+              value: 'https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com'
 
             - name: AWS_S3_BUCKET
-              value: digidocs-local-bucket
+              value: 'digidocs-local-bucket'
 ---
 apiVersion: v1
 kind: Service
