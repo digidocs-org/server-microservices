@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: email
-          image: registry.digitalocean.com/digidocs-stage-cluster/email
+          image: registry.digitalocean.com/digidocs-stage-container/email
           env:
             - name: PORT
               value: '80'

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: registry.digitalocean.com/digidocs-stage-cluster/auth
+          image: registry.digitalocean.com/digidocs-stage-container/auth
           env:
             - name: MONGO_URI
               value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/authentication
