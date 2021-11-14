@@ -6,6 +6,8 @@ on:
       - master
     paths:
       - 'infra/k8s/k8s-prod/**'
+  workflow_dispatch:
+    
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
