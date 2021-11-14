@@ -30,4 +30,5 @@ jobs:
         run: docker push registry.digitalocean.com/digidocs-stage-container/authorization:latest
       - name: Config kubernetes
         run: doctl kubernetes cluster kubeconfig save digidocs-stage-cluster
+      - name: Restart deployment
         run: kubectl rollout restart deployment auth-depl
