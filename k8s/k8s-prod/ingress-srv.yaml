@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - stage.digidocs.one
+      - stage-api.digidocs.one
       secretName: digidocs-app-tls
   rules:
-    - host: stage.digidocs.one
+    - host: stage-api.digidocs.one
       http:
         paths:
           - path: /api/v1/auth/?(.*)
