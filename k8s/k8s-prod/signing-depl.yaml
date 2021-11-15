@@ -18,7 +18,7 @@ spec:
           env:
             - name: PORT
               value: '80'
-              
+
             - name: MONGO_URI
               value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/signing
 
@@ -76,7 +76,7 @@ spec:
                   key: PFX_FILE_PASS
 
             - name: ESIGN_RESPONSE_URL
-              value: 'https://stage.digidocs.one/api/v1/authorization/esign/aadhar/callback'
+              value: 'https://stage-api.digidocs.one/api/v1/authorization/esign/aadhar/callback'
 
             - name: ESIGN_SALT
               value: 'aalkjdsf993848ji34ij3i.ewpoef023444a'
@@ -85,7 +85,7 @@ spec:
               value: '1000000'
 
             - name: REDIRECT_URI
-              value: 'https://stage.digidocs.one/api/v1/authorization/esign/aadhar/redirect'
+              value: 'https://stage-api.digidocs.one/api/v1/authorization/esign/aadhar/redirect'
 ---
 apiVersion: v1
 kind: Service
