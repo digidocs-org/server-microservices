@@ -16,6 +16,9 @@ spec:
         - name: signing
           image: registry.digitalocean.com/digidocs-stage-container/signing:latest
           env:
+            - name: PORT
+              value: '80'
+              
             - name: MONGO_URI
               value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/signing
 
