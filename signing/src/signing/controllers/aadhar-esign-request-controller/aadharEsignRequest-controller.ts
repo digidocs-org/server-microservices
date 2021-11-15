@@ -38,16 +38,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
                     pageNo: 1,
                     xCoord: 50,
                     yCoord: 50
-                },
-                {
-                    pageNo: 2,
-                    xCoord: 70,
-                    yCoord: 50
-                },
-                {
-                    pageNo: 3,
-                    xCoord: 100,
-                    yCoord: 50
                 }
             ]
         }
@@ -72,7 +62,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
         await exec(esignRequest.signingRequest);
-
         const signedXML = await readFile(esignRequest.requestXmlFilePath)
 
         // return res.send("success")
