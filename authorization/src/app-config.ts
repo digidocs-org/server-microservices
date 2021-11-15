@@ -38,7 +38,7 @@ export class Application {
 
     this.app = new App(
       [DocumentAuthorizationRouter.route()],
-      [json({ limit: '50mb' }), urlencoded({ extended: true })]
+      [json({ limit: '50mb' }), urlencoded({ extended: true }), fileUpload()]
     );
   }
 
