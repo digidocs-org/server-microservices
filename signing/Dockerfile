@@ -8,6 +8,10 @@ RUN apt-get install -y curl \
     && apt-get install -y nodejs \
     && curl -L https://www.npmjs.com/install.sh | sh
 
+RUN ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
+RUN echo "Asia/Kolkata" | sudo tee /etc/timezone
+RUN dpkg-reconfigure --frontend noninteractive tzdata
+
 COPY signing signing
 COPY guardian guardian
 COPY package.json .

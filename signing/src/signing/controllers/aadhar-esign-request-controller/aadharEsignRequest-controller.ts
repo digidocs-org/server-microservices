@@ -64,7 +64,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         await exec(esignRequest.signingRequest);
         const signedXML = await readFile(esignRequest.requestXmlFilePath)
 
-        // return res.send("success")
         return res.render('esignRequest', {
             esignRequestXMLData: signedXML.toString()
         })
