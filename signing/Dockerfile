@@ -9,8 +9,12 @@ RUN apt-get install -y curl \
     && curl -L https://www.npmjs.com/install.sh | sh
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
-RUN echo "Asia/Kolkata" | sudo tee /etc/timezone
+RUN echo "Asia/Kolkata" | tee /etc/timezone
 RUN dpkg-reconfigure --frontend noninteractive tzdata
+
+RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/digital-sign.jar -P /usr/src/app/signing/src/signing/java-esign-utility
+RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/aadhaar-sign.jar -P /usr/src/app/signing/src/signing/java-esign-utility
+RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/sign.png -P /usr/src/app/signing/src/signing/sign-dir
 
 COPY signing signing
 COPY guardian guardian
