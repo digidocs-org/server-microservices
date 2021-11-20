@@ -14,7 +14,7 @@ export const createDocumentController = async (req: Request, res: Response) => {
     throw new NotAuthorizedError();
   }
   // Fetch the document from request
-  const { files } = req.body;
+  const { files } = req;
 
   const user = await User.findById(userId);
 
