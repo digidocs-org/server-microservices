@@ -31,7 +31,6 @@
     "document",
     "signing",
     "skaffold",
-    "k8s",
-    "gateway"
+    "k8s"
   ]
 }
