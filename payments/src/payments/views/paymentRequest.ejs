@@ -5,17 +5,55 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esign Request</title>
+    <title>Payment</title>
 </head>
 
 <body>
-    <form id="ASPRequestForm" name="URL" method="POST"
-        action="https://pregw.esign.egov-nsdl.com/nsdl-esp/authenticate/esign-doc/" enctype="multipart/form-data">
-        <input type="hidden" name="msg" value='<%=esignRequestXMLData %>' />
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <form action="<%=process.env.SUCCESS_CALLBACK_URL%>" method="POST" id="success_response">
+        <input type="hidden" custom="Hidden Element" name="jwtToken" value="<%= token%>" />
+    </form>
+    <form action="<%=process.env.FAILED_CALLBACK_URL%>" method="POST" id="failed_response">
+        <input type="hidden" custom="Hidden Element" name="jwtToken" value="<%= token%>" />
     </form>
     <script>
+        var options = {
+            "key": "<%=process.env.RAZORPAY_KEY_ID%>",
+            "amount": "<%=amount%>",
+            "currency": "<%=currency%>",
+            "name": "Digidocs",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": "<%=orderId%>",
+            "handler": function (response) {
+                var s = document.createElement("input");
+                s.setAttribute("type", "hidden");
+                s.setAttribute("custom", "Hidden Element");
+                s.setAttribute("name", "response");
+                s.setAttribute("value", response);
+                document.getElementById("success_response").appendChild(s).submit()
+            },
+            "prefill": {
+                "name": "<%=name%>",
+                "email": "<%=email%>",
+                "contact": "<%=phoneNo%>"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+            var s = document.createElement("input");
+            s.setAttribute("type", "hidden");
+            s.setAttribute("custom", "Hidden Element");
+            s.setAttribute("name", "response");
+            s.setAttribute("value", response);
+            document.getElementById("failed_response").submit();
+
+        });
         window.addEventListener("load", () => {
-            document.getElementById("ASPRequestForm").submit();
+            rzp1.open();
         })
     </script>
 </body>
