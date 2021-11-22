@@ -8,7 +8,11 @@ import { IDocumentActions } from 'authorization-service/models/Actions';
 import Document from 'authorization-service/models/Document';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
 import User from 'authorization-service/models/User';
-import { ActionStatus, queueGroupName } from 'authorization-service/types';
+import {
+  ActionStatus,
+  ActionType,
+  queueGroupName,
+} from 'authorization-service/types';
 import { Message } from 'node-nats-streaming';
 import { natsWrapper } from 'src/nats-wrapper';
 import { SendEmailPublisher } from '../publishers/send-email-publisher';
@@ -20,9 +24,6 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
   async onMessage(data: EsignSuccessEvent['data'], msg: Message) {
     const { docId, userId } = data;
 
-    let docUserMaps = await DocumentUserMap.find({ document: docId }).populate(
-      'action'
-    );
     const document = await Document.findById(docId);
     const signer = await DocumentUserMap.findOne({
       document: docId,
@@ -44,9 +45,32 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
     await signerAction.save();
     await action.save();
 
+    let docUserMaps = await DocumentUserMap.find({ document: docId }).populate(
+      'action'
+    );
+
     // TODO Send Email to the user who signed the document.
 
     if (!document.inOrder) {
+      let allSigned = false;
+      docUserMaps.forEach(docUserMap => {
+        const action = docUserMap.action as IDocumentActions;
+
+        if (
+          action.type === ActionType.SIGN &&
+          action.actionStatus !== ActionStatus.SIGNED
+        ) {
+          allSigned = false;
+          return;
+        }
+        allSigned = true;
+      });
+
+      if (allSigned) {
+        document.status = DocumentStatus.COMPLETED;
+        await document.save();
+      }
+
       msg.ack();
       return;
     }
