@@ -2,11 +2,9 @@ import {
     headerValidators,
     bodyValidators,
     validateRequest,
-    currentUser,
 } from '@digidocs/guardian';
 import { Router } from 'express';
-
-
+import {paymentDetails,paymentRequest} from 'payments-service/controllers'
 
 export class DocumentRouter {
     private static router = Router();
@@ -23,7 +21,7 @@ export class DocumentRouter {
             "/api/payment/request",
             bodyValidators("userId", "amount", "currency"),
             validateRequest,
-
+            paymentRequest
         )
 
         /**
@@ -34,7 +32,7 @@ export class DocumentRouter {
         */
          this.router.get(
             "/api/payment/details/:orderId",
-            
+            paymentDetails
         )
 
         return this.router;
