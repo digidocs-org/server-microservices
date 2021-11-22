@@ -1,7 +1,7 @@
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import { IDocument } from 'authorization-service/models/Document';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
-import User from 'authorization-service/models/User';
+import User, { IUser } from 'authorization-service/models/User';
 import { Request, Response } from 'express';
 
 export const documentDetailsController = async (
@@ -28,16 +28,19 @@ export const documentDetailsController = async (
   const signatureFields = action.fields;
   const docUserMaps = await DocumentUserMap.find({
     document: documentId,
-  }).populate('action');
+  })
+    .populate('action')
+    .populate('user');
 
   const actions = docUserMaps.map(docUserMap => {
     const action = docUserMap.action as IDocumentActions;
+    const user = docUserMap.user as IUser;
 
     return {
       type: action.type,
       email: action.recipientEmail,
       status: action.actionStatus,
-      name: action.recipientName,
+      name: action.recipientName ?? `${user.firstname} ${user.lastname}`,
       fields: action.fields,
     };
   });
