@@ -1,5 +1,6 @@
+import { BadRequestError } from "@digidocs/guardian";
 import { Request, Response } from "express";
-import Razorpay, { } from 'razorpay'
+import Razorpay from 'razorpay'
 
 export const paymentRequest = (req: Request, res: Response) => {
     const { user, amount, currency, token, callbackUrl } = req.body
@@ -16,6 +17,9 @@ export const paymentRequest = (req: Request, res: Response) => {
         currency
     }
     razorpay.orders.create(paymentOptions, function (err: any, order: any) {
+        if(err){
+            throw new BadRequestError("payment failed!!!")
+        }
         const orderId: string = order.id
 
         res.render('paymentRequest.ejs', {
