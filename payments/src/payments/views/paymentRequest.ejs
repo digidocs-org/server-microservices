@@ -10,10 +10,7 @@
 
 <body>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <form action="<%=process.env.SUCCESS_CALLBACK_URL%>" method="POST" id="success_response">
-        <input type="hidden" custom="Hidden Element" name="jwtToken" value="<%= token%>" />
-    </form>
-    <form action="<%=process.env.FAILED_CALLBACK_URL%>" method="POST" id="failed_response">
+    <form action="<%=callbackUrl%>" method="POST" id="callback_response">
         <input type="hidden" custom="Hidden Element" name="jwtToken" value="<%= token%>" />
     </form>
     <script>
@@ -22,7 +19,6 @@
             "amount": "<%=amount%>",
             "currency": "<%=currency%>",
             "name": "Digidocs",
-            "description": "Test Transaction",
             "image": "https://example.com/your_logo",
             "order_id": "<%=orderId%>",
             "handler": function (response) {
@@ -31,7 +27,7 @@
                 s.setAttribute("custom", "Hidden Element");
                 s.setAttribute("name", "response");
                 s.setAttribute("value", response);
-                document.getElementById("success_response").appendChild(s).submit()
+                document.getElementById("callback_response").appendChild(s).submit()
             },
             "prefill": {
                 "name": "<%=name%>",
@@ -49,8 +45,7 @@
             s.setAttribute("custom", "Hidden Element");
             s.setAttribute("name", "response");
             s.setAttribute("value", response);
-            document.getElementById("failed_response").submit();
-
+            document.getElementById("callback_response").appendChild(s).submit();
         });
         window.addEventListener("load", () => {
             rzp1.open();
