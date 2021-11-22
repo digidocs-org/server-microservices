@@ -4,8 +4,8 @@ import { App } from '@digidocs/guardian';
 import { DatabaseConfig } from './db-config';
 import cors from 'cors'
 import { natsWrapper } from './nats-wrapper';
-import fileUpload from 'express-fileupload';
 import { PaymentRouter } from './payments/routes';
+import path from 'path';
 
 export class Application {
   private app: App;
@@ -19,8 +19,8 @@ export class Application {
           process.env.NATS_URI!
         )
         .then(() => {
-            //Add payment listeners here
-            
+          //Add payment listeners here
+
         });
 
       natsWrapper.client.on('close', () => {
@@ -35,7 +35,13 @@ export class Application {
 
     this.app = new App(
       [PaymentRouter.route()],
-      [cors(),json({ limit: '50mb' }), fileUpload()]
+      [cors(), json({ limit: '50mb' })],
+      [
+        {
+          viewPath: path.join(path.resolve(), 'src/payments/views'),
+          engine: 'ejs',
+        },
+      ]
     );
   }
 

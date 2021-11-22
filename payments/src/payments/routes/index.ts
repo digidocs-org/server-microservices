@@ -4,21 +4,21 @@ import {
     validateRequest,
 } from '@digidocs/guardian';
 import { Router } from 'express';
-import {paymentDetails,paymentRequest} from 'payments-service/controllers'
+import { paymentDetails, paymentRequest, indexOrders } from 'payments-service/controllers'
 
-export class DocumentRouter {
+export class PaymentRouter {
     private static router = Router();
 
     public static route() {
 
         /**
-           * @Route   POST 'api/payment/request'
+           * @Route   POST '/api/orders/payment/request'
            * @Desc    Create a payment request
            * @Access  Private
            * @Returns {orderId,paymentId,status}
         */
         this.router.post(
-            "/api/payment/request",
+            "/api/orders/payment/request",
             bodyValidators("userId", "amount", "currency"),
             validateRequest,
             paymentRequest
@@ -30,9 +30,22 @@ export class DocumentRouter {
            * @Access  Private
            * @Returns {orderId,paymentId,status}
         */
-         this.router.get(
-            "/api/payment/details/:orderId",
+        this.router.get(
+            "/api/orders/detail/:orderId",
             paymentDetails
+        )
+
+        /**
+           * @Route   POST 'api/payments/index'
+           * @Desc    Create a payment request
+           * @Access  Private
+           * @Returns {orderId,paymentId,status}
+        */
+        this.router.get(
+            "/api/orders/index",
+            headerValidators("userId"),
+            validateRequest,
+            indexOrders
         )
 
         return this.router;
