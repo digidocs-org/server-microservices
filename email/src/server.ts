@@ -1,7 +1,7 @@
 import {Application} from './app-config';
 
 if (!process.env.NODEMAILER_EMAIL) {
-  throw new Error('JWT_KEY is required.');
+  throw new Error('NODEMAILER_EMAIL is required.');
 }
 
 if (!process.env.NODEMAILER_PASS) {

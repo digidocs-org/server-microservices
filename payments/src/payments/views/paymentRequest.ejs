@@ -6,12 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment</title>
+    <style>
+        #modal-close.close {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <form action="<%=callbackUrl%>" method="POST" id="callback_response">
-        <input type="hidden" custom="Hidden Element" name="jwtToken" value="<%= token%>" />
+        <input type="hidden" custom="Hidden Element" name="token" value="<%= token%>" />
     </form>
     <script>
         var options = {
@@ -26,8 +31,23 @@
                 s.setAttribute("type", "hidden");
                 s.setAttribute("custom", "Hidden Element");
                 s.setAttribute("name", "response");
-                s.setAttribute("value", response);
-                document.getElementById("callback_response").appendChild(s).submit()
+                s.setAttribute("value", JSON.stringify(response));
+                document.getElementById("callback_response").appendChild(s)
+                document.getElementById("callback_response").submit()
+            },
+            "modal": {
+                "ondismiss": function () {
+                    const response = {
+                        error: "payment cancelled"
+                    }
+                    var s = document.createElement("input");
+                    s.setAttribute("type", "hidden");
+                    s.setAttribute("custom", "Hidden Element");
+                    s.setAttribute("name", "response");
+                    s.setAttribute("value", JSON.stringify(response));
+                    document.getElementById("callback_response").appendChild(s);
+                    document.getElementById("callback_response").submit()
+                }
             },
             "prefill": {
                 "name": "<%=name%>",
@@ -44,8 +64,9 @@
             s.setAttribute("type", "hidden");
             s.setAttribute("custom", "Hidden Element");
             s.setAttribute("name", "response");
-            s.setAttribute("value", response);
-            document.getElementById("callback_response").appendChild(s).submit();
+            s.setAttribute("value", JSON.stringify(response));
+            document.getElementById("callback_response").appendChild(s);
+            document.getElementById("callback_response").submit()
         });
         window.addEventListener("load", () => {
             rzp.open();

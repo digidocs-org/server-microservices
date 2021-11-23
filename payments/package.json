@@ -5,6 +5,16 @@
   "main": "index.js",
   "author": "naman singh",
   "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "start": "nodemon",
+    "start-dev": "nodemon",
+    "build": "tsc"
+  },
   "devDependencies": {
     "@types/node": "^14.11.2",
     "gts": "^3.1.0",

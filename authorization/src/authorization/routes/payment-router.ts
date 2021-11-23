@@ -1,6 +1,6 @@
 import { bodyValidators, currentUser, headerValidators, queryValidators, validateRequest } from '@digidocs/guardian';
 import { Router } from 'express';
-import { createOrder, getOrderDetails, indexOrders } from 'authorization-service/controllers/payment-orders';
+import { createOrder, getOrderDetails, indexOrders, paymentCallback } from 'authorization-service/controllers/payment-orders';
 
 const router = Router();
 
@@ -41,6 +41,19 @@ router.get(
     validateRequest,
     currentUser,
     createOrder
+);
+
+/**
+* @Route  GET 'api/v1/authorization/orders/payment/callback'
+* @Desc   Get all orders
+* @Access Private
+*/
+router.post(
+    '/payment/callback',
+    bodyValidators('token'),
+    validateRequest,
+    currentUser,
+    paymentCallback
 );
 
 

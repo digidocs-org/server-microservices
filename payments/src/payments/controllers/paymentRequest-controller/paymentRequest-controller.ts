@@ -13,11 +13,12 @@ export const paymentRequest = (req: Request, res: Response) => {
     })
 
     const paymentOptions = {
-        amount,
+        amount: amount * 100,
         currency
     }
     razorpay.orders.create(paymentOptions, function (err: any, order: any) {
         if (err) {
+            console.log(err)
             throw new BadRequestError("payment failed!!!")
         }
         const orderId: string = order.id

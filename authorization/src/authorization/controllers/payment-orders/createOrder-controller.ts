@@ -15,9 +15,8 @@ export const createOrder = async (req: Request, res: Response) => {
     if (!user) {
         throw new BadRequestError("User not found")
     }
-
     const currency = "INR"
-    const amount = 40
+    const amount = 30
     const userData = {
         name: `${user.firstname} ${user.lastname}`,
         phoneNo: user.mobile,
