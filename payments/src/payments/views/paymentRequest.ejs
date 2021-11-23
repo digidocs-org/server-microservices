@@ -16,15 +16,16 @@
 <body>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <form action="<%=callbackUrl%>" method="POST" id="callback_response">
-        <input type="hidden" custom="Hidden Element" name="token" value="<%= token%>" />
+        <input type="hidden" custom="Hidden Element" name="token" value="<%=token%>" />
     </form>
     <script>
         var options = {
             "key": "<%=process.env.RAZORPAY_KEY_ID%>",
             "amount": "<%=amount%>",
             "currency": "<%=currency%>",
-            "name": "Digidocs",
-            "image": "https://example.com/your_logo",
+            "name": "Digidocs Tech Pvt Ltd",
+            "description": "Aadhaar E-Sign Payment",
+            "image": "https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/digidocs-logo.jpeg",
             "order_id": "<%=orderId%>",
             "handler": function (response) {
                 var s = document.createElement("input");
@@ -35,6 +36,7 @@
                 document.getElementById("callback_response").appendChild(s)
                 document.getElementById("callback_response").submit()
             },
+            
             "modal": {
                 "ondismiss": function () {
                     const response = {
@@ -55,19 +57,19 @@
                 "contact": "<%=phoneNo%>"
             },
             "theme": {
-                "color": "#3399cc"
+                "color": "#1F7AE0"
             }
         };
         var rzp = new Razorpay(options);
-        rzp.on('payment.failed', function (response) {
-            var s = document.createElement("input");
-            s.setAttribute("type", "hidden");
-            s.setAttribute("custom", "Hidden Element");
-            s.setAttribute("name", "response");
-            s.setAttribute("value", JSON.stringify(response));
-            document.getElementById("callback_response").appendChild(s);
-            document.getElementById("callback_response").submit()
-        });
+        // rzp.on('payment.failed', function (response) {
+        //     var s = document.createElement("input");
+        //     s.setAttribute("type", "hidden");
+        //     s.setAttribute("custom", "Hidden Element");
+        //     s.setAttribute("name", "response");
+        //     s.setAttribute("value", JSON.stringify(response));
+        //     document.getElementById("callback_response").appendChild(s);
+        //     document.getElementById("callback_response").submit()
+        // });
         window.addEventListener("load", () => {
             rzp.open();
         })

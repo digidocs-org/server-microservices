@@ -1,6 +1,17 @@
+import { BadRequestError } from '@digidocs/guardian'
 import { Request, Response } from 'express'
 
 export const paymentCallback = (req: Request, res: Response) => {
-    console.log(req.body)
-    res.send({ success: "failed" })
+    const paymentResponse = JSON.parse(req.body.response)
+    if (paymentResponse.error) {
+        throw new BadRequestError(paymentResponse.error)
+    }
+    const paymentId = paymentResponse.razorpay_payment_id
+    const orderId = paymentResponse.razorpay_order_id
+    const responseData = {
+        paymentId,
+        orderId,
+        message: "payment successful",
+    }
+    res.send({ status: 'success', data: responseData })
 }

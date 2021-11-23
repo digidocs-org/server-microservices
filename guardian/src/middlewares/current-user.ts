@@ -22,8 +22,7 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.header('token') ?? req.query.token;
-
+  const token = req.header('token') ?? req.query.token ?? req.body.token;
   try {
     const payload = jwt.verify(
       token ?? req.session?.jwt,
