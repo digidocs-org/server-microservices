@@ -20,7 +20,8 @@ export const createOrder = async (req: Request, res: Response) => {
     const userData = {
         name: `${user.firstname} ${user.lastname}`,
         phoneNo: user.mobile,
-        email: user.email
+        email: user.email,
+        userId: user._id
     }
 
     try {

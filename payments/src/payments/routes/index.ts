@@ -4,7 +4,7 @@ import {
     validateRequest,
 } from '@digidocs/guardian';
 import { Router } from 'express';
-import { paymentDetails, paymentRequest, indexOrders } from 'payments-service/controllers'
+import { paymentDetails, paymentRequest, indexOrders, paymentCallback } from 'payments-service/controllers'
 
 export class PaymentRouter {
     private static router = Router();
@@ -19,7 +19,7 @@ export class PaymentRouter {
         */
         this.router.post(
             "/api/orders/payment/request",
-            bodyValidators("user", "amount", "currency","token","callbackUrl"),
+            bodyValidators("user", "amount", "currency", "token", "callbackUrl"),
             validateRequest,
             paymentRequest
         )
@@ -44,6 +44,16 @@ export class PaymentRouter {
             headerValidators("userId"),
             validateRequest,
             indexOrders
+        )
+
+        /**
+           * @Route   POST 'api/payments/callback'
+           * @Desc    index payments
+           * @Access  Private
+        */
+        this.router.post(
+            "/api/payments/callback",
+            paymentCallback
         )
 
         return this.router;

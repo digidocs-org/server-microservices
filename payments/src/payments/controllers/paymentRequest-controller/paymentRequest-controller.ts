@@ -5,7 +5,7 @@ import Razorpay from 'razorpay'
 export const paymentRequest = (req: Request, res: Response) => {
     const { user, amount, currency, token, callbackUrl } = req.body
 
-    const { name, email, phoneNo } = user
+    const { name, userId, email, phoneNo } = user
 
     const razorpay = new Razorpay({
         key_id: process.env.RAZORPAY_KEY_ID,
@@ -31,7 +31,9 @@ export const paymentRequest = (req: Request, res: Response) => {
             email,
             phoneNo,
             token,
-            callbackUrl
+            userId,
+            callbackUrl,
+            paymentCallback: process.env.PAYMENT_CALLBACK
         })
     });
 }

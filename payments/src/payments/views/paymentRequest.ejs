@@ -6,11 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment</title>
-    <style>
-        #modal-close.close {
-            display: none;
-        }
-    </style>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 </head>
 
 <body>
@@ -28,27 +24,59 @@
             "image": "https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/digidocs-logo.jpeg",
             "order_id": "<%=orderId%>",
             "handler": function (response) {
-                var s = document.createElement("input");
-                s.setAttribute("type", "hidden");
-                s.setAttribute("custom", "Hidden Element");
-                s.setAttribute("name", "response");
-                s.setAttribute("value", JSON.stringify(response));
-                document.getElementById("callback_response").appendChild(s)
-                document.getElementById("callback_response").submit()
+                $("<input type='hidden' />")
+                    .attr("name", "response")
+                    .attr("value", JSON.stringify(response))
+                    .appendTo("#payment_callback");
+
+                $("<input type='hidden' />")
+                    .attr("name", "response")
+                    .attr("value", JSON.stringify(response))
+                    .appendTo("#callback_response");
+
+                $.ajax({
+                    url: '<%=paymentCallback%>',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        userId: '<%=userId%>',
+                        response: JSON.stringify(response)
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        console.log(data)
+                        document.getElementById("callback_response").submit()
+                    }
+                });
             },
-            
+
             "modal": {
                 "ondismiss": function () {
                     const response = {
                         error: "payment cancelled"
                     }
-                    var s = document.createElement("input");
-                    s.setAttribute("type", "hidden");
-                    s.setAttribute("custom", "Hidden Element");
-                    s.setAttribute("name", "response");
-                    s.setAttribute("value", JSON.stringify(response));
-                    document.getElementById("callback_response").appendChild(s);
-                    document.getElementById("callback_response").submit()
+                    $("<input type='hidden' />")
+                        .attr("name", "response")
+                        .attr("value", JSON.stringify(response))
+                        .appendTo("#payment_callback");
+
+                    $("<input type='hidden' />")
+                        .attr("name", "response")
+                        .attr("value", JSON.stringify(response))
+                        .appendTo("#callback_response");
+
+                    $.ajax({
+                        url: '<%=paymentCallback%>',
+                        type: 'POST',
+                        data: JSON.stringify({
+                            userId: '<%=userId%>',
+                            response: JSON.stringify(response)
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            console.log(data)
+                            document.getElementById("callback_response").submit()
+                        }
+                    });
                 }
             },
             "prefill": {
@@ -61,15 +89,6 @@
             }
         };
         var rzp = new Razorpay(options);
-        // rzp.on('payment.failed', function (response) {
-        //     var s = document.createElement("input");
-        //     s.setAttribute("type", "hidden");
-        //     s.setAttribute("custom", "Hidden Element");
-        //     s.setAttribute("name", "response");
-        //     s.setAttribute("value", JSON.stringify(response));
-        //     document.getElementById("callback_response").appendChild(s);
-        //     document.getElementById("callback_response").submit()
-        // });
         window.addEventListener("load", () => {
             rzp.open();
         })
