@@ -9,6 +9,7 @@ import { DocumentAuthorizationRouter } from './authorization/routes';
 import { CreateDocumentListener } from './events/listeners/document-created-listener';
 import { CreateUserListener } from './events/listeners/user-created-listener';
 import { UpdateDocumentListener } from './events/listeners/update-document-listener';
+import { EsignSuccessListener } from './events/listeners/esign-success-listener';
 
 export class Application {
   private app: App;
@@ -25,6 +26,7 @@ export class Application {
           new CreateDocumentListener(natsWrapper.client).listen();
           new CreateUserListener(natsWrapper.client).listen();
           new UpdateDocumentListener(natsWrapper.client).listen();
+          new EsignSuccessListener(natsWrapper.client).listen();
         });
 
       natsWrapper.client.on('close', () => {
