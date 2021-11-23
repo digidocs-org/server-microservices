@@ -22,3 +22,16 @@ export const bodyValidators = (...body: string[]) => {
     }
     return validatorArray;
 };
+
+export const queryValidators = (...query: string[]) => {
+    const validatorArray = [];
+    for (let i = 0; i < query?.length; i++) {
+        validatorArray.push(
+            header(query[i])
+                .not()
+                .isEmpty()
+                .withMessage(`${query[i]} is required!!!`)
+        );
+    }
+    return validatorArray;
+};

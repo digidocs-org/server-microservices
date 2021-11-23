@@ -17,7 +17,7 @@ export const paymentRequest = (req: Request, res: Response) => {
         currency
     }
     razorpay.orders.create(paymentOptions, function (err: any, order: any) {
-        if(err){
+        if (err) {
             throw new BadRequestError("payment failed!!!")
         }
         const orderId: string = order.id

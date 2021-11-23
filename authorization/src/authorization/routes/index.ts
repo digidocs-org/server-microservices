@@ -22,6 +22,11 @@ export class DocumentAuthorizationRouter {
     */
     this.router.use('/api/v1/authorization/recipient', recipientRouter);
 
+    /**
+    * @description Payment Router
+    */
+    this.router.use('/api/v1/authorization/orders', recipientRouter);
+
     return this.router;
   }
 }

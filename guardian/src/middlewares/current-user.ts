@@ -22,7 +22,7 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.header('token');
+  const token = req.header('token') ?? req.query.token;
 
   try {
     const payload = jwt.verify(
