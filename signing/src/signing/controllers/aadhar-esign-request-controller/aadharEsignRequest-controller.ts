@@ -38,6 +38,11 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
                     pageNo: 1,
                     xCoord: 50,
                     yCoord: 50
+                },
+                {
+                    pageNo: 1,
+                    xCoord: 200,
+                    yCoord: 200
                 }
             ]
         }
