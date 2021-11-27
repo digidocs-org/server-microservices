@@ -2,11 +2,9 @@ import { Request, Response } from 'express'
 import Document from 'signing-service/models/document'
 import { BadRequestError, decryptDocument, deleteFile, encryptDocument, exec, fetchData, readFile, SignTypes, uploadToS3Bucket, writeFile } from '@digidocs/guardian'
 import { createJarSigningReq, parseUploadData } from 'signing-service/utils';
-import crypto from 'crypto'
 import { EsignRequest } from 'signing-service/types';
 import { EsignSuccess } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
-import { v4 as uuidv4 } from 'uuid'
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId
@@ -47,8 +45,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
             ]
         }
     }
-    const fileName = `temp-${uuidv4()}`;
-    const esignRequest = createJarSigningReq(SignTypes.DIGITAL_SIGN, signFieldData, fileName);
+    const esignRequest = createJarSigningReq(SignTypes.DIGITAL_SIGN, signFieldData);
     console.log(esignRequest.signingRequest)
     try {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');

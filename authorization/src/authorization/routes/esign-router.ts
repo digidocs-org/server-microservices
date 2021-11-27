@@ -1,6 +1,6 @@
 import { bodyValidators, headerValidators, validateRequest } from '@digidocs/guardian';
 import { Router } from 'express';
-import { aadharEsignCallback, aadharEsignRequest, digitalSignRequest, redirectCallback } from 'authorization-service/controllers/signing';
+import { aadharEsignCallback, aadharEsignRequest, digitalSignRequest } from 'authorization-service/controllers/signing';
 
 const router = Router();
 
@@ -25,16 +25,6 @@ router.post(
     bodyValidators("msg"),
     aadharEsignCallback
 );
-
-/**
- * @Route  POST 'api/v1/sign/aadhar-esign/redirect'
- * @Desc   redirect route for validating signing
- * @Access Private
- */
-router.get(
-    '/aadhar/redirect',
-    redirectCallback
-)
 
 /**
  * @Route  POST 'api/v1/sign/aadhar-esign/redirect'
