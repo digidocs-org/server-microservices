@@ -2,6 +2,7 @@ import { json } from 'express';
 import { App } from '@digidocs/guardian';
 import cookieSession from 'cookie-session';
 
+import cors from 'cors'
 import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';
 import { AuthRouter } from './auth/routes';
@@ -39,6 +40,7 @@ export class Application {
     this.app = new App(
       [AuthRouter.route()],
       [
+        cors(),
         json(),
         cookieSession({
           signed: false,
