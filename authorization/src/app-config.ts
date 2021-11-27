@@ -10,6 +10,7 @@ import { CreateDocumentListener } from './events/listeners/document-created-list
 import { CreateUserListener } from './events/listeners/user-created-listener';
 import { UpdateDocumentListener } from './events/listeners/update-document-listener';
 import { EsignSuccessListener } from './events/listeners/esign-success-listener';
+import cors from 'cors'
 
 export class Application {
   private app: App;
@@ -40,7 +41,7 @@ export class Application {
 
     this.app = new App(
       [DocumentAuthorizationRouter.route()],
-      [json({ limit: '50mb' }), urlencoded({ extended: true }), fileUpload()]
+      [cors(), json({ limit: '50mb' }), urlencoded({ extended: true }), fileUpload()]
     );
   }
 
