@@ -3,6 +3,7 @@ import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
 import { IDocument } from 'authorization-service/models/Document';
 import User, { IUser } from 'authorization-service/models/User';
 import { IDocumentActions } from 'authorization-service/models/Actions';
+import { findUserStatus } from 'authorization-service/utils/find-user-status';
 
 const indexDocumentService = async (userId: string) => {
   try {
@@ -21,7 +22,9 @@ const indexDocumentService = async (userId: string) => {
 
         const docUserMapsForDoc = await DocumentUserMap.find({
           document: document._id,
-        }).populate('action');
+        })
+          .populate('action')
+          .populate('user');
 
         docUserMapsForDoc.map(docUserMapForDoc => {
           const action = docUserMapForDoc.action as IDocumentActions;
@@ -51,6 +54,7 @@ const indexDocumentService = async (userId: string) => {
           ownerName: `${user?.firstname} ${user?.lastname}`,
           createdAt: document.createdAt,
           status: document.status || DocumentStatus.DRAFTS,
+          userStatus: findUserStatus(userId, docUserMapsForDoc),
           actions: actionList,
         };
       })
