@@ -9,15 +9,17 @@ import { v4 as uuidv4 } from 'uuid'
 export const aadharEsignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId;
     const userId = req.currentUser?.id;
+    const redirectUrl = req.body.redirectUri
+    const defaultRedirectUrl = process.env.ESIGN_RESPONSE_URL
 
     const document = await Document.findById(documentId);
     if (!document) {
-        throw new BadRequestError('Document not found!!!');
+        return redirectUrl ? res.send(`${redirectUrl}?status=failed`) : res.send(`${defaultRedirectUrl}?status=failed`)
     }
 
     const user = await User.findById(userId);
     if (!user) {
-        throw new BadRequestError("User not found!!!")
+        return redirectUrl ? res.send(`${redirectUrl}?status=failed`) : res.send(`${defaultRedirectUrl}?status=failed`)
     }
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
     const publicKeyURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/keys/${document.publicKeyId}`;
@@ -51,7 +53,8 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     const jwt = generateToken({
         documentId,
         userId: user._id,
-        fileName
+        fileName,
+        redirectUrl
     },
         process.env.ESIGN_SALT!,
         process.env.ESIGN_SALT_EXPIRE!
@@ -70,6 +73,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     } catch (error) {
         deleteFile(esignRequest.signedFilePath);
         console.log(error)
-        return res.send('redirect?type=failed');
+        return redirectUrl ? res.send(`${redirectUrl}?status=failed`) : res.send(`${defaultRedirectUrl}?status=failed`);
     }
 }

@@ -13,12 +13,18 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     }
     const { data } = await api.post(esignService.aadharEsignRequest, {
       documentId: req.params.id,
+      redirectUri: req.query.redirectUri
     }, {
       headers: {
         token: req.query.token
       }
     });
-    return res.send(data);
+    var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    var regex = new RegExp(expression);
+    if(regex.test(data)){
+      
+    }
+    return res.send(data)
   } catch (error) {
     return errorResponseParser(error, res);
   }
@@ -41,7 +47,7 @@ export const aadharEsignCallback = async (req: Request, res: Response) => {
 
 export const redirectCallback = async (req: Request, res: Response) => {
   try {
-    const resType = req.query.type;
+    const resType = req.query.status;
 
     const { data } = await api.post(esignService.redirectCallback, { resType });
     return res.send(data);

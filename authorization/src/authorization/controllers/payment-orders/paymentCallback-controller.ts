@@ -8,6 +8,7 @@ export const paymentCallback = (req: Request, res: Response) => {
     }
     const paymentId = paymentResponse.razorpay_payment_id
     const orderId = paymentResponse.razorpay_order_id
+    const paymentSignature = paymentResponse.razorpay_signature
     const responseData = {
         paymentId,
         orderId,

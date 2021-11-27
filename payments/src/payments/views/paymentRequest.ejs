@@ -24,59 +24,16 @@
             "image": "https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/digidocs-logo.jpeg",
             "order_id": "<%=orderId%>",
             "handler": function (response) {
-                $("<input type='hidden' />")
-                    .attr("name", "response")
-                    .attr("value", JSON.stringify(response))
-                    .appendTo("#payment_callback");
-
-                $("<input type='hidden' />")
-                    .attr("name", "response")
-                    .attr("value", JSON.stringify(response))
-                    .appendTo("#callback_response");
-
-                $.ajax({
-                    url: '<%=paymentCallback%>',
-                    type: 'POST',
-                    data: JSON.stringify({
-                        userId: '<%=userId%>',
-                        response: JSON.stringify(response)
-                    }),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        console.log(data)
-                        document.getElementById("callback_response").submit()
-                    }
-                });
+                processPayment(response)
             },
 
             "modal": {
                 "ondismiss": function () {
                     const response = {
+                        orderId: '<%=orderId%>',
                         error: "payment cancelled"
                     }
-                    $("<input type='hidden' />")
-                        .attr("name", "response")
-                        .attr("value", JSON.stringify(response))
-                        .appendTo("#payment_callback");
-
-                    $("<input type='hidden' />")
-                        .attr("name", "response")
-                        .attr("value", JSON.stringify(response))
-                        .appendTo("#callback_response");
-
-                    $.ajax({
-                        url: '<%=paymentCallback%>',
-                        type: 'POST',
-                        data: JSON.stringify({
-                            userId: '<%=userId%>',
-                            response: JSON.stringify(response)
-                        }),
-                        contentType: "application/json; charset=utf-8",
-                        success: function (data) {
-                            console.log(data)
-                            document.getElementById("callback_response").submit()
-                        }
-                    });
+                    processPayment(response)
                 }
             },
             "prefill": {
@@ -88,6 +45,31 @@
                 "color": "#1F7AE0"
             }
         };
+        const processPayment = (response) => {
+            $("<input type='hidden' />")
+                .attr("name", "response")
+                .attr("value", JSON.stringify(response))
+                .appendTo("#payment_callback");
+
+            $("<input type='hidden' />")
+                .attr("name", "response")
+                .attr("value", JSON.stringify(response))
+                .appendTo("#callback_response");
+
+            $.ajax({
+                url: '<%=paymentCallback%>',
+                type: 'POST',
+                data: JSON.stringify({
+                    userId: '<%=userId%>',
+                    response: JSON.stringify(response)
+                }),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log(data)
+                    document.getElementById("callback_response").submit()
+                }
+            });
+        }
         var rzp = new Razorpay(options);
         window.addEventListener("load", () => {
             rzp.open();

@@ -20,23 +20,24 @@ import User from 'signing-service/models/user'
 
 export const esignCallback = async (req: Request, res: Response) => {
   const { espResponse, signingData } = req.body;
+  const defaultRedirectUrl = process.env.ESIGN_RESPONSE_URL
+
   const decodedData = jwt.verify(signingData, process.env.ESIGN_SALT!) as AadharEsignPayload
-  const { documentId, fileName, userId } = decodedData
+  const { documentId, fileName, userId, redirectUrl } = decodedData
+
   const response = verifyEsignResponse(espResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+    return redirectUrl ? res.send(`${redirectUrl}?status=cancelled`) : res.send(`${defaultRedirectUrl}?status=cancelled`);
   }
   const user = await User.findById(userId)
 
   if (!documentId || !fileName || !userId || !user) {
-    console.log("field missing")
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+    return redirectUrl ? res.send(`${redirectUrl}?status=failed`) : res.send(`${defaultRedirectUrl}?status=failed`);
   }
 
   const document = await Document.findById(documentId);
   if (!document) {
-    console.log("document not found")
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+    return redirectUrl ? res.send(`${redirectUrl}?status=failed`) : res.send(`${defaultRedirectUrl}?status=failed`);
   }
 
   const signFieldData: EsignRequest = {
@@ -45,8 +46,7 @@ export const esignCallback = async (req: Request, res: Response) => {
     reason: "Aadhaar Sign",
   }
 
-  const esignRequest = createJarSigningReq(SignTypes.AADHAR_SIGN, signFieldData, fileName );
-  console.log(esignRequest.signingRequest)
+  const esignRequest = createJarSigningReq(SignTypes.AADHAR_SIGN, signFieldData, fileName);
 
   try {
     await writeFile(esignRequest.responseTextFile, espResponse, 'utf-8');
@@ -68,10 +68,10 @@ export const esignCallback = async (req: Request, res: Response) => {
     })
 
     deleteFile(esignRequest.signedFilePath);
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+    return redirectUrl ? res.send(`${redirectUrl}?status=success`) : res.send(`${defaultRedirectUrl}?status=success`);
   } catch (error) {
     console.log(error);
     deleteFile(esignRequest.signedFilePath);
-    return res.send(`${process.env.REDIRECT_URI}?type=failed`);
+    return redirectUrl ? res.send(`${redirectUrl}?status=failed`) : res.send(`${defaultRedirectUrl}?status=failed`);
   }
 };

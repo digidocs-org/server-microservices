@@ -12,7 +12,7 @@ export const Files = {
   pfxKey: `${dirname}/../key/digidocs-sign.pfx`,
   javaDigitalUtility: `${dirname}/../java-esign-utility/digital-sign.jar`,
   javaAadhaarUtility: `${dirname}/../java-esign-utility/aadhaar-sign.jar`,
-  tempSigningDir : `${dirname}/../sign-dir`
+  tempSigningDir: `${dirname}/../sign-dir`
 };
 
 export interface EsignRequest {
@@ -32,4 +32,5 @@ export interface AadharEsignPayload {
   documentId: string
   userId: string
   fileName: string
+  redirectUrl?: string
 }

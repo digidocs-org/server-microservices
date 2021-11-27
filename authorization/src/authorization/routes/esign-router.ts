@@ -32,7 +32,7 @@ router.post(
  * @Access Private
  */
 router.get(
-    '/aadhar/redirect',
+    '/aadhar/callback',
     redirectCallback
 )
 
