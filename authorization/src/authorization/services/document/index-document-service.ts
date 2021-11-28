@@ -19,6 +19,7 @@ const indexDocumentService = async (userId: string) => {
       documentUserMaps.map(async docUserMap => {
         const document = docUserMap.document as IDocument;
         const actions = [] as IDocumentActions[];
+        const recipient = docUserMap.user as IUser;
 
         const docUserMapsForDoc = await DocumentUserMap.find({
           document: document._id,
@@ -43,6 +44,9 @@ const indexDocumentService = async (userId: string) => {
               type: action.type,
               email: action.recipientEmail,
               status: action.actionStatus,
+              name:
+                action.recipientName ??
+                `${recipient.firstname} ${recipient.lastname}`,
               signOrder: action.signOrder,
             });
           });
