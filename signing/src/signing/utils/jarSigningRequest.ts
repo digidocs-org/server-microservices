@@ -1,16 +1,18 @@
 import { convertToString, SignTypes } from "@digidocs/guardian"
 import { EsignRequest, Files } from 'signing-service/types'
+import { v4 as uuid } from 'uuid'
 
-export const createJarSigningReq = (signType: string, requestData: EsignRequest, fileName: string, responseUrl?: string,) => {
+export const createJarSigningReq = (signType: string, requestData: EsignRequest) => {
 
     const { tempSigningDir, pfxKey, javaAadhaarUtility, javaDigitalUtility } = Files
-    const tempFileName = fileName
+    const tempFileName = `temp-${uuid()}`
     const ASP_ID = process.env.ASP_ID
     const pfxFilePass = process.env.PFX_FILE_PASS
 
     const unsignedFilePath = `${tempSigningDir}/${tempFileName}/unsigned.pdf`;
     const responseTextFile = signType == SignTypes.AADHAR_SIGN ? `${tempSigningDir}/${tempFileName}/response.txt` : "";
     const signedFilePath = `${tempSigningDir}/${tempFileName}/unsigned_signedFinal.pdf`;
+    const unsignedFieldPath = `${tempSigningDir}/${tempFileName}/unsigned_encryptTempSigned.pdf`
     const signImageFilePath = `${tempSigningDir}/sign.png`;
     const fieldDataFilePath = `${tempSigningDir}/${tempFileName}/field.txt`
     const timeStampFilePath = `${tempSigningDir}/${tempFileName}/unsigned_calTimeStamp.txt`
@@ -37,7 +39,7 @@ export const createJarSigningReq = (signType: string, requestData: EsignRequest,
     }
 
     if (signType == SignTypes.ESIGN_REQUEST) {
-        signingRequest = `java -jar ${javaAadhaarUtility} 1 "" ${data.unsignedPdfPath} ${ASP_ID} 1 ${convertToString(responseUrl)} ${pfxKey} ${pfxFilePass} ${data.signImageFile} 15 1 "${requestData.name}" "${requestData.location}" "${requestData.reason}" "" "" ${data.fieldDataFilePath}`
+        signingRequest = `java -jar ${javaAadhaarUtility} 1 "" ${data.unsignedPdfPath} ${ASP_ID} 1 "" ${pfxKey} ${pfxFilePass} ${data.signImageFile} 15 1 "${requestData.name}" "${requestData.location}" "${requestData.reason}" "" "" ${data.fieldDataFilePath}`
     }
 
 
@@ -54,6 +56,7 @@ export const createJarSigningReq = (signType: string, requestData: EsignRequest,
         fieldDataFilePath,
         timeStampFilePath,
         tempFileName,
-        requestXmlFilePath
+        requestXmlFilePath,
+        unsignedFieldPath
     }
 }

@@ -20,36 +20,61 @@ import User from 'signing-service/models/user'
 
 export const esignCallback = async (req: Request, res: Response) => {
   const { espResponse, signingData } = req.body;
+
   const decodedData = jwt.verify(signingData, process.env.ESIGN_SALT!) as AadharEsignPayload
-  const { documentId, fileName, userId } = decodedData
+  const { documentId, userId, redirectUrl, calTimeStamp } = decodedData
+
   const response = verifyEsignResponse(espResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+    return res.send(`${redirectUrl}?status=cancelled`);
   }
   const user = await User.findById(userId)
 
-  if (!documentId || !fileName || !userId || !user) {
-    console.log("field missing")
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+  if (!documentId || !userId || !user || !redirectUrl || !calTimeStamp) {
+    return res.send(`${redirectUrl}?status=failed`);
   }
 
   const document = await Document.findById(documentId);
   if (!document) {
-    console.log("document not found")
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+    return res.send(`${redirectUrl}?status=failed`);
   }
+
+  const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
+  const publicKeyURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/keys/${document.publicKeyId}`;
+
+  const encryptedFile = await fetchData(documentURL);
+  const publicKeyBuffer = await fetchData(publicKeyURL);
+
+  const publicKey = publicKeyBuffer.toString();
+  const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
   const signFieldData: EsignRequest = {
     name: `${user.firstname} ${user.lastname}`,
     location: "India",
     reason: "Aadhaar Sign",
+    signatureFieldData: {
+      data: [
+        {
+          pageNo: 1,
+          xCoord: 50,
+          yCoord: 50
+        }
+      ]
+    }
   }
 
-  const esignRequest = createJarSigningReq(SignTypes.AADHAR_SIGN, signFieldData, fileName );
-  console.log(esignRequest.signingRequest)
+  let fieldData = "";
+  signFieldData.signatureFieldData?.data.map(field => {
+    fieldData += `${field.pageNo}-${field.xCoord},${field.yCoord},50,150;`
+  })
+
+  const esignRequest = createJarSigningReq(SignTypes.AADHAR_SIGN, signFieldData);
 
   try {
+    await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
+    await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
     await writeFile(esignRequest.responseTextFile, espResponse, 'utf-8');
+    await writeFile(esignRequest.timeStampFilePath, calTimeStamp, 'utf-8');
     await exec(esignRequest.signingRequest);
 
     const dataBuffer = await readFile(esignRequest.signedFilePath)
@@ -68,10 +93,10 @@ export const esignCallback = async (req: Request, res: Response) => {
     })
 
     deleteFile(esignRequest.signedFilePath);
-    return res.send(`${process.env.REDIRECT_URI}?type=success`);
+    return res.send(`${redirectUrl}?status=success`);
   } catch (error) {
     console.log(error);
     deleteFile(esignRequest.signedFilePath);
-    return res.send(`${process.env.REDIRECT_URI}?type=failed`);
+    return res.send(`${redirectUrl}?status=failed`);
   }
 };
