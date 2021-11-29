@@ -1,4 +1,4 @@
-import { body as reqBody, header } from 'express-validator';
+import { body as reqBody, header, query as reqQuery } from 'express-validator';
 
 export const headerValidators = (...headers: string[]) => {
     const validatorArray = [];
@@ -18,6 +18,16 @@ export const bodyValidators = (...body: string[]) => {
     for (let i = 0; i < body?.length; i++) {
         validatorArray.push(
             reqBody(body[i]).not().isEmpty().withMessage(`${body[i]} is required!!!`)
+        );
+    }
+    return validatorArray;
+};
+
+export const queryValidators = (...query: string[]) => {
+    let validatorArray = [];
+    for (let i = 0; i < query?.length; i++) {
+        validatorArray.push(
+            reqQuery(query[i]).not().isEmpty().withMessage(`${query[i]} is required!!!`)
         );
     }
     return validatorArray;
