@@ -6,9 +6,6 @@ export const paymentCallback = async (req: Request, res: Response) => {
     const paymentResponse = JSON.parse(req.body.response)
     const { userId } = req.body
     if (paymentResponse.error) {
-        await PaymentOrders.create({
-            orderId:
-        })
         console.log(paymentResponse.error)
     }
     console.log(paymentResponse)

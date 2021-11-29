@@ -21,3 +21,11 @@ export const decrypt = (data: any, workingKey: string) => {
     decoded += decipher.final('utf8');
     return decoded;
 }
+
+export const parseToQueryParam = (data: any) => {
+    let query = ""
+    for (const key in data) {
+        query += `&${key}=${encodeURIComponent(data[key])}`
+    }
+    return query.slice(1, query.length)
+}

@@ -1,8 +1,6 @@
-import { BadRequestError } from "@digidocs/guardian";
 import { Request, Response } from "express";
 import { orderId } from 'payments-service/utils/orderIdGenerator'
-import { encrypt } from 'payments-service/utils'
-import { URLSearchParams } from 'url'
+import { encrypt, parseToQueryParam } from 'payments-service/utils'
 
 export const paymentRequest = (req: Request, res: Response) => {
     const { user, amount, currency, token, callbackUrl } = req.body
@@ -20,11 +18,6 @@ export const paymentRequest = (req: Request, res: Response) => {
         cancel_url: process.env.PAYMENT_CALLBACK,
         language: "EN",
         billing_name: name,
-        billing_address: "",
-        billing_city: "",
-        billing_state: "",
-        billing_zip: "",
-        billing_country: "",
         billing_tel: phoneNo,
         billing_email: email,
         customer_identifier: userId,
@@ -32,12 +25,14 @@ export const paymentRequest = (req: Request, res: Response) => {
         merchant_param2: callbackUrl
     }
 
-    const encRequest = encrypt(paymentData, workingKey!)
-    const encryptedPaymentData = new URLSearchParams(encRequest)
+    const parsedData = parseToQueryParam(paymentData)
+    console.log(parsedData)
 
+    const responseBuffer = Buffer.from(JSON.stringify(parsedData))
+    const encRequest = encrypt(responseBuffer, workingKey!)
     res.render("paymentRequest", {
         gatewayUrl: process.env.CCAVENUE_STAGE_URL,
-        encryptedData: encryptedPaymentData,
+        encryptedData: encRequest,
         accessCode: accessKey
     })
 }
