@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments</title>
+</head>
+
+<body>
+    <form action="<%=gatewayUrl%>" id="nonseamless" method="post" name="redirect" />
+        <input type="hidden" id="encRequest" name="encRequest" value="<%=encryptedData%>">
+        <input type="hidden" name="access_code" id="access_code" value="<%=accessCode%>">
+    </form>
+    <script>
+        window.addEventListener("load", () => {
+            document.redirect.submit()
+        })
+    </script>
+</body>
+
+</html>

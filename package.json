@@ -30,6 +30,7 @@
     "email",
     "document",
     "signing",
+    "payments",
     "skaffold",
     "k8s"
   ]

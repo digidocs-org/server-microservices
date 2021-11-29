@@ -1,0 +1,17 @@
+{
+  "extends": "../node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "outDir": "build",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports":true,
+    "baseUrl": "./",                
+    "paths": {
+      "payments-service/*":["src/payments/*"]
+    },
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ]
+}
