@@ -28,8 +28,8 @@ export const paymentCallback = async (req: Request, res: Response) => {
         }
     })
     const token = parsedData.merchant_param2;
-    const status = parsedData.order_status;
+    const orderId = parsedData.order_id;
     const redirectUrl = parsedData.merchant_param3
 
-    res.redirect(`${redirectUrl}?token=${token}&status=${status}`)
+    res.redirect(`${redirectUrl}?token=${token}&orderId=${orderId}`)
 }

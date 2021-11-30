@@ -48,9 +48,9 @@ router.get(
 * @Desc   Get all orders
 * @Access Private
 */
-router.post(
+router.get(
     '/payment/callback',
-    bodyValidators('token'),
+    queryValidators('token'),
     validateRequest,
     currentUser,
     paymentCallback
