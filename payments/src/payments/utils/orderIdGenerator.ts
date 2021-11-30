@@ -10,13 +10,8 @@ export const orderId = {
         }
 
         // split into xxxx-xxxxxx-xxxx format
-        return [now.slice(0, 4), now.slice(4, 10), now.slice(10, 14)].join('-');
+        return "DCS-" + [now.slice(0, 4), now.slice(10, 14)].join('-');
     },
-    getTime: (orderId: string) => {
-        let res = orderId.replace(/-/g, '');
-        res = res.slice(0, 13);
-        return parseInt(res, 10);
-    }
 };
 
 const randomNumber = (length: number) => {
