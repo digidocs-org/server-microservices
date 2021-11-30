@@ -29,3 +29,13 @@ export const parseToQueryParam = (data: any) => {
     }
     return query.slice(1, query.length)
 }
+
+export const parseFromQueryParam = (query: string) => {
+    let data: any = {}
+    let splitArray = query.split("&")
+    for (let str of splitArray) {
+        let splitKey = str.split("=")
+        data[splitKey[0]] = decodeURIComponent(splitKey[1])
+    }
+    return data
+}

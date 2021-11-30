@@ -7,13 +7,13 @@ export const paymentRequest = (req: Request, res: Response) => {
 
     const { name, userId, email, phoneNo } = user
     const orderID = orderId.generate()
-    const workingKey = process.env.CCAVENUE_WORKING_KEY
+    const workingKey = process.env.CCAVENUE_WORKING_KEY!
     const accessKey = process.env.CCAVENUE_ACCESS_KEY
     const paymentData = {
-        amount: parseInt(amount),
-        currency,
-        order_id: orderID,
         merchant_id: parseInt(process.env.CCAVENUE_MERCHANT_ID!),
+        order_id: orderID,
+        currency,
+        amount,
         redirect_url: process.env.PAYMENT_CALLBACK,
         cancel_url: process.env.PAYMENT_CALLBACK,
         language: "EN",
@@ -21,15 +21,15 @@ export const paymentRequest = (req: Request, res: Response) => {
         billing_tel: phoneNo,
         billing_email: email,
         customer_identifier: userId,
-        merchant_param1: token,
-        merchant_param2: callbackUrl
+        merchant_param1: "Digidocs Technologies Private Limited",
+        merchant_param2: token,
+        merchant_param3: callbackUrl,
+        merchant_param4: userId
     }
 
     const parsedData = parseToQueryParam(paymentData)
-    console.log(parsedData)
-
-    const responseBuffer = Buffer.from(JSON.stringify(parsedData))
-    const encRequest = encrypt(responseBuffer, workingKey!)
+    const responseBuffer = Buffer.from(parsedData)
+    const encRequest = encrypt(responseBuffer, workingKey)
     res.render("paymentRequest", {
         gatewayUrl: process.env.CCAVENUE_STAGE_URL,
         encryptedData: encRequest,

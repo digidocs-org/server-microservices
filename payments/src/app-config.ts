@@ -1,11 +1,12 @@
 import { json } from 'express';
 import { App } from '@digidocs/guardian';
-
+import express from 'express'
 import { DatabaseConfig } from './db-config';
 import cors from 'cors'
 import { natsWrapper } from './nats-wrapper';
 import { PaymentRouter } from './payments/routes';
 import path from 'path';
+import fileUpload from 'express-fileupload';
 
 export class Application {
   private app: App;
@@ -34,7 +35,12 @@ export class Application {
 
     this.app = new App(
       [PaymentRouter.route()],
-      [cors(), json({ limit: '50mb' })],
+      [
+        cors(),
+        json({ limit: '50mb' }),
+        fileUpload(),
+        express.urlencoded({ extended: true })
+      ],
       [
         {
           viewPath: path.join(path.resolve(), 'src/payments/views'),
