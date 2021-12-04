@@ -34,8 +34,10 @@ router.post(
  * @Desc   redirect route for validating signing
  * @Access Private
  */
-router.get(
+router.post(
     '/digital/request/:id',
+    headerValidators("token"),
+    validateRequest,
     digitalSignRequest
 )
 

@@ -41,14 +41,11 @@ export const aadharEsignCallback = async (req: Request, res: Response) => {
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
   try {
-    if (!req.query.token) {
-      return res.status(500).send({ error: 'Token is required!!!' });
-    }
     const { data } = await api.post(esignService.digitalSignRequest, {
       documentId: req.params.id,
     }, {
       headers: {
-        token: req.query.token
+        token: req.header("token")
       }
     });
     return res.send(data)
