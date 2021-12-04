@@ -2,7 +2,9 @@ import { Request, Response } from 'express'
 import PaymentOrders from 'payments-service/models/payment-orders'
 import { decrypt, parseFromQueryParam } from 'payments-service/utils'
 import jwt from 'jsonwebtoken'
-import { PaymentSignedData } from 'payments-service/types'
+import { PaymentSignedData, PaymentStatus } from 'payments-service/types'
+import { PaymentSuccessPublisher } from 'src/events/publishers/payment-success-publisher'
+import { natsWrapper } from 'src/nats-wrapper'
 
 export const paymentCallback = async (req: Request, res: Response) => {
     const encryptedResponse = req.body.encResp
@@ -43,5 +45,12 @@ export const paymentCallback = async (req: Request, res: Response) => {
         data: decodedToken.data
     }
     const params = encodeURIComponent(JSON.stringify(data))
+    if (parsedData.order_status == PaymentStatus.SUCCESS) {
+        new PaymentSuccessPublisher(natsWrapper.client).publish({
+            orderId,
+            userId: decodedToken.userId,
+            data: decodedToken.data
+        })
+    }
     res.redirect(`${callbackUrl}?data=${params}&token=${token}`)
 }

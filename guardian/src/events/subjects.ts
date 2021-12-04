@@ -10,4 +10,6 @@ export enum Subjects {
   SendDocument = 'document:send',
 
   SigningSuccess = 'signing:success',
+
+  PaymentSuccess = 'payment:success'
 }
