@@ -7,7 +7,10 @@ import {
   getUserProfile,
   resetPassword,
 } from 'auth/controllers/userProfile-controller';
-import { sendOTPEmail, verifyOTP } from 'auth/controllers/verifyEmail-controller';
+import {
+  sendOTPEmail,
+  verifyOTP,
+} from 'auth/controllers/verifyEmail-controller';
 import {
   forgotPasswordOtp,
   forgotPasswordVerifyOtp,
@@ -19,6 +22,7 @@ import {
   bodyValidators,
 } from '@digidocs/guardian';
 import { verifyToken } from 'auth/middlewares/vertfyToken';
+import { updateProfile } from 'auth/controllers/update-profile-controller';
 
 export class AuthRouter {
   private static router = Router();
@@ -168,6 +172,19 @@ export class AuthRouter {
       validateRequest,
       verifyToken,
       resetPassword
+    );
+
+    /**
+     * @Route  POST 'api/v1/auth/update-profile'
+     * @Desc   update user profile
+     * @Access Private
+     */
+    this.router.post(
+      '/api/v1/auth/update-profile',
+      headerValidators('token'),
+      validateRequest,
+      currentUser,
+      updateProfile
     );
 
     return this.router;

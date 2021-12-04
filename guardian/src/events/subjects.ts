@@ -11,5 +11,7 @@ export enum Subjects {
 
   SigningSuccess = 'signing:success',
 
-  PaymentSuccess = 'payment:success'
+  PaymentSuccess = 'payment:success',
+
+  CreditSuccess = 'credit:success',
 }
