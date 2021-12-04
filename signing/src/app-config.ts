@@ -10,6 +10,7 @@ import { CreateUserListener } from './events/listeners/user-created-listener';
 import { CreateDocumentListener } from './events/listeners/document-created-listener';
 import path from 'path';
 import { CreateGuestUserListener } from './events/listeners/create-guest-user-listener';
+import { UpdateDocumentListener } from './events/listeners/document-updated-listener';
 
 export class Application {
   private app: App;
@@ -26,6 +27,7 @@ export class Application {
           new CreateUserListener(natsWrapper.client).listen();
           new CreateDocumentListener(natsWrapper.client).listen();
           new CreateGuestUserListener(natsWrapper.client).listen();
+          new UpdateDocumentListener(natsWrapper.client).listen();
         });
 
       natsWrapper.client.on('close', () => {
