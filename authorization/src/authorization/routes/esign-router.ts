@@ -9,8 +9,11 @@ const router = Router();
 * @Desc   create a esign request to NSDL
 * @Access Private
 */
-router.get(
+router.post(
     '/aadhar/request/:id',
+    headerValidators("token"),
+    bodyValidators("redirect_uri"),
+    validateRequest,
     aadharEsignRequest
 );
 

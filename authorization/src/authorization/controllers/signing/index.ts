@@ -1,22 +1,18 @@
 import { Request, Response } from 'express';
 import { apiAdapter, errorResponseParser } from 'authorization-service/services/apiAdapter'
 import { endpoints } from 'authorization-service/types/endpoints';
-import { BadRequestError } from '@digidocs/guardian';
 
 const api = apiAdapter(process.env.ESIGN_SERVICE_BASE_URL!);
 const esignService = endpoints.SIGNING_ROUTES;
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
   try {
-    if (!req.query.token) {
-      return res.status(500).send({ error: 'Token is required!!!' });
-    }
     const { data } = await api.post(esignService.aadharEsignRequest, {
       documentId: req.params.id,
-      redirectUrl: req.query.redirect_uri
+      redirectUrl: req.body.redirect_uri
     }, {
       headers: {
-        token: req.query.token
+        token: req.header("token")
       }
     });
     if (data.type == "redirect") {
