@@ -1,15 +1,23 @@
 import { Request, Response } from 'express'
 import PaymentOrders from 'payments-service/models/payment-orders'
 import { decrypt, parseFromQueryParam } from 'payments-service/utils'
+import jwt from 'jsonwebtoken'
+import { PaymentSignedData } from 'payments-service/types'
 
 export const paymentCallback = async (req: Request, res: Response) => {
     const encryptedResponse = req.body.encResp
     const workingKey = process.env.CCAVENUE_WORKING_KEY!
     const decryptedData = decrypt(encryptedResponse, workingKey)
     const parsedData = parseFromQueryParam(decryptedData)
+
+    const signedToken = parsedData.merchant_param2
+    const decodedToken = jwt.verify(signedToken, process.env.PAYMENT_SIGNING_SALT!) as PaymentSignedData
+
+    console.log(decodedToken)
+
     await PaymentOrders.create({
         orderId: parsedData.order_id,
-        userId: parsedData.merchant_param4,
+        userId: decodedToken.userId,
         trackingId: parsedData.tracking_id,
         currency: parsedData.currency,
         amount: parsedData.amount,
@@ -27,9 +35,14 @@ export const paymentCallback = async (req: Request, res: Response) => {
             email: parsedData.billing_email
         }
     })
-    const token = parsedData.merchant_param2;
+    const token = decodedToken.token;
     const orderId = parsedData.order_id;
-    const redirectUrl = parsedData.merchant_param3
-
-    res.redirect(`${redirectUrl}?token=${token}&orderId=${orderId}`)
+    const callbackUrl = decodedToken.callbackUrl
+    const redirectUrl = decodedToken.redirectUrl
+    const data = {
+        orderId,
+        redirectUrl
+    }
+    const params = encodeURIComponent(JSON.stringify(data))
+    res.redirect(`${callbackUrl}?token=${token}&data=${params}`)
 }

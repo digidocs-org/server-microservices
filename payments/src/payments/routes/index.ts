@@ -19,7 +19,7 @@ export class PaymentRouter {
         */
         this.router.post(
             "/api/orders/payment/request",
-            bodyValidators("user", "amount", "currency", "token", "callbackUrl"),
+            bodyValidators("user", "amount", "currency", "token", "callbackUrl", "redirectUrl"),
             validateRequest,
             paymentRequest
         )

@@ -37,7 +37,7 @@ router.get(
 */
 router.get(
     '/payment/request',
-    queryValidators('token'),
+    queryValidators('token', 'aadhaarCredits', 'digitalCredits', 'redirectUrl'),
     validateRequest,
     currentUser,
     createOrder
@@ -50,7 +50,7 @@ router.get(
 */
 router.get(
     '/payment/callback',
-    queryValidators('token'),
+    queryValidators('data','token'),
     validateRequest,
     currentUser,
     paymentCallback

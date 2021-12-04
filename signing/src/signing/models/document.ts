@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { DocumentStatus } from '@digidocs/guardian';
+import { DocumentStatus, SignTypes } from '@digidocs/guardian';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 export interface IDocument extends Document {
@@ -14,6 +14,7 @@ export interface IDocument extends Document {
     userId: string
     validTill?: string
     timeToSign?: string
+    signType?: SignTypes
     version: number
 }
 
@@ -30,6 +31,7 @@ const documentSchema: Schema = new Schema(
         userId: String,
         validTill: String,
         timeToSign: String,
+        signType: String
     },
     {
         timestamps: { createdAt: true, updatedAt: true }, toJSON: {

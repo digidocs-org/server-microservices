@@ -1,14 +1,24 @@
 import { Request, Response } from "express";
 import { orderId } from 'payments-service/utils/orderIdGenerator'
 import { encrypt, parseToQueryParam } from 'payments-service/utils'
+import { generateToken } from "payments-service/utils/signData";
 
 export const paymentRequest = (req: Request, res: Response) => {
-    const { user, amount, currency, token, callbackUrl } = req.body
+    const { user, amount, currency, token, callbackUrl, redirectUrl } = req.body
 
     const { name, userId, email, phoneNo } = user
     const orderID = orderId.generate()
     const workingKey = process.env.CCAVENUE_WORKING_KEY!
     const accessKey = process.env.CCAVENUE_ACCESS_KEY
+    const signedData = generateToken({
+        callbackUrl,
+        userId,
+        token,
+        redirectUrl
+    },
+        process.env.PAYMENT_SIGNING_SALT!,
+        process.env.PAYMENT_SALT_EXPIRE!
+    )
     const paymentData = {
         merchant_id: parseInt(process.env.CCAVENUE_MERCHANT_ID!),
         order_id: orderID,
@@ -22,9 +32,7 @@ export const paymentRequest = (req: Request, res: Response) => {
         billing_email: email,
         customer_identifier: userId,
         merchant_param1: "Digidocs Technologies Private Limited",
-        merchant_param2: token,
-        merchant_param3: callbackUrl,
-        merchant_param4: userId
+        merchant_param2: signedData
     }
 
     const parsedData = parseToQueryParam(paymentData)

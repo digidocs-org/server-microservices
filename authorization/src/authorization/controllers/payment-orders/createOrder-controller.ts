@@ -9,14 +9,16 @@ const paymentService = endpoints.PAYMENT_ROUTES;
 
 export const createOrder = async (req: Request, res: Response) => {
     const userId = req.currentUser?.id
-    const userToken = req.query.token
+    // const userToken = req.body.token
+    // const { aadhaarCredits, digitalCredits, redirectUrl } = req.body
+    const { token, aadhaarCredits, digitalCredits, redirectUrl } = req.query
 
     const user = await User.findById(userId)
     if (!user) {
         throw new BadRequestError("User not found")
     }
     const currency = "INR"
-    const amount = 30
+    const amount = parseInt(aadhaarCredits as string) * 30 + parseInt(digitalCredits as string) * 10
     const userData = {
         name: `${user.firstname} ${user.lastname}`,
         phoneNo: user.mobile,
@@ -28,9 +30,10 @@ export const createOrder = async (req: Request, res: Response) => {
         const { data } = await api.post(paymentService.createOrder, {
             amount,
             currency,
-            token: userToken,
+            redirectUrl,
+            token,
             user: userData,
-            callbackUrl: process.env.PAYMENT_CALLBACK_URL
+            callbackUrl: process.env.PAYMENT_CALLBACK_URL,
         });
         return res.send(data);
     } catch (error) {
