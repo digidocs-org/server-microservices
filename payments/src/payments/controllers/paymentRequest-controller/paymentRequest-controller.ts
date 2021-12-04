@@ -4,9 +4,14 @@ import { encrypt, parseToQueryParam } from 'payments-service/utils'
 import { generateToken } from "payments-service/utils/signData";
 
 export const paymentRequest = (req: Request, res: Response) => {
-    const { user, amount, currency, token, callbackUrl, redirectUrl } = req.body
-
+    const { user, amount, currency, token, callbackUrl, redirectUrl, extraData } = req.body
     const { name, userId, email, phoneNo } = user
+
+    let data = {}
+    if (extraData) {
+        data = extraData
+    }
+
     const orderID = orderId.generate()
     const workingKey = process.env.CCAVENUE_WORKING_KEY!
     const accessKey = process.env.CCAVENUE_ACCESS_KEY
@@ -14,7 +19,8 @@ export const paymentRequest = (req: Request, res: Response) => {
         callbackUrl,
         userId,
         token,
-        redirectUrl
+        redirectUrl,
+        data
     },
         process.env.PAYMENT_SIGNING_SALT!,
         process.env.PAYMENT_SALT_EXPIRE!

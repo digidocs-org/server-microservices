@@ -34,6 +34,10 @@ export const createOrder = async (req: Request, res: Response) => {
             token,
             user: userData,
             callbackUrl: process.env.PAYMENT_CALLBACK_URL,
+            extraData: {
+                aadhaarCredits,
+                digitalCredits
+            }
         });
         return res.send(data);
     } catch (error) {

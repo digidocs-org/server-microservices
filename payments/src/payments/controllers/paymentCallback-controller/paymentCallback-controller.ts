@@ -13,8 +13,6 @@ export const paymentCallback = async (req: Request, res: Response) => {
     const signedToken = parsedData.merchant_param2
     const decodedToken = jwt.verify(signedToken, process.env.PAYMENT_SIGNING_SALT!) as PaymentSignedData
 
-    console.log(decodedToken)
-
     await PaymentOrders.create({
         orderId: parsedData.order_id,
         userId: decodedToken.userId,
@@ -41,8 +39,9 @@ export const paymentCallback = async (req: Request, res: Response) => {
     const redirectUrl = decodedToken.redirectUrl
     const data = {
         orderId,
-        redirectUrl
+        redirectUrl,
+        data: decodedToken.data
     }
     const params = encodeURIComponent(JSON.stringify(data))
-    res.redirect(`${callbackUrl}?token=${token}&data=${params}`)
+    res.redirect(`${callbackUrl}?data=${params}&token=${token}`)
 }

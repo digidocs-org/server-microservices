@@ -12,7 +12,7 @@ export const endpoints = {
     digitalSignRequest: '/api/esign/digital',
   },
   PAYMENT_ROUTES: {
-    getOrderDetail: '/api/orders/detail/:orderId',
+    getOrderDetail: '/api/orders/detail',
     indexOrders: '/api/orders/index',
     createOrder: '/api/orders/payment/request'
   }

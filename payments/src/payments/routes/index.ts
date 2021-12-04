@@ -19,7 +19,14 @@ export class PaymentRouter {
         */
         this.router.post(
             "/api/orders/payment/request",
-            bodyValidators("user", "amount", "currency", "token", "callbackUrl", "redirectUrl"),
+            bodyValidators(
+                "user",
+                "amount",
+                "currency",
+                "token",
+                "callbackUrl",
+                "redirectUrl"
+            ),
             validateRequest,
             paymentRequest
         )
@@ -29,8 +36,10 @@ export class PaymentRouter {
            * @Desc    Create a payment request
            * @Access  Private
         */
-        this.router.get(
-            "/api/orders/detail/:orderId",
+        this.router.post(
+            "/api/orders/detail",
+            bodyValidators("orderId"),
+            validateRequest,
             paymentDetails
         )
 
