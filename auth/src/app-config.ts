@@ -2,13 +2,16 @@ import { json } from 'express';
 import { App } from '@digidocs/guardian';
 import cookieSession from 'cookie-session';
 
-import cors from 'cors'
+import cors from 'cors';
 import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';
 import { AuthRouter } from './auth/routes';
 import passport from 'passport';
 import passportInit from 'auth/services/passport';
-import { CreateGuestUserListener } from './events/listeners/create-guest-user-listener';
+import {
+  CreateGuestUserListener,
+  CreditSuccessListener,
+} from './events/listeners';
 
 export class Application {
   private app: App;
@@ -25,6 +28,7 @@ export class Application {
         )
         .then(() => {
           new CreateGuestUserListener(natsWrapper.client).listen();
+          new CreditSuccessListener(natsWrapper.client).listen();
         });
 
       natsWrapper.client.on('close', () => {
