@@ -52,7 +52,6 @@ export const paymentCallback = async (req: Request, res: Response) => {
     });
     return res.send(orderData.data);
   } catch (error) {
-    console.log(error);
     return errorResponseParser(error, res);
   }
 };

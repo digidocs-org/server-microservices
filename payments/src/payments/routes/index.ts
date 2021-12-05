@@ -48,9 +48,9 @@ export class PaymentRouter {
            * @Desc    index payments
            * @Access  Private
         */
-        this.router.get(
+        this.router.post(
             "/api/orders/index",
-            headerValidators("userId"),
+            bodyValidators("userId"),
             validateRequest,
             indexOrders
         )
