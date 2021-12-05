@@ -31,8 +31,3 @@ export enum SignTypes {
   AADHAR_SIGN = 'AADHAR_SIGN',
   DIGITAL_SIGN = 'DIGITAL_SIGN',
 }
-
-export enum CreditType {
-  AADHAR = 'AADHAR',
-  DIGITAL = 'DIGITAL',
-}

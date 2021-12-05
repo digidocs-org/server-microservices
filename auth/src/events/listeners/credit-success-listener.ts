@@ -1,6 +1,5 @@
 import {
   CreditSuccessEvent,
-  CreditType,
   Listener,
   Subjects,
 } from '@digidocs/guardian';
@@ -14,18 +13,24 @@ export class CreditSuccessListener extends Listener<CreditSuccessEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: CreditSuccessEvent['data'], msg: Message) {
-    const { userId, creditType, credits } = data;
-
+    const { userId, data: creditData } = data;
+    const { aadhaarCredits, digitalSignCredits } = creditData
     const user = await User.findById(userId);
 
     if (!user) {
       return;
     }
 
-    if (creditType === CreditType.AADHAR) {
-      user.aadhaarCredits += credits;
-    } else if (creditType === CreditType.DIGITAL) {
-      user.digitalSignCredits += credits;
+    if (user.aadhaarCredits) {
+      user.aadhaarCredits += aadhaarCredits
+    } else {
+      user.aadhaarCredits = aadhaarCredits
+    }
+
+    if (user.digitalSignCredits) {
+      user.digitalSignCredits += digitalSignCredits
+    } else {
+      user.digitalSignCredits = digitalSignCredits
     }
 
     await user.save();

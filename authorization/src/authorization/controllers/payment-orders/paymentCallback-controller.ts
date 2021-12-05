@@ -1,4 +1,3 @@
-import { BadRequestError, CreditType } from '@digidocs/guardian';
 import User, { IUser } from 'authorization-service/models/User';
 import {
   apiAdapter,
@@ -18,6 +17,8 @@ export const paymentCallback = async (req: Request, res: Response) => {
     const userId = req.currentUser?.id as string;
     const parsedData = JSON.parse(data as string);
     const { orderId, redirectUrl, data: creditData } = parsedData;
+    const aadhaarCredits = parseInt(creditData.aadhaarCredits)
+    const digitalSignCredits = parseInt(creditData.digitalCredits)
 
     const { data: orderData } = await api.post(paymentService.getOrderDetail, {
       orderId,
@@ -29,17 +30,25 @@ export const paymentCallback = async (req: Request, res: Response) => {
     //Update user credits
     const user = (await User.findById(userId)) as IUser;
 
-    if (orderData.creditType === CreditType.AADHAR) {
-      user.aadhaarCredits += orderData.credits;
-    } else if (orderData.creditType === CreditType.DIGITAL) {
-      user.digitalSignCredits += orderData.credits;
+    if (user.aadhaarCredits) {
+      user.aadhaarCredits += aadhaarCredits
+    } else {
+      user.aadhaarCredits = aadhaarCredits
+    }
+
+    if (user.digitalSignCredits) {
+      user.digitalSignCredits += digitalSignCredits
+    } else {
+      user.digitalSignCredits = digitalSignCredits
     }
 
     await user.save();
     new CreditSuccessPublisher(natsWrapper.client).publish({
       userId,
-      creditType: orderData.creditType,
-      credits: orderData.credits,
+      data: {
+        aadhaarCredits,
+        digitalSignCredits
+      }
     });
     return res.send(orderData.data);
   } catch (error) {
