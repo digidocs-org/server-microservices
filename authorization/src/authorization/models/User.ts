@@ -14,6 +14,8 @@ export interface IUser extends Document {
   profileImage?: string;
   notificationId?: string;
   deviceId?: string;
+  aadhaarCredits: number;
+  digitalSignCredits: number;
   version?: number;
 }
 /**
@@ -31,6 +33,8 @@ const userSchema: Schema = new Schema(
     isEmailVerified: { type: Boolean, default: false },
     profileImage: String,
     deviceId: String,
+    aadhaarCredits: Number,
+    digitalSignCredits: Number
   },
   {
     timestamps: { createdAt: true, updatedAt: true },

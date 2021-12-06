@@ -11,4 +11,9 @@ export const endpoints = {
     redirectCallback: '/api/esign/aadhar/redirect',
     digitalSignRequest: '/api/esign/digital',
   },
+  PAYMENT_ROUTES: {
+    getOrderDetail: '/api/orders/detail',
+    indexOrders: '/api/orders/index',
+    createOrder: '/api/orders/payment/request'
+  }
 };

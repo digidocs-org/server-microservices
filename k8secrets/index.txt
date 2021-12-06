@@ -11,3 +11,7 @@ kubectl create secret generic file-key --from-literal=FILE_KEY=pU9+uZm1KBXOpnl/c
 kubectl create secret generic asp-id --from-literal=ASP_ID=ASPDTPLUAT004911
 kubectl create secret generic pfx-file-pass --from-literal=PFX_FILE_PASS=123456
 kubectl create secret generic client-url --from-literal=CLIENT_URL=https://accounts.digidocs.one
+kubectl create secret generic ccavenue-working-key --from-literal=CCAVENUE_WORKING_KEY=3F075489B30FF2BA90BF3D7381CC12AC
+kubectl create secret generic ccavenue-access-key --from-literal=CCAVENUE_ACCESS_KEY=AVZP04IL05AL88PZLA
+kubectl create secret generic payment-signing-salt --from-literal=PAYMENT_SIGNING_SALT=klasd9f23.wkid309000asdkf.aksdf8
+kubectl create secret generic ccavenur-merchant-id --from-literal=CCAVENUE_MERCHANT_ID=730659

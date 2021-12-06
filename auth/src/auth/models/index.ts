@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import {updateIfCurrentPlugin} from 'mongoose-update-if-current';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 /**
  *
  */
@@ -22,7 +22,9 @@ export interface IUser extends Document {
   deviceId: string
   password?: string
   refreshToken?: string
-  version?: number
+  version?: number,
+  aadhaarCredits: number,
+  digitalSignCredits: number
 }
 /**
  *
@@ -52,7 +54,9 @@ const userSchema: Schema = new Schema(
     deviceId: String,
     password: String,
     refreshToken: String,
-    version: Number
+    version: Number,
+    aadhaarCredits: { type: Number, default: 0 },
+    digitalSignCredits: { type: Number, default: 0 }
   },
   {
     timestamps: { createdAt: true, updatedAt: true }, toJSON: {

@@ -5,3 +5,4 @@ export * from './user-events';
 export * from './email-events'
 export * from './document-events'
 export * from './signing-events'
+export * from './payment-events'
