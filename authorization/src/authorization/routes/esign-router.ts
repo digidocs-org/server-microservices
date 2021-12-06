@@ -1,6 +1,7 @@
-import { bodyValidators, headerValidators, validateRequest } from '@digidocs/guardian';
+import { bodyValidators, currentUser, headerValidators, validateRequest } from '@digidocs/guardian';
 import { Router } from 'express';
 import { aadharEsignCallback, aadharEsignRequest, digitalSignRequest } from 'authorization-service/controllers/signing';
+import hasDocumentAccess from 'authorization-service/middlewares/has-document-access';
 
 const router = Router();
 
@@ -10,10 +11,12 @@ const router = Router();
 * @Access Private
 */
 router.post(
-    '/aadhar/request/:id',
-    headerValidators("token"),
+    '/aadhar/request/:documentId',
+    bodyValidators("token"),
     bodyValidators("redirect_uri"),
     validateRequest,
+    currentUser,
+    hasDocumentAccess,
     aadharEsignRequest
 );
 
@@ -35,9 +38,11 @@ router.post(
  * @Access Private
  */
 router.post(
-    '/digital/request/:id',
+    '/digital/request/:documentId',
     headerValidators("token"),
     validateRequest,
+    currentUser,
+    hasDocumentAccess,
     digitalSignRequest
 )
 
