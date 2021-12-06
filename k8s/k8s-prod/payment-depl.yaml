@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+        - name: payment
+          image: registry.digitalocean.com/digidocs-stage-container/payment:latest
+          env:
+            - name: PORT
+              value: "80"
+
+            - name: MONGO_URI
+              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/payment
+
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+            - name: NATS_URI
+              value: "http://nats-srv:4222"
+
+            - name: NATS_CLUSTER_ID
+              value: "digidocs"
+
+            - name: PAYMENT_SIGNING_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: payment-signing-salt
+                  key: PAYMENT_SIGNING_SALT
+
+            - name: CCAVENUE_MERCHANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: ccavenue-merchant-id
+                  key: CCAVENUE_MERCHANT_ID
+
+            - name: CCAVENUE_WORKING_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ccavenue-working-key
+                  key: CCAVENUE_WORKING_KEY
+
+            - name: CCAVENUE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ccavenue-access-key
+                  key: CCAVENUE_ACCESS_KEY
+
+            - name: CCAVENUE_STAGE_URL
+              value: https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction
+
+            - name: PAYMENT_SALT_EXPIRE
+              value: "1000000"
+
+            - name: PAYMENT_CALLBACK
+              value: https://stage-api.digidocs.one/api/payments/callback
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-srv
+spec:
+  selector:
+    app: payment
+  ports:
+    - name: payment
+      protocol: TCP
+      port: 80
+      targetPort: 80

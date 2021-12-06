@@ -1,0 +1,30 @@
+name: Payment deployment
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'payments/**'
+  workflow_dispatch:
+  
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo 
+        uses: actions/checkout@v2
+      - name: Build image 
+        run:  docker build -t registry.digitalocean.com/digidocs-stage-container/payment -f payments/Dockerfile .
+      - name: Install doctl 
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Log in to Container Registry 
+        run: doctl registry login --expiry-seconds 600
+      - name: Push image to Container Registry 
+        run: docker push registry.digitalocean.com/digidocs-stage-container/payment
+      - name: Config kubernetes
+        run: doctl kubernetes cluster kubeconfig save digidocs-stage-cluster
+      - name: Restart deployment
+        run: kubectl rollout restart deployment payment-depl
