@@ -32,7 +32,7 @@
     "email",
     "document",
     "signing",
-    "payments",
+    "payment",
     "skaffold",
     "k8s"
   ]
