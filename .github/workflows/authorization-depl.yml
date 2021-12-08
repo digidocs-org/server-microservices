@@ -1,17 +1,17 @@
-name: Authentication deployment
+name: Authorization deployment
 
 on:
   push:
     branches:
       - master
     paths:
-      - "authentication/**"
+      - "authorization/**"
   workflow_dispatch:
 
 env:
   PROJECT_ID: digidocs-stage
   GKE_ZONE: asia-south1-b
-  IMAGE: authentication
+  IMAGE: authorization
 
 jobs:
   build_and_push:
