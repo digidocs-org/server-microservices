@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: payment
-          image: registry.digitalocean.com/digidocs-stage-container/payment:latest
+          image: asia.gcr.io/digidocs-stage/payment:latest
           env:
             - name: PORT
               value: "80"
@@ -64,7 +64,7 @@ spec:
               value: "1000000"
 
             - name: PAYMENT_CALLBACK
-              value: https://stage-api.digidocs.one/api/payments/callback
+              value: https://stage-api.digidocs.one/api/v1/orders/payments/callback
 
 ---
 apiVersion: v1

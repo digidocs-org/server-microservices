@@ -28,3 +28,10 @@ spec:
                 name: authorization-srv
                 port: 
                   number: 80
+          - path: /api/v1/orders/?(.*)
+            pathType: Prefix
+            backend:
+              service: 
+                name: payment-srv
+                port: 
+                  number: 80

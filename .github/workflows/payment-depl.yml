@@ -5,26 +5,40 @@ on:
     branches:
       - master
     paths:
-      - 'payments/**'
+      - "payment/**"
   workflow_dispatch:
-  
+
+env:
+  PROJECT_ID: digidocs-stage
+  GKE_ZONE: asia-south1-b
+  IMAGE: payment
+
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repo 
+      - name: Checkout the repo
         uses: actions/checkout@v2
-      - name: Build image 
-        run:  docker build -t registry.digitalocean.com/digidocs-stage-container/payment -f payments/Dockerfile .
-      - name: Install doctl 
+
+      # Setup GCR
+      - uses: google-github-actions/setup-gcloud@v0.3.0
+        with:
+          service_account_key: ${{ secrets.GCR_KEY }}
+          project_id: ${{ secrets.GKE_PROJECT }}
+
+      - run: gcloud --quiet auth configure-docker
+
+      - name: Build image
+        run: docker build -t asia.gcr.io/$PROJECT_ID/$IMAGE -f $IMAGE/Dockerfile .
+      - name: Push image
+        run: docker push asia.gcr.io/$PROJECT_ID/$IMAGE
+
+      # Digital Ocean Setup and deployment
+      - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Log in to Container Registry 
-        run: doctl registry login --expiry-seconds 600
-      - name: Push image to Container Registry 
-        run: docker push registry.digitalocean.com/digidocs-stage-container/payment
       - name: Config kubernetes
         run: doctl kubernetes cluster kubeconfig save digidocs-stage-cluster
       - name: Restart deployment
-        run: kubectl rollout restart deployment payment-depl
+        run: kubectl rollout restart deployment $IMAGE-depl

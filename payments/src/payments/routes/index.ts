@@ -18,7 +18,7 @@ export class PaymentRouter {
            * @Returns {orderId,paymentId,status}
         */
         this.router.post(
-            "/api/orders/payment/request",
+            "/payment/request",
             bodyValidators(
                 "user",
                 "amount",
@@ -37,7 +37,7 @@ export class PaymentRouter {
            * @Access  Private
         */
         this.router.post(
-            "/api/orders/detail",
+            "/detail",
             bodyValidators("orderId"),
             validateRequest,
             paymentDetails
@@ -49,7 +49,7 @@ export class PaymentRouter {
            * @Access  Private
         */
         this.router.post(
-            "/api/orders/index",
+            "/index",
             bodyValidators("userId"),
             validateRequest,
             indexOrders
@@ -61,7 +61,7 @@ export class PaymentRouter {
            * @Access  Private
         */
         this.router.post(
-            "/api/payments/callback",
+            "/payments/callback",
             paymentCallback
         )
 

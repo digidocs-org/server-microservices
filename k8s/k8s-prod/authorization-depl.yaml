@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: authorization
-          image: registry.digitalocean.com/digidocs-stage-container/authorization:latest
+          image: asia.gcr.io/digidocs-stage/authorization:latest
           env:
             - name: PORT
               value: "80"
@@ -73,7 +73,7 @@ spec:
               value: "http://document-srv"
 
             - name: PAYMENT_SERVICE_BASE_URL
-              value: "http://payment-srv"
+              value: "https://stage-api.digidocs.one/api/v1"
 
             - name: PAYMENT_CALLBACK_URL
               value: "https://stage-api.digidocs.one/api/v1/authorization/orders/payment/callback"
