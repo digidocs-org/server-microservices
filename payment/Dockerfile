@@ -4,7 +4,7 @@ WORKDIR /app
 
 FROM base AS dependencies
 
-COPY payments payments
+COPY payment payment
 COPY guardian guardian
 COPY package.json .
 COPY .npmrc .npmrc
