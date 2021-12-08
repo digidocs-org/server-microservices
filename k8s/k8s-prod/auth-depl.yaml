@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: registry.digitalocean.com/digidocs-stage-container/auth:latest
+          image: asia.gcr.io/digidocs-stage/auth:latest
           env:
             - name: PORT
               value: '80'
