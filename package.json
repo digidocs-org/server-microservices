@@ -20,9 +20,7 @@
     "start-signing-dev": "dotenv -e ./signing/.env yarn workspace @digidocs/signing start",
     "start-email-dev": "dotenv -e ./email/.env yarn workspace @digidocs/email start",
     "start-payments-dev": "dotenv -e ./payments/.env yarn workspace @digidocs/payments start",
-    "start-document-dev": "dotenv -e ./document/.env yarn workspace @digidocs/document start",
-    "start-stage": "yarn workspace @digidocs/skaffold skaffold-dev",
-    "start-prod": "yarn workspace @digidocs/skaffold skaffold-prod"
+    "start-document-dev": "dotenv -e ./document/.env yarn workspace @digidocs/document start"
   },
   "private": true,
   "workspaces": [
@@ -33,7 +31,6 @@
     "document",
     "signing",
     "payment",
-    "skaffold",
     "k8s"
   ]
 }
