@@ -49,3 +49,9 @@ export const enum ActionStatus {
   DECLINED = 'DECLINED',
   RECEIVED = 'RECEIVED',
 }
+
+export const enum PaymentStatus {
+  SUCCESS = 'Success',
+  FAILED = 'Failure',
+  CANCELLED = 'Aborted'
+}

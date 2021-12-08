@@ -3,6 +3,7 @@ import {
   apiAdapter,
   errorResponseParser,
 } from 'authorization-service/services/apiAdapter';
+import { PaymentStatus } from 'authorization-service/types';
 import { endpoints } from 'authorization-service/types/endpoints';
 import { Request, Response } from 'express';
 import { CreditSuccessPublisher } from 'src/events/publishers/credit-success-publisher';
@@ -24,8 +25,12 @@ export const paymentCallback = async (req: Request, res: Response) => {
       orderId,
     });
 
-    if (orderData.status == 'Failed') {
-      return res.redirect(`${redirectUrl}?status=failed`);
+    if (orderData.data.status == PaymentStatus.FAILED) {
+      return res.redirect(`${redirectUrl}?status=failed&orderId=${orderId}`);
+    }
+
+    if(orderData.data.status == PaymentStatus.CANCELLED){
+      return res.redirect(`${redirectUrl}?status=cancelled&orderId=${orderId}`);
     }
     //Update user credits
     const user = (await User.findById(userId)) as IUser;
@@ -50,7 +55,7 @@ export const paymentCallback = async (req: Request, res: Response) => {
         digitalSignCredits
       }
     });
-    return res.send(orderData.data);
+    return res.redirect(`${redirectUrl}?status=success&orderId=${orderId}`)
   } catch (error) {
     return errorResponseParser(error, res);
   }

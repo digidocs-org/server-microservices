@@ -19,7 +19,7 @@
     "start-authorization-dev": "dotenv -e ./authorization/.env yarn workspace @digidocs/authorization start",
     "start-signing-dev": "dotenv -e ./signing/.env yarn workspace @digidocs/signing start",
     "start-email-dev": "dotenv -e ./email/.env yarn workspace @digidocs/email start",
-    "start-payments-dev": "dotenv -e ./payments/.env yarn workspace @digidocs/payments start",
+    "start-payments-dev": "dotenv -e ./payment/.env yarn workspace @digidocs/payments start",
     "start-document-dev": "dotenv -e ./document/.env yarn workspace @digidocs/document start"
   },
   "private": true,
