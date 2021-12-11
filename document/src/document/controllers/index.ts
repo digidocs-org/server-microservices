@@ -1,5 +1,0 @@
-export * from './createDocument-controller'
-export * from './downloadDocument-controller'
-export * from './sendDocument-controller'
-export * from './deleteDocument-controller'
-export * from './indexDocument-controller'
