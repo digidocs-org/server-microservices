@@ -1,3 +1,4 @@
+import { CreditUpdateType } from '@digidocs/guardian';
 import User, { IUser } from 'authorization-service/models/User';
 import {
   apiAdapter,
@@ -6,7 +7,7 @@ import {
 import { PaymentStatus } from 'authorization-service/types';
 import { endpoints } from 'authorization-service/types/endpoints';
 import { Request, Response } from 'express';
-import { CreditSuccessPublisher } from 'src/events/publishers/credit-success-publisher';
+import { CreditUpdatePublisher } from 'src/events/publishers/credit-update-publisher';
 import { natsWrapper } from 'src/nats-wrapper';
 
 const api = apiAdapter(process.env.PAYMENT_SERVICE_BASE_URL!);
@@ -29,7 +30,7 @@ export const paymentCallback = async (req: Request, res: Response) => {
       return res.redirect(`${redirectUrl}?status=failed&orderId=${orderId}`);
     }
 
-    if(orderData.data.status == PaymentStatus.CANCELLED){
+    if (orderData.data.status == PaymentStatus.CANCELLED) {
       return res.redirect(`${redirectUrl}?status=cancelled&orderId=${orderId}`);
     }
     //Update user credits
@@ -48,12 +49,13 @@ export const paymentCallback = async (req: Request, res: Response) => {
     }
 
     await user.save();
-    new CreditSuccessPublisher(natsWrapper.client).publish({
+    new CreditUpdatePublisher(natsWrapper.client).publish({
       userId,
       data: {
         aadhaarCredits,
         digitalSignCredits
-      }
+      },
+      type: CreditUpdateType.ADDED
     });
     return res.redirect(`${redirectUrl}?status=success&orderId=${orderId}`)
   } catch (error) {

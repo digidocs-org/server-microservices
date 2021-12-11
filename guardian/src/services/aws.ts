@@ -24,7 +24,7 @@ export const uploadToS3Bucket = async (file: IUploadOptions) => {
         return Promise.resolve({ name: file.name, key: file.key });
     } catch (error) {
         console.log(error);
-        return Promise.reject('Cannot Upload Error Occured!!');
+        throw new Error("Cannot upload document")
     }
 };
 

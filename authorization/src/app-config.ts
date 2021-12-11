@@ -6,9 +6,7 @@ import { DatabaseConfig } from './db-config';
 import { natsWrapper } from './nats-wrapper';
 import fileUpload from 'express-fileupload';
 import { DocumentAuthorizationRouter } from './authorization/routes';
-import { CreateDocumentListener } from './events/listeners/document-created-listener';
 import { CreateUserListener } from './events/listeners/user-created-listener';
-import { UpdateDocumentListener } from './events/listeners/update-document-listener';
 import { EsignSuccessListener } from './events/listeners/esign-success-listener';
 import cors from 'cors'
 
@@ -24,9 +22,7 @@ export class Application {
           process.env.NATS_URI!
         )
         .then(() => {
-          new CreateDocumentListener(natsWrapper.client).listen();
           new CreateUserListener(natsWrapper.client).listen();
-          new UpdateDocumentListener(natsWrapper.client).listen();
           new EsignSuccessListener(natsWrapper.client).listen();
         });
 
