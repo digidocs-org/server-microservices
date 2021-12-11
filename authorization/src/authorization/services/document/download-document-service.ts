@@ -1,20 +1,38 @@
-import axios from 'axios';
-import { BadRequestError } from '@digidocs/guardian';
-import { endpoints } from 'authorization-service/types/endpoints';
-import { apiAdapter } from 'authorization-service/services/apiAdapter'
+import {
+  BadRequestError,
+  decryptDocument,
+  fetchData,
+  NotFoundError,
+} from '@digidocs/guardian';
+import Document from 'authorization-service/models/Document'
 
-const downloadDocumentService = async (documentId: string) => {
+const downloadDocument = (documentId: string) => new Promise<string>(async (resolve, reject) => {
   try {
-    const api = apiAdapter(process.env.DOCUMENT_SERVICE_URL!);
-    const { DOCUMENT_ROUTES } = endpoints
-    const response = await api.post(DOCUMENT_ROUTES.downloadDocument, {
-      documentId,
-    });
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new BadRequestError('Error while downloading document');
-  }
-};
 
-export default downloadDocumentService;
+    const document = await Document.findById(documentId);
+
+    if (!document) {
+      throw new NotFoundError();
+    }
+
+    const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
+    const publicKeyURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/keys/${document.publicKeyId}`;
+
+    const encryptedFile = await fetchData(documentURL);
+    const publicKeyBuffer = await fetchData(publicKeyURL);
+    const publicKey = publicKeyBuffer.toString();
+
+    const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
+
+    if (!decryptedFile) {
+      throw new BadRequestError('cannot download document');
+    }
+
+    resolve(decryptedFile.toString("base64"))
+  } catch (error) {
+    reject(error)
+  }
+})
+
+
+export default downloadDocument

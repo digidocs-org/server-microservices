@@ -10,6 +10,6 @@ export const downloadDocumentController = async (req: Request, res: Response) =>
   if (!docUserMap) {
     throw new BadRequestError('Cannot access the document!!');
   }
-  const document = await downloadDocumentService(documentData.id);
-  return res.send(document);
+  const documentBase64 = await downloadDocumentService(documentData.id);
+  return res.send(documentBase64);
 };
