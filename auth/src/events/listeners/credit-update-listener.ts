@@ -1,5 +1,6 @@
 import {
-  CreditSuccessEvent,
+  CreditUpdateEvent,
+  CreditUpdateType,
   Listener,
   Subjects,
 } from '@digidocs/guardian';
@@ -8,12 +9,12 @@ import { queueGroupName } from 'auth/types';
 import User from 'auth/models';
 import { Message } from 'node-nats-streaming';
 
-export class CreditSuccessListener extends Listener<CreditSuccessEvent> {
-  subject: Subjects.CreditSuccess = Subjects.CreditSuccess;
+export class CreditUpdateListener extends Listener<CreditUpdateEvent> {
+  subject: Subjects.CreditUpdate = Subjects.CreditUpdate;
   queueGroupName = queueGroupName;
 
-  async onMessage(data: CreditSuccessEvent['data'], msg: Message) {
-    const { userId, data: creditData } = data;
+  async onMessage(data: CreditUpdateEvent['data'], msg: Message) {
+    const { userId, data: creditData, type } = data;
     const { aadhaarCredits, digitalSignCredits } = creditData
     const user = await User.findById(userId);
 
@@ -21,16 +22,12 @@ export class CreditSuccessListener extends Listener<CreditSuccessEvent> {
       return;
     }
 
-    if (user.aadhaarCredits) {
+    if (type == CreditUpdateType.ADDED) {
       user.aadhaarCredits += aadhaarCredits
-    } else {
-      user.aadhaarCredits = aadhaarCredits
-    }
-
-    if (user.digitalSignCredits) {
       user.digitalSignCredits += digitalSignCredits
-    } else {
-      user.digitalSignCredits = digitalSignCredits
+    } else if (type == CreditUpdateType.SUBTRACTED) {
+      user.aadhaarCredits -= aadhaarCredits
+      user.digitalSignCredits -= digitalSignCredits
     }
 
     await user.save();

@@ -23,6 +23,7 @@ export default class SendDocumentListener extends Listener<SendDocumentEvent> {
 
     document.isDrafts = false;
     document.status = DocumentStatus.PENDING;
+    // TODO: Update credits
     await document.save();
     msg.ack();
   }

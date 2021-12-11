@@ -10,7 +10,7 @@ import passport from 'passport';
 import passportInit from 'auth/services/passport';
 import {
   CreateGuestUserListener,
-  CreditSuccessListener,
+  CreditUpdateListener,
 } from './events/listeners';
 
 export class Application {
@@ -28,7 +28,7 @@ export class Application {
         )
         .then(() => {
           new CreateGuestUserListener(natsWrapper.client).listen();
-          new CreditSuccessListener(natsWrapper.client).listen();
+          new CreditUpdateListener(natsWrapper.client).listen();
         });
 
       natsWrapper.client.on('close', () => {

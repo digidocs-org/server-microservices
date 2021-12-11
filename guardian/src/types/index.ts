@@ -31,3 +31,8 @@ export enum SignTypes {
   AADHAR_SIGN = 'AADHAR_SIGN',
   DIGITAL_SIGN = 'DIGITAL_SIGN',
 }
+
+export enum CreditUpdateType {
+  ADDED = 'ADDED',
+  SUBTRACTED = 'SUBTRACTED'
+}

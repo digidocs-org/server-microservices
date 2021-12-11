@@ -87,6 +87,10 @@ export const sendDocumentController = async (req: Request, res: Response) => {
   document.status = DocumentStatus.PENDING;
   await document.save();
 
+  //TODO: Update credits
+  //TODO: Update user profile credits
+  //TODO: Update document credits
+
   await new SendDocumentPublisher(natsWrapper.client).publish({
     id: documentId,
   });
