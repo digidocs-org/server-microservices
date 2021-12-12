@@ -10,16 +10,12 @@ const esignService = endpoints.SIGNING_ROUTES;
 
 export const aadharEsignRequest = async (req: Request, res: Response) => {
   try {
-    const { data } = await api.post(
-      esignService.aadharEsignRequest,
-      {
-        documentId: req.params.id,
-        redirectUrl: req.body.redirect_uri,
-      },
-      {
-        headers: {
-          token: req.header('token'),
-        },
+    const { data } = await api.post(esignService.aadharEsignRequest, {
+      documentId: req.params.documentId,
+      redirectUrl: req.body.redirect_uri
+    }, {
+      headers: {
+        token: req.body.token
       }
     );
     if (data.type == 'redirect') {
@@ -27,6 +23,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     }
     return res.send(data);
   } catch (error) {
+    console.log(error)
     return errorResponseParser(error, res);
   }
 };

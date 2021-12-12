@@ -13,5 +13,5 @@ export enum Subjects {
 
   PaymentSuccess = 'payment:success',
 
-  CreditSuccess = 'credit:success',
+  CreditUpdate = 'credit:update',
 }

@@ -6,6 +6,8 @@ import DocumentUserMap from 'src/authorization/models/DocumentUserMap';
 import Actions from 'authorization-service/models/Actions';
 import { ActionType } from 'authorization-service/types';
 import User from 'authorization-service/models/User';
+import { CreateDocumentPublisher } from 'src/events/publishers/create-document-publisher';
+import { natsWrapper } from 'src/nats-wrapper';
 
 export const createDocumentController = async (req: Request, res: Response) => {
   const userId = req.currentUser?.id;
@@ -31,19 +33,40 @@ export const createDocumentController = async (req: Request, res: Response) => {
   }
 
   const file = files.file as UploadedFile;
-  const data = await createDocumentService(userId, file);
 
-  const action = await Actions.create({
-    type: ActionType.VIEW,
-    recipientEmail: user.email,
-  });
+  try {
+    const document = await createDocumentService(userId, file);
+    new CreateDocumentPublisher(natsWrapper.client).publish({
+      id: document.id,
+      name: document.name,
+      message: document.message,
+      inOrder: document.inOrder,
+      publicKeyId: document.publicKeyId,
+      documentId: document.documentId,
+      selfSign: document.selfSign,
+      isDrafts: document.isDrafts,
+      status: document.status,
+      signType: document.signType,
+      userId: document.userId,
+      validTill: document.validTill,
+      timeToSign: document.timeToSign,
+      version: document.version,
+    });
 
-  await DocumentUserMap.create({
-    user: user.id,
-    document: data.data.id,
-    action: action,
-    access: true,
-  });
+    const action = await Actions.create({
+      type: ActionType.VIEW,
+      recipientEmail: user.email,
+    });
 
-  return res.send(data);
+    await DocumentUserMap.create({
+      user: user.id,
+      document: document.id,
+      action: action,
+      access: true,
+    });
+
+    return res.send({ success: true, data: { id: document.id } });
+  } catch (error) {
+    throw new BadRequestError("Cannot upload document")
+  }
 };

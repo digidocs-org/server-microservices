@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 import { NextFunction, Request, Response } from 'express';
 import { BadRequestError } from '@digidocs/guardian';
 import DocumentUserMap, {
