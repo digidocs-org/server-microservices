@@ -46,7 +46,7 @@ const indexDocumentService = async (userId: string) => {
               status: action.actionStatus,
               name:
                 action.recipientName ??
-                `${recipient.firstname} ${recipient.lastname}`,
+                `${recipient.firstname ?? ''} ${recipient.lastname ?? ''}`,
               signOrder: action.signOrder,
             });
           });
@@ -55,7 +55,7 @@ const indexDocumentService = async (userId: string) => {
         return {
           documentName: document.name,
           documentId: document._id,
-          ownerName: `${user?.firstname} ${user?.lastname}`,
+          ownerName: `${user?.firstname || ''} ${user?.lastname || ''}`,
           createdAt: document.createdAt,
           status: document.status || DocumentStatus.DRAFTS,
           userStatus: findUserStatus(userId, docUserMapsForDoc),

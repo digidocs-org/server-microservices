@@ -53,7 +53,8 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
 
     if (!document.inOrder) {
       let allSigned = false;
-      docUserMaps.forEach(docUserMap => {
+
+      for (const docUserMap of docUserMaps) {
         const action = docUserMap.action as IDocumentActions;
 
         if (
@@ -61,10 +62,10 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
           action.actionStatus !== ActionStatus.SIGNED
         ) {
           allSigned = false;
-          return;
+          break;
         }
         allSigned = true;
-      });
+      }
 
       if (allSigned) {
         document.status = DocumentStatus.COMPLETED;
@@ -100,16 +101,34 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
       }
     }
 
-    document.status = DocumentStatus.COMPLETED;
-    await document.save();
-    // Send email to all users that document is signed completely.
-    const owner = await User.findById(document.userId);
+    let allSigned = false;
 
-    new SendEmailPublisher(natsWrapper.client).publish({
-      senderEmail: 'notification@digidocsapp.com',
-      clientEmail: owner!.email,
-      subject: 'Document Signed Successfully.',
-      body: 'All the recipients have signed the document.',
-    });
+    for (const docUserMap of docUserMaps) {
+      const action = docUserMap.action as IDocumentActions;
+
+      if (
+        action.type === ActionType.SIGN &&
+        action.actionStatus !== ActionStatus.SIGNED
+      ) {
+        allSigned = false;
+        break;
+      }
+      allSigned = true;
+    }
+
+    if (allSigned) {
+      document.status = DocumentStatus.COMPLETED;
+      await document.save();
+      // Send email to all users that document is signed completely.
+      const owner = await User.findById(document.userId);
+
+      new SendEmailPublisher(natsWrapper.client).publish({
+        senderEmail: 'notification@digidocsapp.com',
+        clientEmail: owner!.email,
+        subject: 'Document Signed Successfully.',
+        body: 'All the recipients have signed the document.',
+      });
+    }
+    msg.ack();
   }
 }

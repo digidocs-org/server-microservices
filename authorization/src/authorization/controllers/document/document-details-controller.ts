@@ -29,7 +29,7 @@ export const documentDetailsController = async (
       delete ret.name;
       delete ret._id;
       delete ret.publicKeyId;
-      ret.ownerName = `${owner?.firstname} ${owner?.lastname}`;
+      ret.ownerName = `${owner?.firstname ?? ''} ${owner?.lastname ?? ''}`;
       ret.ownerEmail = owner?.email;
       ret.userStatus = findUserStatus(userId, docUserMaps);
     },
@@ -43,7 +43,9 @@ export const documentDetailsController = async (
       type: action.type,
       email: action.recipientEmail,
       status: action.actionStatus,
-      name: action.recipientName ?? `${user.firstname} ${user.lastname}`,
+      name:
+        action.recipientName ??
+        `${user.firstname ?? ''} ${user.lastname ?? ''}`,
       fields: action.fields,
     };
   });
