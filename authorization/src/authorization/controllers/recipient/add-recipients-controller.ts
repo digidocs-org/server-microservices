@@ -53,7 +53,7 @@ export const addRecipientsController = async (req: Request, res: Response) => {
 
     allRecipients.map(recipient => {
       const recipientAction = recipient.action as IDocumentActions;
-      if (recipientAction.recipientEmail != loggedInUser.email) {
+      if (recipientAction.recipientEmail !== loggedInUser.email) {
         actionIdsArray.push(recipientAction._id);
         docUserMapIdsArray.push(recipient._id);
       }
@@ -92,12 +92,20 @@ export const addRecipientsController = async (req: Request, res: Response) => {
 
       const action = await Actions.create(recipient);
 
-      await DocumentUserMap.create({
+      const docUserMapAlreadyExists = await DocumentUserMap.findOne({
         user: userId,
-        document: document.id,
-        access: recipientEmail === loggedInUser.email,
-        action: action.id,
+        document: document._id,
       });
+
+      if (!docUserMapAlreadyExists) {
+        console.log(recipientEmail);
+        await DocumentUserMap.create({
+          user: userId,
+          document: document.id,
+          access: recipientEmail === loggedInUser.email,
+          action: action.id,
+        });
+      }
     }
   }
 
