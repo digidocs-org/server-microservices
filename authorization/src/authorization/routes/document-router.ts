@@ -6,6 +6,7 @@ import {
   sendDocumentController,
   updateDocumentController,
   documentDetailsController,
+  addFields
 } from 'authorization-service/controllers/document';
 import {
   bodyValidators,
@@ -13,7 +14,7 @@ import {
   headerValidators,
   validateRequest,
 } from '@digidocs/guardian';
-import hasDocumentAccess from 'authorization-service/middlewares/has-document-access';
+import hasDocumentAccess from 'authorization-service/middlewares/has-document-access'
 
 const router = Router();
 
@@ -88,5 +89,15 @@ router.get(
   hasDocumentAccess,
   documentDetailsController
 );
+
+router.post(
+  '/field/:documentId',
+  headerValidators('token'),
+  bodyValidators('userEmail', 'fieldData'),
+  validateRequest,
+  currentUser,
+  hasDocumentAccess,
+  addFields
+)
 
 export = router;
