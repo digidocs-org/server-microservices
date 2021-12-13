@@ -8,15 +8,14 @@ import {
 } from 'authorization-service/types';
 
 export interface IActionFields {
-  dataX: string;
-  dataY: string;
-  fieldName: FieldName;
-  fieldType: FieldType;
-  height: number;
-  width: number;
-  fontSize?: number;
-  pageNumber?: number;
-  imageUrl?: string;
+  dataX: number
+  dataY: number
+  height: number
+  width: number
+  pageNumber: number
+  recipientName: string
+  recipientEmail: string
+  dragTypeID: string
 }
 
 export interface IDocumentActions extends Document {
