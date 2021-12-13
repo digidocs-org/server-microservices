@@ -24,7 +24,8 @@ export interface IUser extends Document {
   refreshToken?: string
   version?: number,
   aadhaarCredits: number,
-  digitalSignCredits: number
+  digitalSignCredits: number,
+  signUrl?: string
 }
 /**
  *
@@ -56,7 +57,8 @@ const userSchema: Schema = new Schema(
     refreshToken: String,
     version: Number,
     aadhaarCredits: { type: Number, default: 0 },
-    digitalSignCredits: { type: Number, default: 0 }
+    digitalSignCredits: { type: Number, default: 0 },
+    signUrl: String
   },
   {
     timestamps: { createdAt: true, updatedAt: true }, toJSON: {

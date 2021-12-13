@@ -9,6 +9,7 @@ import { DocumentAuthorizationRouter } from './authorization/routes';
 import { CreateUserListener } from './events/listeners/user-created-listener';
 import { EsignSuccessListener } from './events/listeners/esign-success-listener';
 import cors from 'cors'
+import { UserUpdatedListener } from './events/listeners/user-updated-listener';
 
 export class Application {
   private app: App;
@@ -24,6 +25,7 @@ export class Application {
         .then(() => {
           new CreateUserListener(natsWrapper.client).listen();
           new EsignSuccessListener(natsWrapper.client).listen();
+          new UserUpdatedListener(natsWrapper.client).listen();
         });
 
       natsWrapper.client.on('close', () => {
