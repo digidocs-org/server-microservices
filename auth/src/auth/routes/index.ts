@@ -23,6 +23,7 @@ import {
 } from '@digidocs/guardian';
 import { verifyToken } from 'auth/middlewares/vertfyToken';
 import { updateProfile } from 'auth/controllers/update-profile-controller';
+import { updateSign } from 'auth/controllers/updateSign-controller';
 
 export class AuthRouter {
   private static router = Router();
@@ -185,6 +186,19 @@ export class AuthRouter {
       validateRequest,
       currentUser,
       updateProfile
+    );
+
+    /**
+     * @Route  POST 'api/v1/auth/update-sign'
+     * @Desc   update user profile
+     * @Access Private
+     */
+     this.router.post(
+      '/api/v1/auth/update-sign',
+      headerValidators('token'),
+      validateRequest,
+      currentUser,
+      updateSign
     );
 
     return this.router;

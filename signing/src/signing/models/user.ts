@@ -17,6 +17,7 @@ export interface IUser extends Document {
     version?: number
     aadhaarCredits: number
     digitalSignCredits: number
+    signUrl: string
 }
 /**
  *
@@ -34,7 +35,8 @@ const userSchema: Schema = new Schema(
         profileImage: String,
         deviceId: String,
         aadhaarCredits: Number,
-        digitalSignCredits: Number
+        digitalSignCredits: Number,
+        signUrl: String
     },
     {
         timestamps: { createdAt: true, updatedAt: true }, toJSON: {
