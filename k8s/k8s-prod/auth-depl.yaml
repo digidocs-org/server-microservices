@@ -17,21 +17,21 @@ spec:
           image: asia.gcr.io/digidocs-stage/auth:latest
           env:
             - name: PORT
-              value: '80'
+              value: "80"
 
             - name: MONGO_URI
               value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/authentication
-              
+
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
 
             - name: NATS_URI
-              value: 'http://nats-srv:4222'
+              value: "http://nats-srv:4222"
 
             - name: NATS_CLUSTER_ID
-              value: 'digidocs'
+              value: "digidocs"
 
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
@@ -80,6 +80,24 @@ spec:
                 secretKeyRef:
                   name: client-url
                   key: CLIENT_URL
+
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-access-key-id
+                  key: AWS_ACCESS_KEY_ID
+
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret-access-key
+                  key: AWS_SECRET_ACCESS_KEY
+
+            - name: CLOUDFRONT_URI
+              value: "https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com"
+
+            - name: AWS_S3_BUCKET
+              value: "digidocs-local-bucket"
 ---
 apiVersion: v1
 kind: Service
