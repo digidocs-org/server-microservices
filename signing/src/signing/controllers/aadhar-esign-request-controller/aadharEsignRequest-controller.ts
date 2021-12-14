@@ -17,7 +17,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     }
 
     const user = await User.findById(userId);
-    if (!user) {
+    if (!user || !user.signUrl) {
         return res.send({ type: "redirect", url: `${redirectUrl}?status=failed` })
     }
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
@@ -25,28 +25,33 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 
     const encryptedFile = await fetchData(documentURL);
     const publicKeyBuffer = await fetchData(publicKeyURL);
+    const sign = await fetchData(user.signUrl);
     const publicKey = publicKeyBuffer.toString();
 
     const decryptedFile = decryptDocument(encryptedFile, publicKey);
 
+    let signField = req.body.fieldData
+    if (!signField.length) {
+        signField = [{
+            dataX: 0,
+            dataY: 0,
+            height: 50,
+            width: 150,
+            pageNumber: 1,
+        }]
+    }
     const signFieldData: EsignRequest = {
         name: `${user.firstname} ${user.lastname}`,
         location: "India",
         reason: "Aadhaar Sign",
         signatureFieldData: {
-            data: [
-                {
-                    pageNo: 1,
-                    xCoord: 50,
-                    yCoord: 50
-                }
-            ]
+            data: signField
         }
     }
 
     let fieldData = "";
     signFieldData.signatureFieldData?.data.map(field => {
-        fieldData += `${field.pageNo}-${field.xCoord},${field.yCoord},50,150;`
+        fieldData += `${field.pageNumber}-${field.dataX},${field.dataY},${field.width},${field.height};`
     })
 
 
@@ -54,6 +59,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     try {
         await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
+        await writeFile(esignRequest.signImageFilePath, sign, 'base64');
         await exec(esignRequest.signingRequest);
 
         const calTimeStamp = await readFile(esignRequest.timeStampFilePath);
@@ -63,7 +69,8 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             documentId,
             userId: user._id,
             redirectUrl,
-            calTimeStamp: calTimeStamp.toString()
+            calTimeStamp: calTimeStamp.toString(),
+            fieldData: signField
         },
             process.env.ESIGN_SALT!,
             process.env.ESIGN_SALT_EXPIRE!

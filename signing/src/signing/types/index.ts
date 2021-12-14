@@ -23,9 +23,11 @@ export interface EsignRequest {
 }
 
 export interface SignField {
-  pageNo: number
-  xCoord: number
-  yCoord: number
+  dataX: number
+  dataY: number
+  height: number
+  width: number
+  pageNumber: number
 }
 
 export interface AadharEsignPayload {
@@ -33,4 +35,5 @@ export interface AadharEsignPayload {
   userId: string
   redirectUrl: string
   calTimeStamp: string
+  fieldData: any
 }

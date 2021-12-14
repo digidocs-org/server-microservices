@@ -22,7 +22,7 @@ export const esignCallback = async (req: Request, res: Response) => {
   const { espResponse, signingData } = req.body;
 
   const decodedData = jwt.verify(signingData, process.env.ESIGN_SALT!) as AadharEsignPayload
-  const { documentId, userId, redirectUrl, calTimeStamp } = decodedData
+  const { documentId, userId, redirectUrl, calTimeStamp, fieldData: signField } = decodedData
 
   const response = verifyEsignResponse(espResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
@@ -30,7 +30,7 @@ export const esignCallback = async (req: Request, res: Response) => {
   }
   const user = await User.findById(userId)
 
-  if (!documentId || !userId || !user || !redirectUrl || !calTimeStamp) {
+  if (!documentId || !userId || !user || !redirectUrl || !calTimeStamp || !signField || !user.signUrl) {
     return res.send(`${redirectUrl}?status=failed`);
   }
 
@@ -44,6 +44,7 @@ export const esignCallback = async (req: Request, res: Response) => {
 
   const encryptedFile = await fetchData(documentURL);
   const publicKeyBuffer = await fetchData(publicKeyURL);
+  const sign = await fetchData(user.signUrl)
 
   const publicKey = publicKeyBuffer.toString();
   const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
@@ -53,19 +54,13 @@ export const esignCallback = async (req: Request, res: Response) => {
     location: "India",
     reason: "Aadhaar Sign",
     signatureFieldData: {
-      data: [
-        {
-          pageNo: 1,
-          xCoord: 50,
-          yCoord: 50
-        }
-      ]
+      data: signField
     }
   }
 
   let fieldData = "";
   signFieldData.signatureFieldData?.data.map(field => {
-    fieldData += `${field.pageNo}-${field.xCoord},${field.yCoord},50,150;`
+    fieldData += `${field.pageNumber}-${field.dataX},${field.dataY},${field.width},${field.height};`
   })
 
   const esignRequest = createJarSigningReq(SignTypes.AADHAR_SIGN, signFieldData);
@@ -73,6 +68,7 @@ export const esignCallback = async (req: Request, res: Response) => {
   try {
     await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
     await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
+    await writeFile(esignRequest.signImageFilePath, sign, 'base64');
     await writeFile(esignRequest.responseTextFile, espResponse, 'utf-8');
     await writeFile(esignRequest.timeStampFilePath, calTimeStamp, 'utf-8');
     await exec(esignRequest.signingRequest);

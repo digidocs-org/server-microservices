@@ -5,15 +5,17 @@ import { createJarSigningReq, parseUploadData } from 'signing-service/utils';
 import { EsignRequest } from 'signing-service/types';
 import { EsignSuccess } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
+import User from 'signing-service/models/user'
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
     const documentId = req.body.documentId
     const userId = req.currentUser?.id
     const document = await Document.findById(documentId)
+    const user = await User.findById(userId)
     if (!document) {
         throw new BadRequestError("Document not found!!!")
     }
-    if (!userId) {
+    if (!userId || !user || !user.signUrl) {
         throw new BadRequestError("User not found!!!")
     }
 
@@ -22,33 +24,36 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
 
     const encryptedFile = await fetchData(documentURL);
     const publicKeyBuffer = await fetchData(publicKeyURL);
+    const sign = await fetchData(user.signUrl)
     const publicKey = publicKeyBuffer.toString();
 
     const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
-    const signFieldData: EsignRequest = {
-        name: "Naman Singh",
-        location: "India",
-        reason: "Aadhar E-Sign",
-        signatureFieldData: {
-            data: [
-                {
-                    pageNo: 1,
-                    xCoord: 50,
-                    yCoord: 50
-                },
-                {
-                    pageNo: 1,
-                    xCoord: 200,
-                    yCoord: 200
-                }
-            ]
-        }
+    let signField = req.body.fieldData
+    if (!signField.length) {
+        signField = [{
+            dataX: 0,
+            dataY: 0,
+            height: 50,
+            width: 150,
+            pageNumber: 1,
+        }]
     }
+    const signFieldData: EsignRequest = {
+        name: `${user.firstname} ${user.lastname}`,
+        location: "India",
+        reason: "Digital Sign",
+        signatureFieldData: {
+            data: signField
+        }
+        
+    }
+    
     const esignRequest = createJarSigningReq(SignTypes.DIGITAL_SIGN, signFieldData);
     console.log(esignRequest.signingRequest)
     try {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
+        await writeFile(esignRequest.signImageFilePath, sign, 'base64');
         await exec(esignRequest.signingRequest);
 
         const dataBuffer = await readFile(esignRequest.signedFilePath)
