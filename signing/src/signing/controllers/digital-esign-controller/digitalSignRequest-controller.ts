@@ -46,7 +46,6 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         signatureFieldData: {
             data: signField
         }
-        
     }
     
     const esignRequest = createJarSigningReq(SignTypes.DIGITAL_SIGN, signFieldData);

@@ -21,7 +21,7 @@ export class SigningRouter {
      */
     this.router.post(
       '/api/esign/aadhar/request',
-      bodyValidators('documentId', 'redirectUrl', 'fieldData'),
+      bodyValidators('documentId', 'redirectUrl'),
       headerValidators('token'),
       validateRequest,
       currentUser,
@@ -35,7 +35,7 @@ export class SigningRouter {
      */
     this.router.post(
       '/api/esign/digital',
-      bodyValidators('documentId','fieldData'),
+      bodyValidators('documentId'),
       headerValidators('token'),
       validateRequest,
       currentUser,
