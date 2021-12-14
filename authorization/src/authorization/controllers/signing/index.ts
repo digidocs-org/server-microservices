@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { apiAdapter, errorResponseParser } from 'authorization-service/services/apiAdapter'
+import {
+  apiAdapter,
+  errorResponseParser,
+} from 'authorization-service/services/apiAdapter';
 import { endpoints } from 'authorization-service/types/endpoints';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
 import { IDocumentActions } from 'authorization-service/models/Actions';
@@ -22,31 +25,32 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
       headers: {
         token: req.body.token
       }
-    });
-    if (data.type == "redirect") {
-      return res.redirect(data.url)
+    })
+
+    if (data.type == 'redirect') {
+      return res.redirect(data.url);
     }
-    return res.send(data)
+    return res.send(data);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return errorResponseParser(error, res);
   }
 };
 
 export const aadharEsignCallback = async (req: Request, res: Response) => {
   try {
-    const msg = req.body.msg
-    const { data: signingData } = req.query
+    const msg = req.body.msg;
+    const { data: signingData } = req.query;
 
     const { data } = await api.post(esignService.aadharEsignCallback, {
       espResponse: msg,
-      signingData
-    })
-    return res.redirect(data)
+      signingData,
+    });
+    return res.redirect(data);
   } catch (error) {
-    return errorResponseParser(error, res)
+    return errorResponseParser(error, res);
   }
-}
+};
 
 export const digitalSignRequest = async (req: Request, res: Response) => {
   try {
@@ -62,8 +66,8 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
       headers: {
         token: req.header("token")
       }
-    });
-    return res.send(data)
+    })
+    return res.send(data);
   } catch (error) {
     return errorResponseParser(error, res);
   }
