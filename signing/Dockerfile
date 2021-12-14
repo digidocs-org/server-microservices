@@ -14,7 +14,6 @@ RUN dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/digital-sign.jar -P /usr/src/app/signing/src/signing/java-esign-utility
 RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/aadhaar-sign.jar -P /usr/src/app/signing/src/signing/java-esign-utility
-RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/sign.png -P /usr/src/app/signing/src/signing/sign-dir
 
 COPY signing signing
 COPY guardian guardian

@@ -13,10 +13,10 @@ export const createJarSigningReq = (signType: string, requestData: EsignRequest)
     const responseTextFile = signType == SignTypes.AADHAR_SIGN ? `${tempSigningDir}/${tempFileName}/response.txt` : "";
     const signedFilePath = `${tempSigningDir}/${tempFileName}/unsigned_signedFinal.pdf`;
     const unsignedFieldPath = `${tempSigningDir}/${tempFileName}/unsigned_encryptTempSigned.pdf`
-    const signImageFilePath = `${tempSigningDir}/sign.png`;
     const fieldDataFilePath = `${tempSigningDir}/${tempFileName}/field.txt`
     const timeStampFilePath = `${tempSigningDir}/${tempFileName}/unsigned_calTimeStamp.txt`
     const requestXmlFilePath = `${tempSigningDir}/${tempFileName}/unsigned_eSignRequestXml.txt`
+    const signImageFilePath = `${tempSigningDir}/${tempFileName}/sign.png`
 
     const data = {
         esignResponse: convertToString(responseTextFile),
@@ -57,6 +57,7 @@ export const createJarSigningReq = (signType: string, requestData: EsignRequest)
         timeStampFilePath,
         tempFileName,
         requestXmlFilePath,
-        unsignedFieldPath
+        unsignedFieldPath,
+        signImageFilePath
     }
 }
