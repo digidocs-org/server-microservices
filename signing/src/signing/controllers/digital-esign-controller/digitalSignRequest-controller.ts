@@ -15,8 +15,12 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
     if (!document) {
         throw new BadRequestError("Document not found!!!")
     }
-    if (!userId || !user || !user.signUrl) {
+    if (!userId || !user) {
         throw new BadRequestError("User not found!!!")
+    }
+
+    if(!user.signUrl){
+        throw new BadRequestError("cannot find signature of user!!!")
     }
 
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
