@@ -19,7 +19,7 @@ export const updateDocumentController = async (req: Request, res: Response) => {
   }
 
   const updatedDoc = await updateDocumentService(req);
-  
+
   new UpdateDocumentPublisher(natsWrapper.client).publish({
     id: updatedDoc._id,
     name: updatedDoc.name,
@@ -27,6 +27,7 @@ export const updateDocumentController = async (req: Request, res: Response) => {
     inOrder: updatedDoc.inOrder,
     selfSign: updatedDoc.selfSign,
     validTill: updatedDoc.validTill,
+    sendForSign: updatedDoc.sendForSign,
     timeToSign: updatedDoc.timeToSign,
     signType: updatedDoc.signType,
     version: updatedDoc.__v,
