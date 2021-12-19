@@ -31,7 +31,7 @@ export const updateSign = async (req: Request, res: Response) => {
     }
 
     const data = await uploadToS3Bucket(parseUploadData)
-    const url = `${process.env.S3_BUCKET_BASE_URL}/${data.key}`
+    const url = `${process.env.CLOUDFRONT_URI}/${data.key}`
 
     user.signUrl = url
     await user.save()
