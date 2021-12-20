@@ -4,6 +4,7 @@ export interface IUploadOptions {
   length: number;
   name: string;
   key: string;
+  contentEncoding?: string;
 }
 
 export interface IUploadResponse {

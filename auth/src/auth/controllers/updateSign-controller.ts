@@ -1,6 +1,5 @@
-import { BadRequestError, uploadToS3Bucket } from '@digidocs/guardian'
+import { BadRequestError, checkForBuffer, uploadToS3Bucket } from '@digidocs/guardian'
 import { Request, Response } from 'express'
-import { UploadedFile } from 'express-fileupload'
 import User from 'auth/models'
 import { UserUpdatedPublisher } from 'src/events/publishers'
 import { natsWrapper } from 'src/nats-wrapper'
@@ -13,14 +12,16 @@ export const updateSign = async (req: Request, res: Response) => {
         throw new BadRequestError("User not found")
     }
 
-    if (!req.files) {
+    if (!req.files && !req.body.file) {
         throw new BadRequestError("no file provided")
     }
 
-    const signFile = req.files.file as UploadedFile
+    const signFile = req.files ? req.files.file : req.body.file
     if (signFile.mimetype != 'image/png') {
         throw new BadRequestError("upload a valid png file")
     }
+
+    signFile.data = checkForBuffer(signFile.data) ? signFile.data : Buffer.from(signFile.data, "base64")
 
     const parseUploadData = {
         mime: 'image/png',
@@ -28,6 +29,7 @@ export const updateSign = async (req: Request, res: Response) => {
         length: signFile.data.length,
         name: 'signature.png',
         key: `${userId}/documents/signature.png`,
+        contentEncoding: 'base64'
     }
 
     const data = await uploadToS3Bucket(parseUploadData)
