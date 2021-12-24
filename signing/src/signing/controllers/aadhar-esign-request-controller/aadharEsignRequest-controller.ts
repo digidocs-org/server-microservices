@@ -51,7 +51,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 
     let fieldData = "";
     signFieldData.signatureFieldData?.data.map(field => {
-        fieldData += `${field.pageNumber}-${field.dataX},${field.dataY},${field.width},${field.height};`
+        fieldData += `${field.pageNumber}-${field.dataX},${field.dataY},${field.height},${field.width};`
     })
 
 
