@@ -6,7 +6,6 @@ import {
 } from '@digidocs/guardian';
 import { Router } from 'express';
 import { aadharEsignRequest, esignCallback } from 'signing-service/controllers';
-import { redirectionHandler } from 'signing-service/controllers/redirectionHandle-controller';
 import { digitalSignRequest } from 'signing-service/controllers/digital-esign-controller';
 
 export class SigningRouter {

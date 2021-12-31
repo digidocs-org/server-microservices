@@ -34,7 +34,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
     const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;
 
     let signField = req.body.fieldData
-    if (!signField.length) {
+    if (!signField || !signField.length) {
         signField = [{
             dataX: 0,
             dataY: 0,

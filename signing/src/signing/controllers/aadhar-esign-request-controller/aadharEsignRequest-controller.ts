@@ -31,7 +31,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     const decryptedFile = decryptDocument(encryptedFile, publicKey);
 
     let signField = req.body.fieldData
-    if (!signField.length) {
+    if (!signField || !signField?.length) {
         signField = [{
             dataX: 0,
             dataY: 0,
@@ -51,7 +51,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 
     let fieldData = "";
     signFieldData.signatureFieldData?.data.map(field => {
-        fieldData += `${field.pageNumber}-${field.dataX},${field.dataY},${field.width},${field.height};`
+        fieldData += `${field.pageNumber}-${field.dataX},${field.dataY},${field.height},${field.width};`
     })
 
 
