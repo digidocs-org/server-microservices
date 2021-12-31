@@ -16,7 +16,7 @@ export const downloadDocumentController = async (
   }
   const documentBase64 = await downloadDocumentService(documentData.id);
   const auditTrail = docUserMap.auditTrail as IAuditTrail;
-  if (!auditTrail.view) {
+  if (auditTrail && !auditTrail.view) {
     auditTrail.view = new Date();
     auditTrail.save();
   }
