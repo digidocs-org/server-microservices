@@ -20,7 +20,8 @@ export const documentDetailsController = async (
     document: documentId,
   })
     .populate('action')
-    .populate('user');
+    .populate('user')
+    .populate('auditTrail');
 
   document = document.toJSON({
     transform: (doc: any, ret: any) => {

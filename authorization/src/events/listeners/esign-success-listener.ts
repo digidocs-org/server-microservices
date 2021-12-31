@@ -5,6 +5,9 @@ import {
   DocumentStatus,
 } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
+import AuditTrail, {
+  IAuditTrail,
+} from 'authorization-service/models/AuditTrail';
 import Document from 'authorization-service/models/Document';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
 import User from 'authorization-service/models/User';
@@ -28,26 +31,27 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
     const signer = await DocumentUserMap.findOne({
       document: docId,
       user: userId,
-    }).populate('action');
+    })
+      .populate('action')
+      .populate('auditTrail');
 
     if (!document || !signer) {
       return;
     }
 
     // Update Action
-    const action = signer.action as IDocumentActions;
-    action.actionStatus = ActionStatus.SIGNED;
-
     const signerAction = signer.action as IDocumentActions;
-
     signerAction.actionStatus = ActionStatus.SIGNED;
 
-    await signerAction.save();
-    await action.save();
+    const signerAuditTrail = signer.auditTrail as IAuditTrail;
+    signerAuditTrail.sign = new Date();
 
-    let docUserMaps = await DocumentUserMap.find({ document: docId }).populate(
-      'action'
-    );
+    await signerAction.save();
+    await signerAuditTrail.save();
+
+    let docUserMaps = await DocumentUserMap.find({ document: docId })
+      .populate('action')
+      .populate('auditTrail');
 
     // TODO Send Email to the user who signed the document.
 
@@ -87,8 +91,13 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
     for (const docUserMap of docUserMaps) {
       if (!docUserMap.access) {
         docUserMap.access = true;
+        docUserMap.auditTrail = await AuditTrail.create({
+          receive: new Date(),
+        });
         await docUserMap.save();
         const action = docUserMap.action as IDocumentActions;
+        action.actionStatus = ActionStatus.RECEIVED;
+        await action.save();
         // Send Email to Reciever
         new SendEmailPublisher(natsWrapper.client).publish({
           senderEmail: 'notification@digidocsapp.com',
@@ -119,7 +128,8 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
     if (allSigned) {
       document.status = DocumentStatus.COMPLETED;
       await document.save();
-      // Send email to all users that document is signed completely.
+      // TODO Send email to all users that document is signed completely with audit trail
+      // Currently mail is send only to user.
       const owner = await User.findById(document.userId);
 
       new SendEmailPublisher(natsWrapper.client).publish({

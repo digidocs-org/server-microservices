@@ -12,6 +12,9 @@ import Actions, {
 } from 'authorization-service/models/Actions';
 import User from 'authorization-service/models/User';
 import createGuestUser from 'authorization-service/services/user/create-guest-user';
+import AuditTrail, {
+  IAuditTrail,
+} from 'authorization-service/models/AuditTrail';
 
 interface Recipient {
   type: ActionType;
@@ -45,23 +48,29 @@ export const addRecipientsController = async (req: Request, res: Response) => {
     // Get all recipients of document including owner
     const allRecipients = await DocumentUserMap.find({
       document: document.id,
-    }).populate('action');
+    })
+      .populate('action')
+      .populate('auditTrail');
 
     // Create array of action ids and document map ids of cocument
     const actionIdsArray: string[] = [];
     const docUserMapIdsArray: string[] = [];
+    const auditTrails: string[] = [];
 
     allRecipients.map(recipient => {
       const recipientAction = recipient.action as IDocumentActions;
+      const auditTrail = recipient.auditTrail as IAuditTrail;
       if (recipientAction.recipientEmail !== loggedInUser.email) {
         actionIdsArray.push(recipientAction._id);
         docUserMapIdsArray.push(recipient._id);
+        auditTrails.push(auditTrail.id);
       }
     });
 
     // Delete actions and document maps.
     await Actions.deleteMany({ _id: actionIdsArray });
     await DocumentUserMap.deleteMany({ _id: docUserMapIdsArray });
+    await AuditTrail.deleteMany({ _id: auditTrails });
 
     // If Self signing is false then add the owner with VIEW action
     // if (!document.selfSign) {
@@ -98,7 +107,6 @@ export const addRecipientsController = async (req: Request, res: Response) => {
       });
 
       if (!docUserMapAlreadyExists) {
-        console.log(recipientEmail);
         await DocumentUserMap.create({
           user: userId,
           document: document.id,

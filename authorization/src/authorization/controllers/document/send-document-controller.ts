@@ -8,6 +8,7 @@ import { natsWrapper } from 'src/nats-wrapper';
 import { IUser } from 'authorization-service/models/User';
 import SendDocumentPublisher from 'src/events/publishers/send-document-publisher';
 import { ActionStatus } from 'authorization-service/types';
+import AuditTrail from 'authorization-service/models/AuditTrail';
 
 export const sendDocumentController = async (req: Request, res: Response) => {
   const documentData = req.docUserMap?.document as IDocument;
@@ -52,6 +53,9 @@ export const sendDocumentController = async (req: Request, res: Response) => {
     const recipient = recipients[0];
 
     recipient.access = true;
+    recipient.auditTrail = await AuditTrail.create({
+      receive: new Date(),
+    });
 
     const action = recipient.action as IDocumentActions;
     action.actionStatus = ActionStatus.RECEIVED;
@@ -70,6 +74,9 @@ export const sendDocumentController = async (req: Request, res: Response) => {
     for (const recipient of recipients) {
       const action = recipient.action as IDocumentActions;
       recipient.access = true;
+      recipient.auditTrail = await AuditTrail.create({
+        receive: new Date(),
+      });
       action.actionStatus = ActionStatus.RECEIVED;
       await recipient.save();
       await action.save();
