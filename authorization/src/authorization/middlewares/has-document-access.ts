@@ -31,6 +31,7 @@ const hasDocumentAccess = async (
   })
     .populate('document')
     .populate('action')
+    .populate('auditTrail')
     .populate('user');
 
   if (!docUserMap || !docUserMap.access) {

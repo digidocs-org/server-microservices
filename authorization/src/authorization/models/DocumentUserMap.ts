@@ -3,11 +3,13 @@ import mongoose, { Schema, Document } from 'mongoose';
 import { IUser } from './User';
 import { IDocument } from './Document';
 import { IDocumentActions } from './Actions';
+import { IAuditTrail } from './AuditTrail';
 
 export interface IDocumentUserMap extends Document {
   user: IUser | string;
   document: IDocument | string;
   access: boolean;
+  auditTrail?: IAuditTrail | string;
   action?: IDocumentActions | string;
 }
 
@@ -28,6 +30,11 @@ const documentUserMapSchema: Schema = new Schema(
     action: {
       type: Schema.Types.ObjectId,
       ref: 'actions',
+    },
+
+    auditTrail: {
+      type: Schema.Types.ObjectId,
+      ref: 'auditTrail',
     },
 
     access: {

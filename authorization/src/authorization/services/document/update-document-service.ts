@@ -1,10 +1,15 @@
 import { BadRequestError } from '@digidocs/guardian';
+import { IDocumentActions } from 'authorization-service/models/Actions';
 import Document, { IDocument } from 'authorization-service/models/Document';
+import { ActionType } from 'authorization-service/types';
 import { Request } from 'express';
 
 const updateDocument = (req: Request) =>
   new Promise<IDocument>(async (resolve, reject) => {
+    const { docUserMap } = req;
     const { documentId } = req.params;
+
+    const action = docUserMap?.action as IDocumentActions;
 
     const document = await Document.findById(documentId);
 
@@ -13,6 +18,15 @@ const updateDocument = (req: Request) =>
     }
 
     const newParams = req.body;
+
+    if (newParams.selfSign) {
+      action.type = ActionType.SIGN;
+    } else if (
+      newParams.selfSign !== undefined &&
+      newParams.selfSign === false
+    ) {
+      action.type = ActionType.VIEW;
+    }
 
     // Update the document params.
     document.set({
@@ -37,7 +51,7 @@ const updateDocument = (req: Request) =>
     });
 
     await document.save();
-    // await documentUserMap.save();
+    await action.save();
 
     const documentResponse: any = document.toJSON();
 
