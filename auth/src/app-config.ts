@@ -51,7 +51,7 @@ export class Application {
         fileUpload(),
         cookieSession({
           signed: false,
-          secure: process.env.NODE_ENV !== 'test',
+          secure: process.env.NODE_ENV !== 'stage',
         }),
         passport.initialize(),
       ]
