@@ -39,6 +39,10 @@ export const Signin = async (req: Request, res: Response) => {
   user.refreshToken = refreshToken;
   await user.save();
 
+  req.session = {
+    jwt: accessToken
+  }
+
   res.json({ accessToken, refreshToken });
 };
 

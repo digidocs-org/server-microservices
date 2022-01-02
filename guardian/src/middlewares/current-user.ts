@@ -22,7 +22,8 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.header('token') ?? req.query.token ?? req.body.token;
+
+  const token = req.session?.jwt ?? req.header('token') ?? req.query.token ?? req.body.token
 
   try {
     const payload = jwt.verify(
@@ -32,6 +33,7 @@ export const currentUser = (
     req.currentUser = payload;
   } catch (err) {
     console.log(err)
+    req.session = null
   }
 
   return next();
