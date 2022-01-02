@@ -5,17 +5,41 @@ import User, { IUser } from 'authorization-service/models/User';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import { findUserStatus } from 'authorization-service/utils/find-user-status';
 
-const indexDocumentService = async (userId: string) => {
+export interface IDocQuery {
+  page?: string;
+  limit?: string;
+}
+
+const indexDocumentService = async (userId: string, query: IDocQuery) => {
   try {
-    const documentUserMaps = await DocumentUserMap.find({
+    const { page = '1', limit = '10' } = query;
+
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+
+    //get total pages
+    let totalPages = await DocumentUserMap.find({
       user: userId,
       access: true,
-    })
+    }).countDocuments();
+
+    totalPages = Math.ceil(totalPages / limitNum);
+
+    const documentUserMaps = await DocumentUserMap.find(
+      {
+        user: userId,
+        access: true,
+      },
+      {},
+      { skip: (pageNum - 1) * limitNum, limit: limitNum }
+    )
       .populate('document')
       .populate('user')
-      .populate('action');
+      .populate('action')
+      .sort({ updatedAt: -1 })
+      .lean();
 
-    const result = await Promise.all(
+    const documents = await Promise.all(
       documentUserMaps.map(async docUserMap => {
         const document = docUserMap.document as IDocument;
         const actions = [] as IDocumentActions[];
@@ -64,7 +88,7 @@ const indexDocumentService = async (userId: string) => {
       })
     );
 
-    return result;
+    return { documents, totalPages, currentPage: pageNum };
   } catch (err) {
     console.log(err);
     throw new BadRequestError('Unable to get Document details');

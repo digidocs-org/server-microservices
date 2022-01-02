@@ -4,11 +4,15 @@ import { NotAuthorizedError } from '@digidocs/guardian';
 
 export const indexDocumentController = async (req: Request, res: Response) => {
   const userId = req.currentUser?.id;
+  const { query } = req;
 
   if (!userId) {
     throw new NotAuthorizedError();
   }
 
-  const documents = await indexDocumentService(userId);
-  return res.send({ success: true, data: documents });
+  const { documents, totalPages, currentPage } = await indexDocumentService(
+    userId,
+    query
+  );
+  return res.send({ success: true, data: documents, totalPages, currentPage });
 };
