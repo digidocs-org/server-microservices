@@ -44,7 +44,7 @@ export const esignCallback = async (req: Request, res: Response) => {
 
   const encryptedFile = await fetchData(documentURL);
   const publicKeyBuffer = await fetchData(publicKeyURL);
-  const sign = await fetchData(user.signUrl)
+  const sign = await fetchData(process.env.SIGNATURE_URL!)
 
   const publicKey = publicKeyBuffer.toString();
   const decryptedFile = decryptDocument(encryptedFile, publicKey) as Buffer;

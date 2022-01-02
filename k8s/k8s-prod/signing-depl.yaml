@@ -86,6 +86,9 @@ spec:
 
             - name: REDIRECT_URI
               value: "https://stage-api.digidocs.one/api/v1/authorization/esign/aadhar/redirect"
+
+            - name: SIGNATURE_URL
+              value: "https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com/signature/signature.jpeg"
 ---
 apiVersion: v1
 kind: Service

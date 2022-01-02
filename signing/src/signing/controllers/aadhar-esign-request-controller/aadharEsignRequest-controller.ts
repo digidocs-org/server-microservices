@@ -17,7 +17,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
     }
 
     const user = await User.findById(userId);
-    if (!user || !user.signUrl) {
+    if (!user) {
         return res.send({ type: "redirect", url: `${redirectUrl}?status=failed` })
     }
     const documentURL = `${process.env.CLOUDFRONT_URI}/${document.userId}/documents/${document.documentId}`;
@@ -25,7 +25,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 
     const encryptedFile = await fetchData(documentURL);
     const publicKeyBuffer = await fetchData(publicKeyURL);
-    const sign = await fetchData(user.signUrl);
+    const sign = await fetchData(process.env.SIGNATURE_URL!);
     const publicKey = publicKeyBuffer.toString();
 
     const decryptedFile = decryptDocument(encryptedFile, publicKey);
