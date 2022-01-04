@@ -12,7 +12,9 @@ export const indexDocumentController = async (req: Request, res: Response) => {
 
   const { documents, totalPages, currentPage } = await indexDocumentService(
     userId,
-    query
+    query,
+    req,
+    res
   );
   return res.send({ success: true, data: documents, totalPages, currentPage });
 };
