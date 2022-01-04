@@ -15,6 +15,7 @@ import {
   validateRequest,
 } from '@digidocs/guardian';
 import hasDocumentAccess from 'authorization-service/middlewares/has-document-access'
+import { searchAndFilter } from 'authorization-service/middlewares/search-filter-doc';
 
 const router = Router();
 
@@ -55,6 +56,7 @@ router.get(
   headerValidators('token'),
   validateRequest,
   currentUser,
+  searchAndFilter,
   indexDocumentController
 );
 

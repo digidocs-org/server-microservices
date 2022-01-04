@@ -1,46 +1,110 @@
 import { BadRequestError, DocumentStatus } from '@digidocs/guardian';
+import { Types } from 'mongoose';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
 import { IDocument } from 'authorization-service/models/Document';
 import User, { IUser } from 'authorization-service/models/User';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import { findUserStatus } from 'authorization-service/utils/find-user-status';
+import { Request, Response } from 'express';
 
 export interface IDocQuery {
   page?: string;
   limit?: string;
 }
 
-const indexDocumentService = async (userId: string, query: IDocQuery) => {
+const indexDocumentService = async (
+  userId: string,
+  query: IDocQuery,
+  req: Request,
+  res: Response
+) => {
   try {
     const { page = '1', limit = '10' } = query;
-
+    const { dbQueries } = res.locals;
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
 
-    //get total pages
-    let totalPages = await DocumentUserMap.find({
-      user: userId,
-      access: true,
-    }).countDocuments();
-
-    totalPages = Math.ceil(totalPages / limitNum);
-
-    const documentUserMaps = await DocumentUserMap.find(
+    const documentUserMapsArr = await DocumentUserMap.aggregate([
       {
-        user: userId,
-        access: true,
+        $match: {
+          $and: [
+            {
+              user: Types.ObjectId(userId),
+            },
+            {
+              access: true,
+            },
+          ],
+        },
       },
-      {},
-      { skip: (pageNum - 1) * limitNum, limit: limitNum }
-    )
-      .populate('document')
-      .populate('user')
-      .populate('action')
-      .sort({ updatedAt: -1 })
-      .lean();
+      {
+        $lookup: {
+          from: 'documents',
+          localField: 'document',
+          foreignField: '_id',
+          as: 'document',
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $lookup: {
+          from: 'actions',
+          localField: 'action',
+          foreignField: '_id',
+          as: 'action',
+        },
+      },
+      {
+        $unwind: {
+          path: '$document',
+        },
+      },
+      {
+        $unwind: {
+          path: '$user',
+        },
+      },
+      {
+        $unwind: {
+          path: '$action',
+        },
+      },
+      {
+        $match: dbQueries,
+      },
+      {
+        $sort: { updatedAt: -1 },
+      },
+
+      {
+        $facet: {
+          paginatedResults: [
+            { $skip: (pageNum - 1) * limitNum },
+            { $limit: limitNum },
+          ],
+          totalCount: [
+            {
+              $count: 'count',
+            },
+          ],
+        },
+      },
+
+    ]);
+
+    const totalPages = Math.ceil(documentUserMapsArr[0].totalCount[0].count / limitNum);
+
+    const documentUserMaps = documentUserMapsArr[0].paginatedResults;
 
     const documents = await Promise.all(
-      documentUserMaps.map(async docUserMap => {
+      documentUserMaps.map(async (docUserMap: any) => {
         const document = docUserMap.document as IDocument;
         const actions = [] as IDocumentActions[];
         const recipient = docUserMap.user as IUser;
