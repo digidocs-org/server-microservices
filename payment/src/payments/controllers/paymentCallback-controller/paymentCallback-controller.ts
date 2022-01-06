@@ -12,7 +12,7 @@ export const paymentCallback = async (req: Request, res: Response) => {
     const decryptedData = decrypt(encryptedResponse, workingKey)
     const parsedData = parseFromQueryParam(decryptedData)
 
-    const signedToken = parsedData.merchant_param2
+    const signedToken = parsedData.merchant_param1
     const decodedToken = jwt.verify(signedToken, process.env.PAYMENT_SIGNING_SALT!) as PaymentSignedData
 
     await PaymentOrders.create({
@@ -25,15 +25,6 @@ export const paymentCallback = async (req: Request, res: Response) => {
         modeName: parsedData.card_name,
         failureMessage: parsedData.failure_message,
         status: parsedData.order_status,
-        billingInfo: {
-            userName: parsedData.billing_name,
-            address: parsedData.billing_address,
-            city: parsedData.billing_city,
-            state: parsedData.billing_state,
-            pincode: parsedData.billing_zip,
-            contactNumber: parsedData.billing_tel,
-            email: parsedData.billing_email
-        }
     })
     const token = decodedToken.token;
     const orderId = parsedData.order_id;

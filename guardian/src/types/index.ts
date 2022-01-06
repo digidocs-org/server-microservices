@@ -34,6 +34,6 @@ export enum SignTypes {
 }
 
 export enum CreditUpdateType {
-  ADDED = 'ADDED',
-  SUBTRACTED = 'SUBTRACTED'
+  ADD = 'ADD',
+  DECREASE = 'DECREASE'
 }

@@ -5,7 +5,7 @@ export interface CreditUpdateEvent {
   subject: Subjects.CreditUpdate;
   data: {
     userId: string;
-    data: { aadhaarCredits: number; digitalSignCredits: number };
+    data: { aadhaarCredits?: number; digitalSignCredits?: number };
     type: CreditUpdateType
   };
 }

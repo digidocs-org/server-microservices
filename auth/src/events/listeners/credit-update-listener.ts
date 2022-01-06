@@ -22,12 +22,12 @@ export class CreditUpdateListener extends Listener<CreditUpdateEvent> {
       return;
     }
 
-    if (type == CreditUpdateType.ADDED) {
-      user.aadhaarCredits += aadhaarCredits
-      user.digitalSignCredits += digitalSignCredits
-    } else if (type == CreditUpdateType.SUBTRACTED) {
-      user.aadhaarCredits -= aadhaarCredits
-      user.digitalSignCredits -= digitalSignCredits
+    if (type == CreditUpdateType.ADD) {
+      user.aadhaarCredits = user.aadhaarCredits + (aadhaarCredits ?? 0)
+      user.digitalSignCredits = user.digitalSignCredits + (digitalSignCredits ?? 0)
+    } else if (type == CreditUpdateType.DECREASE) {
+      user.aadhaarCredits = user.aadhaarCredits - (aadhaarCredits ?? 0)
+      user.digitalSignCredits = user.digitalSignCredits - (digitalSignCredits ?? 0)
     }
 
     await user.save();

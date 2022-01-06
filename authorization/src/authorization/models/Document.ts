@@ -19,6 +19,8 @@ export interface IDocument extends Document {
   createdAt: string;
   updatedAt: string;
   version: number;
+  reservedAadhaarCredit: number
+  reservedDigitalCredit: number
 }
 
 const documentSchema: Schema = new Schema(
@@ -36,6 +38,8 @@ const documentSchema: Schema = new Schema(
     userId: String,
     validTill: String,
     timeToSign: String,
+    reservedAadhaarCredit: { type: Number, default: 0 },
+    reservedDigitalCredit: { type: Number, default: 0 }
   },
   {
     timestamps: { createdAt: true, updatedAt: true },

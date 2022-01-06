@@ -9,6 +9,7 @@ import { IUser } from 'authorization-service/models/User';
 import SendDocumentPublisher from 'src/events/publishers/send-document-publisher';
 import { ActionStatus } from 'authorization-service/types';
 import AuditTrail from 'authorization-service/models/AuditTrail';
+import updateDocumentCredit from 'authorization-service/services/document/update-document-credit';
 
 export const sendDocumentController = async (req: Request, res: Response) => {
   const documentData = req.docUserMap?.document as IDocument;
@@ -94,9 +95,8 @@ export const sendDocumentController = async (req: Request, res: Response) => {
   document.status = DocumentStatus.PENDING;
   await document.save();
 
-  //TODO: Update credits
-  //TODO: Update user profile credits
-  //TODO: Update document credits
+  //Update credits
+  await updateDocumentCredit(document)
 
   await new SendDocumentPublisher(natsWrapper.client).publish({
     id: documentId,
