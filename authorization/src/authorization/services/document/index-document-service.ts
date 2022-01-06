@@ -99,7 +99,13 @@ const indexDocumentService = async (
 
     ]);
 
-    const totalPages = Math.ceil(documentUserMapsArr[0].totalCount[0].count / limitNum);
+    const totalCount = documentUserMapsArr[0].totalCount
+    
+    let totalPages = 0
+    if (totalCount.length) {
+      totalPages = Math.ceil(documentUserMapsArr[0].totalCount[0].count / limitNum);
+    }
+
 
     const documentUserMaps = documentUserMapsArr[0].paginatedResults;
 
@@ -155,7 +161,7 @@ const indexDocumentService = async (
     return { documents, totalPages, currentPage: pageNum };
   } catch (err) {
     console.log(err);
-    throw new BadRequestError('Unable to get Document details');
+    throw new BadRequestError("Some error occured");
   }
 };
 
