@@ -14,5 +14,7 @@ export interface UserCreatedEvent {
         notificationId?: string
         deviceId?: string
         version?: number
+        aadhaarCredits: number;
+        digitalSignCredits: number;
     };
 }

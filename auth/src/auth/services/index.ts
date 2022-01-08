@@ -1,27 +1,27 @@
-import {IUserBody} from 'auth/types';
+import { IUserBody } from 'auth/types';
 import User from 'auth/models';
-import {BadRequestError} from '@digidocs/guardian';
+import { BadRequestError } from '@digidocs/guardian';
 import bcrypt from 'bcryptjs';
-import {generateToken} from 'auth/utils';
-import {UserCreatedPublisher, SendEmailPublisher} from 'src/events/publishers';
-import {natsWrapper} from 'src/nats-wrapper';
+import { generateToken } from 'auth/utils';
+import { UserCreatedPublisher, SendEmailPublisher } from 'src/events/publishers';
+import { natsWrapper } from 'src/nats-wrapper';
 
 export class AuthService {
   public static async createUser(userData: IUserBody) {
-    const {email, password, firstname, lastname} = userData;
+    const { email, password, firstname, lastname } = userData;
 
-    let user = await User.findOne({email});
+    let user = await User.findOne({ email });
     if (user) {
       throw new BadRequestError('User already Exists!!');
     }
 
-    user = await User.create({email, firstname, lastname});
+    user = await User.create({ email, firstname, lastname });
     // hash pwd
     const salt = await bcrypt.genSalt(10);
     user.password = bcrypt.hashSync(password, salt);
     user.isPass = true;
 
-    const {id, __v} = user;
+    const { id, __v } = user;
 
     const payload = {
       id,
@@ -52,6 +52,8 @@ export class AuthService {
       notificationId: user.notificationId,
       deviceId: user.deviceId,
       version: user.version,
+      aadhaarCredits: user.aadhaarCredits,
+      digitalSignCredits: user.digitalSignCredits
     });
 
     new SendEmailPublisher(natsWrapper.client).publish({
@@ -61,7 +63,7 @@ export class AuthService {
       body: `Hey ${user.firstname} thankyou for signing up to digidocs esign we are glad to have you on board`,
     });
 
-    return {accessToken, refreshToken};
+    return { accessToken, refreshToken };
   }
 
   public static async getUser(userId?: string) {

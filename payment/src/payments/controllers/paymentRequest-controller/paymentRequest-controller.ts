@@ -37,7 +37,7 @@ export const paymentRequest = (req: Request, res: Response) => {
         billing_tel: phoneNo,
         billing_email: email,
         customer_identifier: userId,
-        merchant_param1: signedData
+        merchant_param2: signedData
     }
 
     const parsedData = parseToQueryParam(paymentData)

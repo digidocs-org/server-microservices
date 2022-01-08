@@ -63,7 +63,7 @@ export const addRecipientsController = async (req: Request, res: Response) => {
       if (recipientAction.recipientEmail !== loggedInUser.email) {
         actionIdsArray.push(recipientAction._id);
         docUserMapIdsArray.push(recipient._id);
-        auditTrails.push(auditTrail.id);
+        auditTrail && auditTrails.push(auditTrail.id);
       }
     });
 

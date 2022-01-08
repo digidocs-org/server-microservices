@@ -3,6 +3,7 @@ import {
   EsignSuccessEvent,
   Listener,
   DocumentStatus,
+  SignTypes,
 } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import AuditTrail, {
@@ -73,8 +74,15 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
 
       if (allSigned) {
         document.status = DocumentStatus.COMPLETED;
-        await document.save();
       }
+
+      //decrease 1 credit from document
+      if (document.signType == SignTypes.AADHAR_SIGN) {
+        document.reservedAadhaarCredit -= 1
+      } else {
+        document.reservedDigitalCredit -= 1
+      }
+      await document.save();
 
       msg.ack();
       return;
@@ -98,6 +106,15 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
         const action = docUserMap.action as IDocumentActions;
         action.actionStatus = ActionStatus.RECEIVED;
         await action.save();
+
+        //decrease 1 credit from document
+        if (document.signType == SignTypes.AADHAR_SIGN) {
+          document.reservedAadhaarCredit -= 1
+        } else {
+          document.reservedDigitalCredit -= 1
+        }
+        await document.save()
+
         // Send Email to Reciever
         new SendEmailPublisher(natsWrapper.client).publish({
           senderEmail: 'notification@digidocsapp.com',
@@ -105,6 +122,7 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
           subject: 'New Document recieved',
           body: 'You have received a new document. Please login to check.',
         });
+        
         msg.ack();
         return;
       }

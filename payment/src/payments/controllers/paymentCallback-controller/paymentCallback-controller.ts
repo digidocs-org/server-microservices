@@ -12,7 +12,7 @@ export const paymentCallback = async (req: Request, res: Response) => {
     const decryptedData = decrypt(encryptedResponse, workingKey)
     const parsedData = parseFromQueryParam(decryptedData)
 
-    const signedToken = parsedData.merchant_param1
+    const signedToken = parsedData.merchant_param2
     const decodedToken = jwt.verify(signedToken, process.env.PAYMENT_SIGNING_SALT!) as PaymentSignedData
 
     await PaymentOrders.create({

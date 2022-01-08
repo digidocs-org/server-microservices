@@ -21,6 +21,8 @@ export class CreateUserListener extends Listener<UserCreatedEvent> {
         notificationId: data.notificationId,
         deviceId: data.deviceId,
         version: data.version,
+        aadhaarCredits: data.aadhaarCredits,
+        digitalSignCredits: data.digitalSignCredits
       });
       msg.ack();
     } catch (error) {

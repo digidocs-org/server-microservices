@@ -28,18 +28,22 @@ export interface IDocumentActions extends Document {
   recipientName: string;
   signOrder: number;
   fields?: IActionFields[];
+  aadhaarCredits: number;
+  digitalSignCredits: number;
 }
 
 const actionSchema: Schema = new Schema(
   {
-    type: String,
+    type: { type: String, required: true },
     privateMessage: String,
     authType: String,
     authCode: Number,
     actionStatus: String,
     recipientName: String,
-    recipientEmail: String,
+    recipientEmail: { type: String, required: true },
     signOrder: Number,
+    aadhaarCredits: Number,
+    digitalSignCredits: Number,
     fields: { type: Array, default: [] },
   },
   {

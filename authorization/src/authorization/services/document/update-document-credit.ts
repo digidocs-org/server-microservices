@@ -13,17 +13,22 @@ const updateDocumentCredit = async (document: IDocument) => {
         let signUserCount = 0
 
         const documentUserMap = await DocumentUserMap.find({
-            document: document.documentId
-        }).populate("actions")
+            document: document._id
+        }).populate("action")
         documentUserMap.map((map: IDocumentUserMap) => {
             const action = map.action as IDocumentActions;
-            if (action.type == ActionType.SIGN) signUserCount++
+            console.log(action.type)
+            if (action.type == ActionType.SIGN) {
+                signUserCount = signUserCount + 1
+            }
         })
-        
+
         const owner = await User.findById(document.userId) as IUser
         if (document.signType == SignTypes.AADHAR_SIGN) {
             owner.aadhaarCredits = owner.aadhaarCredits - signUserCount
             document.reservedAadhaarCredit += signUserCount
+            await owner.save()
+            await document.save()
             new CreditUpdatePublisher(natsWrapper.client).publish({
                 userId: document.userId,
                 data: { aadhaarCredits: signUserCount },
@@ -32,6 +37,8 @@ const updateDocumentCredit = async (document: IDocument) => {
         } else {
             owner.digitalSignCredits = owner.digitalSignCredits - signUserCount
             document.reservedAadhaarCredit += signUserCount
+            await owner.save()
+            await document.save()
             new CreditUpdatePublisher(natsWrapper.client).publish({
                 userId: document.userId,
                 data: { digitalSignCredits: signUserCount },
