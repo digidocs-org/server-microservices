@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid'
 
 export const createJarSigningReq = (signType: string, requestData: EsignRequest) => {
 
-    const { tempSigningDir, pfxKey, javaAadhaarUtility, javaDigitalUtility } = Files
+    const { tempSigningDir, pfxKey, javaAadhaarUtility, javaDigitalUtilityV2 } = Files
     const tempFileName = `temp-${uuid()}`
     const ASP_ID = process.env.ASP_ID
     const pfxFilePass = process.env.PFX_FILE_PASS
@@ -35,7 +35,7 @@ export const createJarSigningReq = (signType: string, requestData: EsignRequest)
     let signingRequest;
 
     if (signType == SignTypes.DIGITAL_SIGN) {
-        signingRequest = `java -jar ${javaDigitalUtility} ${data.unsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} "${requestData.location}" "${requestData.reason}" ` + data.signFieldData + ` ${data.pfxPath} ${data.pfxPass}`
+        signingRequest = `java -jar ${javaDigitalUtilityV2} "DIGITAL_SIGN" ${data.unsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} "${requestData.location}" "${requestData.reason}" ` + data.signFieldData + ` ${data.pfxPath} ${data.pfxPass}`
     }
 
     if (signType == SignTypes.ESIGN_REQUEST) {
