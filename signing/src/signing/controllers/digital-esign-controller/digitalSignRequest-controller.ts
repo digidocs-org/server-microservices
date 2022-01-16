@@ -44,9 +44,9 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         }]
     }
     const signFieldData: EsignRequest = {
-        name: `${user.firstname} ${user.lastname}`,
-        location: "India",
-        reason: "Digital Sign",
+        name: "",
+        location: "",
+        reason: "",
         signatureFieldData: {
             data: signField
         }
