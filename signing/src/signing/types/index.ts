@@ -11,6 +11,7 @@ export const enum EsignResponse {
 export const Files = {
   pfxKey: `${dirname}/../key/digidocs-sign.pfx`,
   javaDigitalUtility: `${dirname}/../java-esign-utility/digital-sign.jar`,
+  javaDigitalUtilityV2: `${dirname}/../java-esign-utility/digital-sign-v2.jar`,
   javaAadhaarUtility: `${dirname}/../java-esign-utility/aadhaar-sign.jar`,
   tempSigningDir: `${dirname}/../sign-dir`
 };
