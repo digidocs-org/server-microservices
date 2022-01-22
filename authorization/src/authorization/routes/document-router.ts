@@ -6,7 +6,8 @@ import {
   sendDocumentController,
   updateDocumentController,
   documentDetailsController,
-  addFields
+  addFields,
+  cancelDocument,
 } from 'authorization-service/controllers/document';
 import {
   bodyValidators,
@@ -14,8 +15,9 @@ import {
   headerValidators,
   validateRequest,
 } from '@digidocs/guardian';
-import hasDocumentAccess from 'authorization-service/middlewares/has-document-access'
+import hasDocumentAccess from 'authorization-service/middlewares/has-document-access';
 import { searchAndFilter } from 'authorization-service/middlewares/search-filter-doc';
+import { queryTokenAccess } from 'authorization-service/middlewares/document-access';
 
 const router = Router();
 
@@ -39,8 +41,7 @@ router.post(
  */
 router.get(
   '/download/:documentId',
-  headerValidators('token'),
-  validateRequest,
+  queryTokenAccess,
   currentUser,
   hasDocumentAccess,
   downloadDocumentController
@@ -85,8 +86,7 @@ router.put(
 
 router.get(
   '/details/:documentId',
-  headerValidators('token'),
-  validateRequest,
+  queryTokenAccess,
   currentUser,
   hasDocumentAccess,
   documentDetailsController
@@ -100,6 +100,14 @@ router.post(
   currentUser,
   hasDocumentAccess,
   addFields
-)
+);
+
+router.post(
+  '/cancel/:documentId',
+  queryTokenAccess,
+  currentUser,
+  hasDocumentAccess,
+  cancelDocument
+);
 
 export = router;

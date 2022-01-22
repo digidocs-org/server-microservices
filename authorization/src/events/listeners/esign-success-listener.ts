@@ -16,6 +16,7 @@ import {
   ActionType,
   queueGroupName,
 } from 'authorization-service/types';
+import { sendReceivedEmail } from 'authorization-service/utils/send-received-email';
 import { Message } from 'node-nats-streaming';
 import { natsWrapper } from 'src/nats-wrapper';
 import { SendEmailPublisher } from '../publishers/send-email-publisher';
@@ -80,7 +81,7 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
       return;
     }
 
-    // If document is inOrder then give access to next user.
+    // If document is inOrder then give access to next user with SIGN type.
     docUserMaps = docUserMaps.sort((a, b) => {
       const aAction = a.action as IDocumentActions;
       const bAction = b.action as IDocumentActions;
@@ -98,15 +99,11 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
         const action = docUserMap.action as IDocumentActions;
         action.actionStatus = ActionStatus.RECEIVED;
         await action.save();
-        // Send Email to Reciever
-        new SendEmailPublisher(natsWrapper.client).publish({
-          senderEmail: 'notification@digidocsapp.com',
-          clientEmail: action.recipientEmail,
-          subject: 'New Document recieved',
-          body: 'You have received a new document. Please login to check.',
-        });
+        sendReceivedEmail(docUserMap);
         msg.ack();
-        return;
+        if (action.type === ActionType.SIGN) {
+          break;
+        }
       }
     }
 
