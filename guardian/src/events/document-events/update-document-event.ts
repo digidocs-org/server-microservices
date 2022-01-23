@@ -1,4 +1,5 @@
 import { Subjects } from '..';
+import { DocumentStatus } from '../..';
 
 export interface UpdateDocumentEvent {
   subject: Subjects.UpdateDocument;
@@ -8,6 +9,7 @@ export interface UpdateDocumentEvent {
     message?: string;
     inOrder?: boolean;
     selfSign?: boolean;
+    status?: DocumentStatus;
     sendForSign?: boolean;
     signType?: string;
     validTill?: string;

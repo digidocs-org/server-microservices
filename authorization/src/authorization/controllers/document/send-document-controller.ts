@@ -7,8 +7,9 @@ import { SendEmailPublisher } from 'src/events/publishers/send-email-publisher';
 import { natsWrapper } from 'src/nats-wrapper';
 import { IUser } from 'authorization-service/models/User';
 import SendDocumentPublisher from 'src/events/publishers/send-document-publisher';
-import { ActionStatus } from 'authorization-service/types';
+import { ActionStatus, ActionType } from 'authorization-service/types';
 import AuditTrail from 'authorization-service/models/AuditTrail';
+import { sendReceivedEmail } from 'authorization-service/utils/send-received-email';
 
 export const sendDocumentController = async (req: Request, res: Response) => {
   const documentData = req.docUserMap?.document as IDocument;
@@ -50,26 +51,24 @@ export const sendDocumentController = async (req: Request, res: Response) => {
       return aAction.signOrder < bAction.signOrder ? -1 : 0;
     });
 
-    const recipient = recipients[0];
+    for (const recipient of recipients) {
+      recipient.access = true;
+      recipient.auditTrail = await AuditTrail.create({
+        receive: new Date(),
+      });
 
-    recipient.access = true;
-    recipient.auditTrail = await AuditTrail.create({
-      receive: new Date(),
-    });
+      const action = recipient.action as IDocumentActions;
+      action.actionStatus = ActionStatus.RECEIVED;
 
-    const action = recipient.action as IDocumentActions;
-    action.actionStatus = ActionStatus.RECEIVED;
+      await recipient.save();
+      await action.save();
 
-    const user = recipient.user as IUser;
+      sendReceivedEmail(recipient);
 
-    await recipient.save();
-    await action.save();
-    new SendEmailPublisher(natsWrapper.client).publish({
-      senderEmail: 'notifications@digidocs.one',
-      clientEmail: user.email,
-      subject: 'Document Received',
-      body: `You have received the document. Please login to view the document.`,
-    });
+      if (action.type === ActionType.SIGN) {
+        break;
+      }
+    }
   } else {
     for (const recipient of recipients) {
       const action = recipient.action as IDocumentActions;
@@ -80,13 +79,7 @@ export const sendDocumentController = async (req: Request, res: Response) => {
       action.actionStatus = ActionStatus.RECEIVED;
       await recipient.save();
       await action.save();
-      const user = recipient.user as IUser;
-      new SendEmailPublisher(natsWrapper.client).publish({
-        senderEmail: 'notifications@digidocs.one',
-        clientEmail: user.email,
-        subject: 'Document Received',
-        body: `You have received the document. Please login to view the document.`,
-      });
+      sendReceivedEmail(recipient);
     }
   }
 
