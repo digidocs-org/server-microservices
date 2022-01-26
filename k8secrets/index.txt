@@ -15,5 +15,5 @@ kubectl create secret generic ccavenue-working-key --from-literal=CCAVENUE_WORKI
 kubectl create secret generic ccavenue-access-key --from-literal=CCAVENUE_ACCESS_KEY=AVZP04IL05AL88PZLA
 kubectl create secret generic payment-signing-salt --from-literal=PAYMENT_SIGNING_SALT=klasd9f23.wkid309000asdkf.aksdf8
 kubectl create secret generic ccavenue-merchant-id --from-literal=CCAVENUE_MERCHANT_ID=730659
-kubectl create secret generic encryption-secret --from-literal=ENCRYPTION_SECRET=631931388dc025488d59d22d7fd46d76f6bf2c1365048676892f9ffb1bfea2c5
+kubectl create secret generic encryption-secret --from-literal=ENCRYPTION_SECRET=ad68d6aee9625dc46b4f2e831471f77a
 kubectl create secret generic document-access-url --from-literal=DOCUMENT_ACCESS_URL=https://stage.digidocs.one/document
