@@ -38,8 +38,8 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         signField = [{
             dataX: 0,
             dataY: 0,
-            height: 50,
-            width: 150,
+            height: 5.9,
+            width: 24.2,
             pageNumber: 1,
         }]
     }
