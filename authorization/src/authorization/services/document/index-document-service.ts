@@ -10,6 +10,7 @@ import { Request, Response } from 'express';
 export interface IDocQuery {
   page?: string;
   limit?: string;
+  recent?: string;
 }
 
 const indexDocumentService = async (
@@ -19,7 +20,7 @@ const indexDocumentService = async (
   res: Response
 ) => {
   try {
-    const { page = '1', limit = '10' } = query;
+    const { page = '1', limit = '10', recent } = query;
     const { dbQueries } = res.locals;
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
@@ -96,16 +97,16 @@ const indexDocumentService = async (
           ],
         },
       },
-
     ]);
 
-    const totalCount = documentUserMapsArr[0].totalCount
-    
-    let totalPages = 0
-    if (totalCount.length) {
-      totalPages = Math.ceil(documentUserMapsArr[0].totalCount[0].count / limitNum);
-    }
+    const totalCount = documentUserMapsArr[0].totalCount;
 
+    let totalPages = 0;
+    if (totalCount.length) {
+      totalPages = Math.ceil(
+        documentUserMapsArr[0].totalCount[0].count / limitNum
+      );
+    }
 
     const documentUserMaps = documentUserMapsArr[0].paginatedResults;
 
@@ -158,10 +159,86 @@ const indexDocumentService = async (
       })
     );
 
-    return { documents, totalPages, currentPage: pageNum };
+    const response: any = { documents, totalPages, currentPage: pageNum };
+
+    if (recent === 'true') {
+      const categorization = await DocumentUserMap.aggregate([
+        {
+          $match: {
+            $and: [
+              {
+                user: Types.ObjectId(userId),
+              },
+              {
+                access: true,
+              },
+            ],
+          },
+        },
+        {
+          $lookup: {
+            from: 'documents',
+            localField: 'document',
+            foreignField: '_id',
+            as: 'document',
+          },
+        },
+        {
+          $lookup: {
+            from: 'actions',
+            localField: 'action',
+            foreignField: '_id',
+            as: 'action',
+          },
+        },
+        {
+          $unwind: {
+            path: '$document',
+          },
+        },
+        {
+          $unwind: {
+            path: '$action',
+          },
+        },
+        {
+          $project: {
+            'document.status': {
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ['$document.status', 'PENDING'] },
+                    { $eq: ['$action.type', 'SIGN'] },
+                    { $ne: ['$action.actionStatus', 'SIGNED'] },
+                  ],
+                },
+                'SIGN_REQUIRED',
+                '$document.status',
+              ],
+            },
+          },
+        },
+        {
+          $group: {
+            _id: '$document.status',
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ]);
+
+      categorization.map(item => {
+        item.status = item._id;
+        delete item._id;
+      });
+      response.categorization = categorization;
+    }
+
+    return response;
   } catch (err) {
     console.log(err);
-    throw new BadRequestError("Some error occured");
+    throw new BadRequestError('Some error occured');
   }
 };
 
