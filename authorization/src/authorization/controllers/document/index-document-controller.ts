@@ -10,11 +10,13 @@ export const indexDocumentController = async (req: Request, res: Response) => {
     throw new NotAuthorizedError();
   }
 
-  const { documents, totalPages, currentPage } = await indexDocumentService(
-    userId,
-    query,
-    req,
-    res
-  );
-  return res.send({ success: true, data: documents, totalPages, currentPage });
+  const { documents, totalPages, currentPage, categorization } =
+    await indexDocumentService(userId, query, req, res);
+  return res.send({
+    success: true,
+    data: documents,
+    categorization,
+    totalPages,
+    currentPage,
+  });
 };
