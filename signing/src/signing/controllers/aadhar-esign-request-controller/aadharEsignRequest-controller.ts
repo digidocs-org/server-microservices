@@ -32,13 +32,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
 
     let signField = req.body.fieldData
     if (!signField || !signField?.length) {
-        signField = [{
-            dataX: 0,
-            dataY: 0,
-            height: 50,
-            width: 150,
-            pageNumber: 1,
-        }]
+        return res.send({ type: "redirect", url: `${redirectUrl}?status=failed` })
     }
     const signFieldData: EsignRequest = {
         name: `${user.firstname} ${user.lastname}`,
@@ -49,28 +43,23 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         }
     }
 
-    let fieldData = "";
-    signFieldData.signatureFieldData?.data.map(field => {
-        fieldData += `${field.pageNumber}-${field.dataX},${field.dataY},${field.height},${field.width};`
-    })
-
-
-    const esignRequest = createJarSigningReq(SignTypes.ESIGN_REQUEST, signFieldData);
+    const esignRequestField = createJarSigningReq(SignTypes.FIELD_REQUEST, signFieldData)
+    const esignRequest = createJarSigningReq(SignTypes.ESIGN_REQUEST, signFieldData, esignRequestField.tempFileName);
     try {
-        await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
         await writeFile(esignRequest.signImageFilePath, sign, 'base64');
+        await exec(esignRequestField.signingRequest)
         await exec(esignRequest.signingRequest);
-
+        const fieldData = await readFile(esignRequestField.fieldDataFilePath)
         const calTimeStamp = await readFile(esignRequest.timeStampFilePath);
-        const unsignedFieldBuffer = await readFile(esignRequest.unsignedFieldPath);
+        const unsignedFieldBuffer = await readFile(esignRequest.fieldDataFilePath);
         const pfxFile = await readFile(Files.pfxKey);
         const jwt = generateToken({
             documentId,
             userId: user._id,
             redirectUrl,
             calTimeStamp: calTimeStamp.toString(),
-            fieldData: signField
+            fieldData
         },
             process.env.ESIGN_SALT!,
             process.env.ESIGN_SALT_EXPIRE!

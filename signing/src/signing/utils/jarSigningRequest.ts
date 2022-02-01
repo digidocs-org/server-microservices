@@ -2,10 +2,10 @@ import { convertToString, SignTypes } from "@digidocs/guardian"
 import { EsignRequest, Files } from 'signing-service/types'
 import { v4 as uuid } from 'uuid'
 
-export const createJarSigningReq = (signType: string, requestData: EsignRequest) => {
+export const createJarSigningReq = (signType: string, requestData: EsignRequest, tempFile?: string) => {
 
     const { tempSigningDir, pfxKey, javaAadhaarUtility, javaDigitalUtilityV2 } = Files
-    const tempFileName = `temp-${uuid()}`
+    const tempFileName = tempFile ?? `temp-${uuid()}`
     const ASP_ID = process.env.ASP_ID
     const pfxFilePass = process.env.PFX_FILE_PASS
 
@@ -35,7 +35,11 @@ export const createJarSigningReq = (signType: string, requestData: EsignRequest)
     let signingRequest;
 
     if (signType == SignTypes.DIGITAL_SIGN) {
-        signingRequest = `java -jar ${javaDigitalUtilityV2} "DIGITAL_SIGN" ${data.unsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} "${requestData.location}" "${requestData.reason}" ` + data.signFieldData + ` ${data.pfxPath} ${data.pfxPass}`
+        signingRequest = `java -jar ${javaDigitalUtilityV2} ${SignTypes.DIGITAL_SIGN} ${data.unsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} "${requestData.location}" "${requestData.reason}" ` + data.signFieldData + ` ${data.pfxPath} ${data.pfxPass}`
+    }
+
+    if (signType == SignTypes.FIELD_REQUEST) {
+        signingRequest = `java -jar ${javaDigitalUtilityV2} ${SignTypes.FIELD_REQUEST} ${data.unsignedPdfPath} ${data.signFieldData} ${data.fieldDataFilePath}`
     }
 
     if (signType == SignTypes.ESIGN_REQUEST) {
