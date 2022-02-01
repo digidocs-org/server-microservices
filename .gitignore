@@ -5,6 +5,6 @@ node_modules
 yarn-error.log
 .DS_store
 aadhaar-sign.jar
-digital-sign.jar
+digital-sign-v2.jar
 temp-*
 sign.png

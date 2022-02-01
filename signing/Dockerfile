@@ -12,7 +12,6 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
 RUN echo "Asia/Kolkata" | tee /etc/timezone
 RUN dpkg-reconfigure --frontend noninteractive tzdata
 
-RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/digital-sign.jar -P /usr/src/app/signing/src/signing/java-esign-utility
 RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/aadhaar-sign.jar -P /usr/src/app/signing/src/signing/java-esign-utility
 RUN wget https://digidocs-prod-bucket.s3.ap-south-1.amazonaws.com/digital-sign-v2.jar -P /usr/src/app/signing/src/signing/java-esign-utility
 
