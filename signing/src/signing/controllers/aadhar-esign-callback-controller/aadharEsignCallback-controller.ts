@@ -58,15 +58,11 @@ export const esignCallback = async (req: Request, res: Response) => {
     }
   }
 
-  let fieldData = "";
-  signFieldData.signatureFieldData?.data.map(field => {
-    fieldData += `${field.pageNumber}-${field.dataX},${field.dataY},${field.height},${field.width};`
-  })
 
   const esignRequest = createJarSigningReq(SignTypes.AADHAR_SIGN, signFieldData);
 
   try {
-    await writeFile(esignRequest.fieldDataFilePath, fieldData, 'utf-8');
+    await writeFile(esignRequest.fieldDataFilePath, signField, 'utf-8');
     await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
     await writeFile(esignRequest.signImageFilePath, sign, 'base64');
     await writeFile(esignRequest.responseTextFile, espResponse, 'utf-8');
