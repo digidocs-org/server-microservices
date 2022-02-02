@@ -38,9 +38,6 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
         name: `${user.firstname} ${user.lastname}`,
         location: "India",
         reason: "Aadhaar Sign",
-        signatureFieldData: {
-            data: signField
-        }
     }
 
     const esignRequestField = createJarSigningReq(SignTypes.FIELD_REQUEST, signFieldData)
@@ -59,7 +56,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             userId: user._id,
             redirectUrl,
             calTimeStamp: calTimeStamp.toString(),
-            fieldData
+            fieldData: fieldData.toString()
         },
             process.env.ESIGN_SALT!,
             process.env.ESIGN_SALT_EXPIRE!

@@ -30,7 +30,7 @@ export const esignCallback = async (req: Request, res: Response) => {
   }
   const user = await User.findById(userId)
 
-  if (!documentId || !userId || !user || !redirectUrl || !calTimeStamp || !signField || !user.signUrl) {
+  if (!documentId || !userId || !user || !redirectUrl || !calTimeStamp || !signField) {
     return res.send(`${redirectUrl}?status=failed`);
   }
 
@@ -53,9 +53,6 @@ export const esignCallback = async (req: Request, res: Response) => {
     name: `${user.firstname} ${user.lastname}`,
     location: "India",
     reason: "Aadhaar Sign",
-    signatureFieldData: {
-      data: signField
-    }
   }
 
 
