@@ -78,6 +78,23 @@ const indexDocumentService = async (
         },
       },
       {
+        $addFields: {
+          status: {
+            $cond: [
+              {
+                $and: [
+                  { $eq: ['$document.status', 'PENDING'] },
+                  { $eq: ['$action.type', 'SIGN'] },
+                  { $ne: ['$action.actionStatus', 'SIGNED'] },
+                ],
+              },
+              'SIGN_REQUIRED',
+              '$document.status',
+            ],
+          },
+        },
+      },
+      {
         $match: dbQueries,
       },
       {
@@ -152,7 +169,7 @@ const indexDocumentService = async (
           documentId: document._id,
           ownerName: `${user?.firstname || ''} ${user?.lastname || ''}`,
           createdAt: document.createdAt,
-          status: document.status || DocumentStatus.DRAFTS,
+          status: docUserMap.status || DocumentStatus.DRAFTS,
           userStatus: findUserStatus(userId, docUserMapsForDoc),
           actions: actionList,
         };

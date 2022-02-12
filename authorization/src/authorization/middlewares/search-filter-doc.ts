@@ -18,7 +18,7 @@ export const searchAndFilter = (
     }
 
     if (status) {
-      dbQueries.push({ 'document.status': status });
+      dbQueries.push({ status });
     }
   }
 
