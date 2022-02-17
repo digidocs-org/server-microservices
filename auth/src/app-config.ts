@@ -50,9 +50,11 @@ export class Application {
         urlencoded({ extended: true }),
         fileUpload(),
         cookieSession({
-          domain: 'digidocs.one',
+          domain: '.digidocs.one',
           signed: false,
           secure: process.env.NODE_ENV !== 'stage',
+          sameSite: 'none',
+          httpOnly: true,
         }),
         passport.initialize(),
       ]
