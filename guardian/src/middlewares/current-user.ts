@@ -34,6 +34,7 @@ export const currentUser = (
       process.env.ACCESS_TOKEN_SECRET!
     ) as UserPayload;
     req.currentUser = payload;
+    req.headers['token'] = token;
   } catch (err) {
     console.log(err);
     res.clearCookie('session');
