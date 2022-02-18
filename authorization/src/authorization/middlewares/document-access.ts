@@ -7,7 +7,7 @@ export const queryTokenAccess = (
   next: NextFunction
 ) => {
   if (
-    !req.session?.jwt &&
+    !req.cookies['session'] &&
     !req.header('token') &&
     !req.body.token &&
     req.query.token
