@@ -24,8 +24,8 @@ class App {
     }
 
     // Configure Middlewares
+    this.app.use(cookieParser());
     this.middlewares.forEach((middleware, index, array) => {
-      this.app.use(cookieParser());
       this.app.use(middleware);
     });
 
