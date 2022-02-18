@@ -53,7 +53,8 @@ export class Application {
           domain: '.digidocs.one',
           signed: false,
           secure: true,
-          sameSite: 'none'
+          sameSite: 'none',
+          name: "session"
         }),
         passport.initialize(),
       ]
