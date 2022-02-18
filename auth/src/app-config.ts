@@ -52,7 +52,8 @@ export class Application {
         cookieSession({
           domain:".digidocs.one",
           signed: false,
-          secure: process.env.NODE_ENV !== 'stage',
+          secure: true,
+          sameSite: 'none'
         }),
         passport.initialize(),
       ]
