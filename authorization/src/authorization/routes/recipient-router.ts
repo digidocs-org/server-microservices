@@ -1,12 +1,11 @@
 import { Router } from 'express';
 import {
-    currentUser,
-    headerValidators,
-    validateRequest,
+  currentUser,
+  headerValidators,
+  validateRequest,
 } from '@digidocs/guardian';
 import hasDocumentAccess from 'authorization-service/middlewares/has-document-access';
 import { addRecipientsController } from 'authorization-service/controllers/recipient';
-
 
 const router = Router();
 
@@ -16,12 +15,12 @@ const router = Router();
  * @Access Public
  */
 router.post(
-    '/add-recipients/:documentId',
-    headerValidators('token'),
-    validateRequest,
-    currentUser,
-    hasDocumentAccess,
-    addRecipientsController
+  '/add-recipients/:documentId',
+  // headerValidators('token'),
+  // validateRequest,
+  currentUser,
+  hasDocumentAccess,
+  addRecipientsController
 );
 
-export = router
+export = router;

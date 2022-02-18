@@ -18,7 +18,7 @@ import {
 import {
   currentUser,
   validateRequest,
-  headerValidators,
+  // headerValidators,
   bodyValidators,
 } from '@digidocs/guardian';
 import { verifyToken } from 'auth/middlewares/vertfyToken';
@@ -67,8 +67,8 @@ export class AuthRouter {
 
     this.router.get(
       '/api/v1/auth/user-profile',
-      headerValidators('token'),
-      validateRequest,
+      // headerValidators('token'),
+      // validateRequest,
       currentUser,
       getUserProfile
     );
@@ -81,8 +81,8 @@ export class AuthRouter {
 
     this.router.get(
       '/api/v1/auth/refresh-token',
-      headerValidators('refreshToken'),
-      validateRequest,
+      // headerValidators('refreshToken'),
+      // validateRequest,
       refreshToken
     );
 
@@ -117,7 +117,7 @@ export class AuthRouter {
      */
     this.router.post(
       '/api/v1/auth/verify-otp',
-      headerValidators('token'),
+      // headerValidators('token'),
       bodyValidators('otp'),
       validateRequest,
       currentUser,
@@ -131,8 +131,8 @@ export class AuthRouter {
      */
     this.router.post(
       '/api/v1/auth/send-otp-email',
-      headerValidators('token'),
-      validateRequest,
+      // headerValidators('token'),
+      // validateRequest,
       currentUser,
       sendOTPEmail
     );
@@ -156,8 +156,8 @@ export class AuthRouter {
      */
     this.router.post(
       '/api/v1/auth/forgotPassword/verify-otp',
-      bodyValidators('email', 'otp'),
-      validateRequest,
+      // bodyValidators('email', 'otp'),
+      // validateRequest,
       forgotPasswordVerifyOtp
     );
 
@@ -168,7 +168,7 @@ export class AuthRouter {
      */
     this.router.post(
       '/api/v1/auth/reset-password',
-      headerValidators('reset-token'),
+      // headerValidators('reset-token'),
       bodyValidators('password'),
       validateRequest,
       verifyToken,
@@ -182,8 +182,8 @@ export class AuthRouter {
      */
     this.router.post(
       '/api/v1/auth/update-profile',
-      headerValidators('token'),
-      validateRequest,
+      // headerValidators('token'),
+      // validateRequest,
       currentUser,
       updateProfile
     );
@@ -193,10 +193,10 @@ export class AuthRouter {
      * @Desc   update user profile
      * @Access Private
      */
-     this.router.post(
+    this.router.post(
       '/api/v1/auth/update-sign',
-      headerValidators('token'),
-      validateRequest,
+      // headerValidators('token'),
+      // validateRequest,
       currentUser,
       updateSign
     );
