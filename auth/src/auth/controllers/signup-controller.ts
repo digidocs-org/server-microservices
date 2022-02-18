@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { AuthService } from 'auth/services';
+import { COOKIE_OPTIONS } from '@digidocs/guardian';
 
 export const Signup = async (
   req: Request,
@@ -14,9 +15,7 @@ export const Signup = async (
       firstname,
       lastname,
     });
-    req.session = {
-      jwt: user.accessToken
-    }
+    res.cookie('session', user.accessToken, COOKIE_OPTIONS);
     return res.status(201).send(user);
   } catch (error) {
     return next(error);

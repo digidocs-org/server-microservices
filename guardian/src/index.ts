@@ -11,7 +11,10 @@ export * from './events';
 export * from './middlewares';
 
 // Services
-export * from './services'
+export * from './services';
 
 //Types
-export * from './types'
+export * from './types';
+
+// Constants
+export * from './constants';
