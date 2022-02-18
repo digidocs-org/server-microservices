@@ -1,7 +1,7 @@
 import { json, urlencoded } from 'express';
 import { App } from '@digidocs/guardian';
 import cookieSession from 'cookie-session';
-import fileUpload from 'express-fileupload'
+import fileUpload from 'express-fileupload';
 
 import cors from 'cors';
 import { DatabaseConfig } from './db-config';
@@ -47,10 +47,10 @@ export class Application {
       [
         cors(),
         json(),
-        urlencoded({extended:true}),
+        urlencoded({ extended: true }),
         fileUpload(),
         cookieSession({
-          domain:".digidocs.one",
+          domain: '.digidocs.one',
           signed: false,
           secure: true,
           sameSite: 'none'
