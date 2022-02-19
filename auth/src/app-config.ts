@@ -44,7 +44,13 @@ export class Application {
     this.app = new App(
       [AuthRouter.route()],
       [
-        cors({ credentials: true }),
+        cors({
+          credentials: true,
+          origin: [
+            'https://accounts.digidocs.one',
+            'https://stage.digidocs.one',
+          ],
+        }),
         json(),
         urlencoded({ extended: true }),
         fileUpload(),
