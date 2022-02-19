@@ -38,7 +38,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
       },
       {
         headers: {
-          token: req.body.token,
+          token: req.headers.token,
         },
       }
     );

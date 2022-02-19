@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { BadRequestError } from '@digidocs/guardian';
+import { BadRequestError, COOKIE_OPTIONS } from '@digidocs/guardian';
 
 import User from 'auth/models';
 import { generateToken } from 'auth/utils';
-
 
 export const Signin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -39,9 +38,8 @@ export const Signin = async (req: Request, res: Response) => {
   user.refreshToken = refreshToken;
   await user.save();
 
-  req.session = {
-    jwt: accessToken
-  }
+  res.cookie('session', accessToken, COOKIE_OPTIONS);
+  res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
 
   res.json({ accessToken, refreshToken });
 };

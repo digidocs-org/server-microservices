@@ -1,6 +1,5 @@
 import { json, urlencoded } from 'express';
 import { App } from '@digidocs/guardian';
-import cookieSession from 'cookie-session';
 import fileUpload from 'express-fileupload';
 
 import cors from 'cors';
@@ -45,17 +44,16 @@ export class Application {
     this.app = new App(
       [AuthRouter.route()],
       [
-        cors(),
+        cors({
+          credentials: true,
+          origin: [
+            'https://accounts.digidocs.one',
+            'https://stage.digidocs.one',
+          ],
+        }),
         json(),
         urlencoded({ extended: true }),
         fileUpload(),
-        cookieSession({
-          domain: '.digidocs.one',
-          signed: false,
-          secure: true,
-          sameSite: 'none',
-          name: "session"
-        }),
         passport.initialize(),
       ]
     );

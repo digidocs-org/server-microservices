@@ -5,14 +5,13 @@ import { NotAuthorizedError } from '@digidocs/guardian';
 import User from 'auth/models';
 import { generateToken } from 'auth/utils';
 
-
 /**
  *
  * @param req
  * @param res
  */
 export const refreshToken = async (req: Request, res: Response) => {
-  let refreshToken = req.header('refreshToken');
+  let refreshToken = req.cookies['refreshToken'];
 
   const user = await User.findOne({ refreshToken });
   if (!user) {

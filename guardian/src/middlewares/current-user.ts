@@ -22,17 +22,22 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
-  let token = req.session?.jwt ?? req.header('token') ?? req.body.token;
+  let token = req.cookies['session'] ?? req.header('token') ?? req.body.token;
+
+  if (!token) {
+    return res.redirect('https://accounts.digidocs.one');
+  }
 
   try {
     const payload = jwt.verify(
-      token ?? req.session?.jwt,
+      token,
       process.env.ACCESS_TOKEN_SECRET!
     ) as UserPayload;
     req.currentUser = payload;
+    req.headers['token'] = token;
   } catch (err) {
     console.log(err);
-    req.session = null;
+    res.clearCookie('session');
   }
 
   next();

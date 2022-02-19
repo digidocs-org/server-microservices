@@ -12,7 +12,6 @@ import {
 import {
   bodyValidators,
   currentUser,
-  headerValidators,
   validateRequest,
 } from '@digidocs/guardian';
 import hasDocumentAccess from 'authorization-service/middlewares/has-document-access';
@@ -28,8 +27,8 @@ const router = Router();
  */
 router.post(
   '/create',
-  headerValidators('token'),
-  validateRequest,
+  // headerValidators('token'),
+  // validateRequest,
   currentUser,
   createDocumentController
 );
@@ -54,8 +53,8 @@ router.get(
  */
 router.get(
   '/index',
-  headerValidators('token'),
-  validateRequest,
+  // headerValidators('token'),
+  // validateRequest,
   currentUser,
   searchAndFilter,
   indexDocumentController
@@ -68,8 +67,8 @@ router.get(
  */
 router.post(
   '/send/:documentId',
-  headerValidators('token'),
-  validateRequest,
+  // headerValidators('token'),
+  // validateRequest,
   currentUser,
   hasDocumentAccess,
   sendDocumentController
@@ -77,8 +76,8 @@ router.post(
 
 router.put(
   '/update/:documentId',
-  headerValidators('token'),
-  validateRequest,
+  // headerValidators('token'),
+  // validateRequest,
   currentUser,
   hasDocumentAccess,
   updateDocumentController
@@ -94,7 +93,7 @@ router.get(
 
 router.post(
   '/field/:documentId',
-  headerValidators('token'),
+  // headerValidators('token'),
   bodyValidators('userEmail', 'fieldData'),
   validateRequest,
   currentUser,

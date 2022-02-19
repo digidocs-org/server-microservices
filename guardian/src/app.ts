@@ -1,5 +1,6 @@
 import express from 'express';
 import { Request, Response, Router, Express } from 'express';
+import cookieParser from 'cookie-parser';
 import 'express-async-errors';
 
 import { errorHandler } from './middlewares';
@@ -7,7 +8,11 @@ import { NotFoundError } from './errors';
 
 class App {
   private app: Express;
-  constructor(private routes: Router[], private middlewares: any[], private views?: { viewPath: string, engine: string }[]) {
+  constructor(
+    private routes: Router[],
+    private middlewares: any[],
+    private views?: { viewPath: string; engine: string }[]
+  ) {
     this.app = express();
     this.app.set('trust proxy', true);
 
@@ -15,10 +20,11 @@ class App {
       this.views.forEach(data => {
         this.app.set('views', data.viewPath);
         this.app.set('view engine', data.engine);
-      })
+      });
     }
 
     // Configure Middlewares
+    this.app.use(cookieParser());
     this.middlewares.forEach((middleware, index, array) => {
       this.app.use(middleware);
     });

@@ -8,7 +8,7 @@ import fileUpload from 'express-fileupload';
 import { DocumentAuthorizationRouter } from './authorization/routes';
 import { CreateUserListener } from './events/listeners/user-created-listener';
 import { EsignSuccessListener } from './events/listeners/esign-success-listener';
-import cors from 'cors'
+import cors from 'cors';
 import { UserUpdatedListener } from './events/listeners/user-updated-listener';
 
 export class Application {
@@ -39,7 +39,19 @@ export class Application {
 
     this.app = new App(
       [DocumentAuthorizationRouter.route()],
-      [cors(), json({ limit: '50mb' }), urlencoded({ extended: true }), fileUpload()]
+      [
+        cors({
+          credentials: true,
+          origin: [
+            'https://accounts.digidocs.one',
+            'https://stage.digidocs.one',
+          ],
+        }),
+        ,
+        json({ limit: '50mb' }),
+        urlencoded({ extended: true }),
+        fileUpload(),
+      ]
     );
   }
 
