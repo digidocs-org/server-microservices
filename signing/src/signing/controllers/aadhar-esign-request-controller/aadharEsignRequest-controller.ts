@@ -59,7 +59,7 @@ export const aadharEsignRequest = async (req: Request, res: Response) => {
             userId: user._id,
             redirectUrl,
             calTimeStamp: calTimeStamp.toString(),
-            fieldData
+            fieldData: fieldData.toString()
         },
             process.env.ESIGN_SALT!,
             process.env.ESIGN_SALT_EXPIRE!
