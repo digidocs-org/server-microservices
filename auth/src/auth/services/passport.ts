@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken';
 import User, { IUser } from 'auth/models';
 import { generateToken } from 'auth/utils';
 import { UserPayload, BadRequestError } from '@digidocs/guardian';
+import { UserCreatedPublisher } from 'src/events/publishers';
+import { natsWrapper } from 'src/nats-wrapper';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -58,6 +60,19 @@ export default function passportInit(): void {
               email: profile?.emails![0]?.value,
               isEmailVerified: true,
             });
+            new UserCreatedPublisher(natsWrapper.client).publish({
+              id: user.id,
+              email: user.email,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              mobile: user.mobile,
+              isBlocked: user.isBlocked,
+              isPremium: user.isPremium,
+              profileImage: user.profileImage,
+              notificationId: user.notificationId,
+              deviceId: user.deviceId,
+              version: user.version,
+            });
           }
           const payload = {
             id: user.id,
@@ -83,6 +98,19 @@ export default function passportInit(): void {
           googleId: profile?.id,
           email: profile?.emails![0]?.value,
           isEmailVerified: true,
+        });
+        new UserCreatedPublisher(natsWrapper.client).publish({
+          id: newUser.id,
+          email: newUser.email,
+          firstname: newUser.firstname,
+          lastname: newUser.lastname,
+          mobile: newUser.mobile,
+          isBlocked: newUser.isBlocked,
+          isPremium: newUser.isPremium,
+          profileImage: newUser.profileImage,
+          notificationId: newUser.notificationId,
+          deviceId: newUser.deviceId,
+          version: newUser.version,
         });
         const payload = {
           id: newUser.id,
