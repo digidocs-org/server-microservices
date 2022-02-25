@@ -5,7 +5,8 @@ on:
     branches:
       - master
     paths:
-      - "authorization/**"
+      - 'authorization/**'
+      - 'guardian/**'
   workflow_dispatch:
 
 env:

@@ -5,7 +5,8 @@ on:
     branches:
       - master
     paths:
-      - "payment/**"
+      - 'payment/**'
+      - 'guardian/**'
   workflow_dispatch:
 
 env:
