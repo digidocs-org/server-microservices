@@ -32,5 +32,7 @@ export const sendEmailToClient = (options: EmailOptions) => {
         }
       }
     );
+  } else {
+    console.log(options);
   }
 };
