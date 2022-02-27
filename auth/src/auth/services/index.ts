@@ -57,7 +57,7 @@ export class AuthService {
       profileImage: user.profileImage,
       notificationId: user.notificationId,
       deviceId: user.deviceId,
-      version: user.version,
+      version: user.version
     });
 
     new SendEmailPublisher(natsWrapper.client).publish({

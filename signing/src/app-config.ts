@@ -12,6 +12,7 @@ import path from 'path';
 import { CreateGuestUserListener } from './events/listeners/create-guest-user-listener';
 import { UpdateDocumentListener } from './events/listeners/document-updated-listener';
 import { UserUpdatedListener } from './events/listeners/user-updated-listener';
+import { CreditUpdateListener } from './events/listeners/credit-update-listener';
 
 export class Application {
   private app: App;
@@ -30,6 +31,7 @@ export class Application {
           new CreateGuestUserListener(natsWrapper.client).listen();
           new UpdateDocumentListener(natsWrapper.client).listen();
           new UserUpdatedListener(natsWrapper.client).listen();
+          new CreditUpdateListener(natsWrapper.client).listen();
         });
 
       natsWrapper.client.on('close', () => {
