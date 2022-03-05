@@ -48,6 +48,9 @@ export const documentDetailsController = async (
         action.recipientName ??
         `${user.firstname ?? ''} ${user.lastname ?? ''}`,
       fields: action.fields,
+      privateMessage: action.privateMessage,
+      authType: action.authType,
+      signOrder: action.signOrder,
     };
   });
 
