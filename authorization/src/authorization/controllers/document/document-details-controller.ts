@@ -38,6 +38,7 @@ export const documentDetailsController = async (
       delete ret._id;
       delete ret.publicKeyId;
       ret.ownerName = `${owner?.firstname ?? ''} ${owner?.lastname ?? ''}`;
+      ret.email = ret.recipientEmail;
       ret.ownerEmail = owner?.email;
       ret.userStatus = findUserStatus(userId, docUserMaps);
     },
