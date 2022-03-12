@@ -8,19 +8,21 @@ import {
 } from 'authorization-service/types';
 
 export interface IActionFields {
-  dataX: number
-  dataY: number
-  height: number
-  width: number
-  pageNumber: number
-  recipientName: string
-  recipientEmail: string
-  dragTypeID: string
+  dataX: number;
+  dataY: number;
+  height: number;
+  width: number;
+  pageNumber: number;
+  recipientName: string;
+  recipientEmail: string;
+  dragTypeID: string;
 }
 
 export interface IDocumentActions extends Document {
   type: ActionType;
   privateMessage: string;
+  viewOn: Date;
+  view: Boolean;
   authType: AuthType;
   authCode: number;
   recipientEmail: string;
@@ -38,6 +40,8 @@ const actionSchema: Schema = new Schema(
     authCode: Number,
     actionStatus: String,
     recipientName: String,
+    viewOn: Date,
+    view: Boolean,
     recipientEmail: String,
     signOrder: Number,
     fields: { type: Array, default: [] },
