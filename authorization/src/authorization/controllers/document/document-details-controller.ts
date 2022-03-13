@@ -34,11 +34,7 @@ export const documentDetailsController = async (
     transform: (doc: any, ret: any) => {
       ret.documentName = ret.name;
       ret.id = ret._id;
-      ret.email = ret.recipientEmail;
-      ret.status = ret.actionStatus;
-      delete ret.actionStatus;
       delete ret.name;
-      delete ret.recipientEmail;
       delete ret._id;
       delete ret.publicKeyId;
       ret.ownerName = `${owner?.firstname ?? ''} ${owner?.lastname ?? ''}`;
@@ -54,13 +50,18 @@ export const documentDetailsController = async (
 
     return action.toJSON({
       transform: (doc: any, ret: any) => {
+        ret.email = ret.recipientEmail;
+        ret.status = ret.actionStatus;
+        ret.name =
+          action.recipientName ??
+          `${user.firstname ?? ''} ${user.lastname ?? ''}`;
         delete ret.authCode;
         delete ret.__v;
         delete ret.createdAt;
         delete ret.updatedAt;
-        ret.name =
-          action.recipientName ??
-          `${user.firstname ?? ''} ${user.lastname ?? ''}`;
+        delete ret.actionStatus;
+        delete ret.recipientEmail;
+        delete ret.recipientName;
       },
     });
   });
