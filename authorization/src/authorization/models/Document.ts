@@ -17,6 +17,8 @@ export interface IDocument extends Document {
   sendForSign?: boolean;
   timeToSign?: string;
   createdAt: string;
+  reservedAadhaarCredits: number
+  reservedDigitalCredits: number
   updatedAt: string;
   version: number;
 }
@@ -26,6 +28,8 @@ const documentSchema: Schema = new Schema(
     name: String,
     message: String,
     selfSign: { type: Boolean, default: false },
+    reservedAadhaarCredits: { type: Number, default: 0 },
+    reservedDigitalCredits: { type: Number, default: 0 },
     inOrder: Boolean,
     isDrafts: Boolean,
     documentId: String,

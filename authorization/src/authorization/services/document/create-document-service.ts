@@ -17,13 +17,13 @@ const createDocument = (userId: string, file: UploadedFile) => new Promise<IDocu
   const fileName = file.name;
 
   if (!file || !checkForPdf(fileData)) {
-    throw new BadRequestError('Please upload a PDF file!');
+    reject('Please upload a PDF file!');
   }
 
   const isPasswordProtected = await checkForProtectedPdf(fileData);
 
   if (isPasswordProtected) {
-    throw new BadRequestError('Cannot upload password protected file!');
+    reject('Cannot upload password protected file!');
   }
 
   // Encrypt the document.

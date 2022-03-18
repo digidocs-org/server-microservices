@@ -97,6 +97,9 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         },
       }
     );
+
+    document.reservedDigitalCredits -= 1
+    await document.save()
     return res.send(data);
   } catch (error) {
     return errorResponseParser(error, res);

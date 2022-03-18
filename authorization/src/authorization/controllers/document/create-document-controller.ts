@@ -66,7 +66,7 @@ export const createDocumentController = async (req: Request, res: Response) => {
     });
 
     return res.send({ success: true, data: { id: document.id } });
-  } catch (error) {
-    throw new BadRequestError("Cannot upload document")
+  } catch (error: any) {
+    throw new BadRequestError(error)
   }
 };
