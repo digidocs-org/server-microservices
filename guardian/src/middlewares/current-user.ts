@@ -24,10 +24,6 @@ export const currentUser = (
 ) => {
   let token = req.cookies['session'] ?? req.header('token') ?? req.body.token;
 
-  if (!token) {
-    return res.redirect('https://accounts.digidocs.one');
-  }
-
   try {
     const payload = jwt.verify(
       token,

@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "@digidocs/guardian": "1.0.0",
+    "@types/cookie-parser": "^1.4.2",
     "node-nats-streaming": "^0.3.2",
+    "cookie-parser": "^1.4.6",
     "nodemailer": "^6.6.3",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"

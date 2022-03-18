@@ -129,9 +129,14 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
       // Currently mail is send only to user.
       const owner = await User.findById(document.userId);
 
+      if (!owner) {
+        msg.ack();
+        return;
+      }
+
       new SendEmailPublisher(natsWrapper.client).publish({
         senderEmail: 'notification@digidocsapp.com',
-        clientEmail: owner!.email,
+        clientEmail: owner.email,
         subject: 'Document Signed Successfully.',
         body: 'All the recipients have signed the document.',
       });

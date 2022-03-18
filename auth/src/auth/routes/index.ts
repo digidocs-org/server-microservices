@@ -24,6 +24,7 @@ import {
 import { verifyToken } from 'auth/middlewares/vertfyToken';
 import { updateProfile } from 'auth/controllers/update-profile-controller';
 import { updateSign } from 'auth/controllers/updateSign-controller';
+import { signout } from 'auth/controllers/signout-controller';
 
 export class AuthRouter {
   private static router = Router();
@@ -199,6 +200,14 @@ export class AuthRouter {
       // validateRequest,
       currentUser,
       updateSign
+    );
+
+    this.router.all(
+      '/api/v1/auth/signout',
+      // headerValidators('token'),
+      // validateRequest,
+      currentUser,
+      signout
     );
 
     return this.router;

@@ -45,9 +45,9 @@ export class Application {
           origin: [
             'https://accounts.digidocs.one',
             'https://stage.digidocs.one',
+            'http://localhost:3000',
           ],
         }),
-        ,
         json({ limit: '50mb' }),
         urlencoded({ extended: true }),
         fileUpload(),
