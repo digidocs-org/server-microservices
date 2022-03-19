@@ -49,5 +49,5 @@ export const googlePassport = (req: Request, res: Response) => {
   const refreshToken = encodeURIComponent(req?.user?.refreshToken!);
   res.cookie('session', accessToken, COOKIE_OPTIONS);
   res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-  return res.redirect(`${process.env.CLIENT_URL}/login`);
+  return res.redirect(`${process.env.DOCUMENT_ACCESS_URL}/login`);
 };
