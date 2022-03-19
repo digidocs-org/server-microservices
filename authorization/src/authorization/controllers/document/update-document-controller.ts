@@ -28,7 +28,7 @@ export const updateDocumentController = async (req: Request, res: Response) => {
     selfSign: updatedDoc.selfSign,
     validTill: updatedDoc.validTill,
     sendForSign: updatedDoc.sendForSign,
-    hasClickedNext: true,
+    hasClickedNext: updatedDoc.hasClickedNext,
     timeToSign: updatedDoc.timeToSign,
     signType: updatedDoc.signType,
     version: updatedDoc.__v,
