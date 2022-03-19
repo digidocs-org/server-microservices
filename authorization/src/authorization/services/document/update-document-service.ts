@@ -34,6 +34,7 @@ const updateDocument = (req: Request) =>
       message: newParams.message || document.message,
       inOrder:
         newParams.inOrder !== undefined ? newParams.inOrder : document.inOrder,
+      hasClickedNext: true,
       selfSign:
         newParams.selfSign !== undefined
           ? newParams.selfSign

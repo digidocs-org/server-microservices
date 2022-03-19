@@ -13,6 +13,7 @@ export interface IDocument extends Document {
   status?: DocumentStatus;
   signType?: SignTypes;
   userId: string;
+  hasClickedNext: boolean;
   validTill?: string;
   sendForSign?: boolean;
   timeToSign?: string;
@@ -31,6 +32,7 @@ const documentSchema: Schema = new Schema(
     documentId: String,
     sendForSign: Boolean,
     publicKeyId: String,
+    hasClickedNext: Boolean,
     signType: String,
     status: String,
     userId: String,
