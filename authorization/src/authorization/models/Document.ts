@@ -32,7 +32,7 @@ const documentSchema: Schema = new Schema(
     documentId: String,
     sendForSign: Boolean,
     publicKeyId: String,
-    hasClickedNext: Boolean,
+    hasClickedNext: { type: Boolean, default: false },
     signType: String,
     status: String,
     userId: String,

@@ -9,6 +9,7 @@ export interface IDocument extends Document {
   publicKeyId: string;
   documentId: string;
   selfSign?: boolean;
+  hasClickedNext?: boolean;
   isDrafts?: boolean;
   status?: DocumentStatus;
   signType: SignTypes;
@@ -23,6 +24,7 @@ const documentSchema: Schema = new Schema(
     name: String,
     message: String,
     selfSign: { type: Boolean, default: false },
+    hasClickedNext: { type: Boolean, default: false },
     inOrder: Boolean,
     isDrafts: Boolean,
     documentId: String,
