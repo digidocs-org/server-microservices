@@ -25,6 +25,7 @@ import { verifyToken } from 'auth/middlewares/vertfyToken';
 import { updateProfile } from 'auth/controllers/update-profile-controller';
 import { updateSign } from 'auth/controllers/updateSign-controller';
 import { signout } from 'auth/controllers/signout-controller';
+import updatePassword from 'auth/controllers/update-password-controller';
 
 export class AuthRouter {
   private static router = Router();
@@ -190,6 +191,19 @@ export class AuthRouter {
     );
 
     /**
+     * @Route  POST 'api/v1/auth/update-profile'
+     * @Desc   update user profile
+     * @Access Private
+     */
+    this.router.post(
+      '/api/v1/auth/update-password',
+      // headerValidators('token'),
+      // validateRequest,
+      currentUser,
+      updatePassword
+    );
+
+    /**
      * @Route  POST 'api/v1/auth/update-sign'
      * @Desc   update user profile
      * @Access Private
@@ -202,6 +216,11 @@ export class AuthRouter {
       updateSign
     );
 
+    /**
+     * @Route  POST '/api/v1/auth/signout'
+     * @Desc   signout the user
+     * @Access Private
+     */
     this.router.all(
       '/api/v1/auth/signout',
       // headerValidators('token'),
