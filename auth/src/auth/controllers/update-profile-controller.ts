@@ -22,5 +22,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     firstname: newParams.firstname || user.firstname,
     lastname: newParams.lastname || user.lastname,
   });
-  return { success: true };
+
+  await user.save();
+  return res.send({ success: true });
 };
