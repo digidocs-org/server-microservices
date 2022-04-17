@@ -69,6 +69,7 @@ const cancelDocument = async (req: Request, res: Response) => {
 
     //Update user info an put all remaining credits
     if (document.signType == SignTypes.AADHAR_SIGN) {
+      const reservedCredits = document.reservedAadhaarCredits
       user.aadhaarCredits += document.reservedAadhaarCredits
       document.reservedAadhaarCredits = 0
       await user.save()
@@ -76,12 +77,13 @@ const cancelDocument = async (req: Request, res: Response) => {
       new CreditUpdatePublisher(natsWrapper.client).publish({
         userId: user.id,
         data: {
-          aadhaarCredits: document.reservedAadhaarCredits,
+          aadhaarCredits: reservedCredits,
           digitalSignCredits: 0
         },
         type: CreditUpdateType.ADDED
       })
     } else if (document.signType == SignTypes.DIGITAL_SIGN) {
+      const reservedCredits = document.reservedDigitalCredits
       user.digitalSignCredits += document.reservedDigitalCredits
       document.reservedDigitalCredits = 0
       await user.save()
@@ -90,7 +92,7 @@ const cancelDocument = async (req: Request, res: Response) => {
         userId: user.id,
         data: {
           aadhaarCredits: 0,
-          digitalSignCredits: document.reservedDigitalCredits
+          digitalSignCredits: reservedCredits
         },
         type: CreditUpdateType.ADDED
       })

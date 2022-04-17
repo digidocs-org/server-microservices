@@ -3,6 +3,7 @@ import {
   EsignSuccessEvent,
   Listener,
   DocumentStatus,
+  SignTypes,
 } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import AuditTrail, {
@@ -53,6 +54,15 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
     let docUserMaps = await DocumentUserMap.find({ document: docId })
       .populate('action')
       .populate('auditTrail');
+
+    //Decrease credit stored in document
+    if (document.signType == SignTypes.AADHAR_SIGN) {
+      document.reservedAadhaarCredits -= 1
+      await document.save()
+    } else if (document.signType == SignTypes.DIGITAL_SIGN) {
+      document.reservedDigitalCredits -= 1
+      await document.save()
+    }
 
     // TODO Send Email to the user who signed the document.
 
