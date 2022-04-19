@@ -57,6 +57,12 @@ spec:
                   name: ccavenue-access-key
                   key: CCAVENUE_ACCESS_KEY
 
+            - name: PAYMENT_SALT_EXPIRE
+              valueFrom:
+                secretKeyRef:
+                  name: payment-salt-expire
+                  key: PAYMENT_SALT_EXPIRE
+
             - name: CCAVENUE_STAGE_URL
               value: https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction
 

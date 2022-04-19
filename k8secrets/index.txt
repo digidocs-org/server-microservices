@@ -17,3 +17,4 @@ kubectl create secret generic payment-signing-salt --from-literal=PAYMENT_SIGNIN
 kubectl create secret generic ccavenue-merchant-id --from-literal=CCAVENUE_MERCHANT_ID=730659
 kubectl create secret generic encryption-secret --from-literal=ENCRYPTION_SECRET=ad68d6aee9625dc46b4f2e831471f77a
 kubectl create secret generic document-access-url --from-literal=DOCUMENT_ACCESS_URL=https://stage.digidocs.one/document
+kubectl create secret generic payment-salt-expire --from-literal=PAYMENT_SALT_EXPIRE=1h
