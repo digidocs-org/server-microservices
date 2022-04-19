@@ -22,7 +22,6 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
-  req.cookies.session = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNWQxMjM4ZDYyYzU3ODdkNDYyYWE1YyIsImlhdCI6MTY1MDI2NjY4MCwiZXhwIjoxNzM4NzY5NjgwfQ.FCae0YeXnUZg7boSzB96jzFeJ46typz6NL713JBMVgk"
   const token = req.cookies['session'] ?? req.header('token') ?? req.body.token;
 
   try {
