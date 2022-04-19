@@ -57,10 +57,10 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
 
     //Decrease credit stored in document
     if (document.signType == SignTypes.AADHAR_SIGN) {
-      document.reservedAadhaarCredits -= 1
+      document.reservedAadhaarCredits--
       await document.save()
     } else if (document.signType == SignTypes.DIGITAL_SIGN) {
-      document.reservedDigitalCredits -= 1
+      document.reservedDigitalCredits--
       await document.save()
     }
 
