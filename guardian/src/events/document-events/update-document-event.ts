@@ -8,6 +8,7 @@ export interface UpdateDocumentEvent {
     name: string;
     message?: string;
     inOrder?: boolean;
+    hasClickedNext?: boolean;
     selfSign?: boolean;
     status?: DocumentStatus;
     sendForSign?: boolean;

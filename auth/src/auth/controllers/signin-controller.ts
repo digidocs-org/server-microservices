@@ -47,7 +47,7 @@ export const Signin = async (req: Request, res: Response) => {
 export const googlePassport = (req: Request, res: Response) => {
   const accessToken = encodeURIComponent(req?.user?.accessToken!);
   const refreshToken = encodeURIComponent(req?.user?.refreshToken!);
-  return res.redirect(
-    `${process.env.CLIENT_URL}/login?token=${accessToken}&refreshToken=${refreshToken}`
-  );
+  res.cookie('session', accessToken, COOKIE_OPTIONS);
+  res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
+  return res.redirect(`${process.env.CLIENT_URL}/login`);
 };
