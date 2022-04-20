@@ -11,7 +11,8 @@ export const createOrder = async (req: Request, res: Response) => {
     const userId = req.currentUser?.id
     // const userToken = req.body.token
     // const { aadhaarCredits, digitalCredits, redirectUrl } = req.body
-    const { token, aadhaarCredits, digitalCredits, redirectUrl } = req.query
+    const { aadhaarCredits, digitalCredits, redirectUrl } = req.query
+    const token = req.cookies['session'] || req.headers["token"];
 
     const user = await User.findById(userId)
     if (!user) {

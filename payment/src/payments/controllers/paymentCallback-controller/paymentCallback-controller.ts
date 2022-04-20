@@ -11,8 +11,7 @@ export const paymentCallback = async (req: Request, res: Response) => {
     const workingKey = process.env.CCAVENUE_WORKING_KEY!
     const decryptedData = decrypt(encryptedResponse, workingKey)
     const parsedData = parseFromQueryParam(decryptedData)
-
-    const signedToken = parsedData.merchant_param2
+    const signedToken = parsedData.merchant_param5
     const decodedToken = jwt.verify(signedToken, process.env.PAYMENT_SIGNING_SALT!) as PaymentSignedData
 
     await PaymentOrders.create({

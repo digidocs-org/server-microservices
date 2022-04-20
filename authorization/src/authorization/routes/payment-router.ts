@@ -48,7 +48,7 @@ router.get(
  */
 router.get(
   '/payment/request',
-  queryValidators('token', 'aadhaarCredits', 'digitalCredits', 'redirectUrl'),
+  queryValidators('aadhaarCredits', 'digitalCredits', 'redirectUrl'),
   validateRequest,
   currentUser,
   createOrder

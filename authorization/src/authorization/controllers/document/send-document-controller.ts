@@ -1,18 +1,25 @@
 import { Request, Response } from 'express';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
 import Document, { IDocument } from 'authorization-service/models/Document';
-import { BadRequestError, DocumentStatus } from '@digidocs/guardian';
+import { BadRequestError, CreditUpdateType, DocumentStatus, SignTypes } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import { SendEmailPublisher } from 'src/events/publishers/send-email-publisher';
 import { natsWrapper } from 'src/nats-wrapper';
-import { IUser } from 'authorization-service/models/User';
+import User, { IUser } from 'authorization-service/models/User';
 import SendDocumentPublisher from 'src/events/publishers/send-document-publisher';
 import { ActionStatus, ActionType } from 'authorization-service/types';
 import AuditTrail from 'authorization-service/models/AuditTrail';
 import { sendReceivedEmail } from 'authorization-service/utils/send-received-email';
+import { CreditUpdatePublisher } from 'src/events/publishers/credit-update-publisher';
 
 export const sendDocumentController = async (req: Request, res: Response) => {
   const documentData = req.docUserMap?.document as IDocument;
+  const userId = req.currentUser?.id
+  const user = await User.findById(userId)
+
+  if (!user) {
+    throw new BadRequestError("User not found")
+  }
 
   const { id: documentId } = documentData;
 
@@ -33,16 +40,31 @@ export const sendDocumentController = async (req: Request, res: Response) => {
     .populate('action')
     .populate('user');
 
+  if (!recipients.length) {
+    throw new BadRequestError('No recipients added');
+  }
+
+  //Check if credits are sufficient to send document
+  const signType = document.signType
+  if (signType == SignTypes.AADHAR_SIGN) {
+    if (user.aadhaarCredits < recipients.length) {
+      throw new BadRequestError("Not enough aadhaar sign credits")
+    }
+  } else if (signType == SignTypes.DIGITAL_SIGN) {
+    if (user.digitalSignCredits < recipients.length) {
+      throw new BadRequestError("Not enough digital sign credits")
+    }
+  } else {
+    throw new BadRequestError("Not enough credits")
+  }
+
   if (!document.selfSign) {
     recipients = recipients.filter(recipient => {
       return document.userId !== recipient.user.toString();
     });
   }
 
-  if (!recipients.length) {
-    throw new BadRequestError('No recipients added');
-  }
-
+  //Check if inOrder or not
   if (document.inOrder) {
     recipients.sort((a, b) => {
       const aAction = a.action as IDocumentActions;
@@ -87,9 +109,34 @@ export const sendDocumentController = async (req: Request, res: Response) => {
   document.status = DocumentStatus.PENDING;
   await document.save();
 
-  //TODO: Update credits
-  //TODO: Update user profile credits
-  //TODO: Update document credits
+  //Update user profile and document credits
+  if (signType == SignTypes.AADHAR_SIGN) {
+    user.aadhaarCredits -= recipients.length
+    document.reservedAadhaarCredits += recipients.length
+    await user.save()
+    await document.save()
+    new CreditUpdatePublisher(natsWrapper.client).publish({
+      userId: user.id,
+      data: {
+        aadhaarCredits: recipients.length,
+        digitalSignCredits: 0
+      },
+      type: CreditUpdateType.SUBTRACTED
+    })
+  } else if (signType == SignTypes.DIGITAL_SIGN) {
+    user.digitalSignCredits -= recipients.length
+    document.reservedDigitalCredits += recipients.length
+    await user.save()
+    await document.save()
+    new CreditUpdatePublisher(natsWrapper.client).publish({
+      userId: user.id,
+      data: {
+        aadhaarCredits: 0,
+        digitalSignCredits: recipients.length
+      },
+      type: CreditUpdateType.SUBTRACTED
+    })
+  }
 
   await new SendDocumentPublisher(natsWrapper.client).publish({
     id: documentId,

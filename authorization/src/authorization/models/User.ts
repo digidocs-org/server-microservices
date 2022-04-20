@@ -34,8 +34,8 @@ const userSchema: Schema = new Schema(
     isEmailVerified: { type: Boolean, default: false },
     profileImage: String,
     deviceId: String,
-    aadhaarCredits: Number,
-    digitalSignCredits: Number,
+    aadhaarCredits: { type: Number, default: 0 },
+    digitalSignCredits: { type: Number, default: 0 },
     signUrl: String
   },
   {

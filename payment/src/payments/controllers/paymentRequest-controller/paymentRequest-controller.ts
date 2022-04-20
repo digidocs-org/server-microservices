@@ -37,10 +37,8 @@ export const paymentRequest = (req: Request, res: Response) => {
         billing_tel: phoneNo,
         billing_email: email,
         customer_identifier: userId,
-        merchant_param1: "Digidocs Technologies Private Limited",
-        merchant_param2: signedData
+        merchant_param5: signedData
     }
-
     const parsedData = parseToQueryParam(paymentData)
     const responseBuffer = Buffer.from(parsedData)
     const encRequest = encrypt(responseBuffer, workingKey)

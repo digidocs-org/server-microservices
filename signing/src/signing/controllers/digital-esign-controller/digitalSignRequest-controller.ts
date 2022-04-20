@@ -19,7 +19,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         throw new BadRequestError("User not found!!!")
     }
 
-    if(!user.signUrl){
+    if (!user.signUrl) {
         throw new BadRequestError("cannot find signature of user!!!")
     }
 
@@ -35,13 +35,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
 
     let signField = req.body.fieldData
     if (!signField || !signField.length) {
-        signField = [{
-            dataX: 0,
-            dataY: 0,
-            height: 5.9,
-            width: 24.2,
-            pageNumber: 1,
-        }]
+        throw new BadRequestError("fields not found")
     }
     const signFieldData: EsignRequest = {
         name: "",
@@ -51,9 +45,8 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
             data: signField
         }
     }
-    
+
     const esignRequest = createJarSigningReq(SignTypes.DIGITAL_SIGN, signFieldData);
-    console.log(esignRequest.signingRequest)
     try {
         await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
         await writeFile(esignRequest.signImageFilePath, sign, 'base64');
@@ -76,8 +69,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         deleteFile(esignRequest.signedFilePath);
         return res.send({ success: true, msg: "document signed successfully!!" });
     } catch (error) {
-        console.log(error);
         deleteFile(esignRequest.signedFilePath);
-        return res.send({ success: false, msg: "document siging failed!!" });
+        throw new BadRequestError("signing failed")
     }
 }
