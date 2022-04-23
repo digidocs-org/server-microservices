@@ -17,7 +17,7 @@ spec:
           image: asia.gcr.io/digidocs-stage/payment:latest
           env:
             - name: PORT
-              value: "80"
+              value: '80'
 
             - name: MONGO_URI
               value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/payment
@@ -28,10 +28,10 @@ spec:
                   fieldPath: metadata.name
 
             - name: NATS_URI
-              value: "http://nats-srv:4222"
+              value: 'http://nats-srv:4222'
 
             - name: NATS_CLUSTER_ID
-              value: "digidocs"
+              value: 'digidocs'
 
             - name: PAYMENT_SIGNING_SALT
               valueFrom:
@@ -65,9 +65,6 @@ spec:
 
             - name: CCAVENUE_STAGE_URL
               value: https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction
-
-            - name: PAYMENT_SALT_EXPIRE
-              value: "1000000"
 
             - name: PAYMENT_CALLBACK
               value: https://stage-api.digidocs.one/api/v1/orders/payments/callback
