@@ -1,6 +1,6 @@
 import { IUserBody } from 'auth/types';
 import User from 'auth/models';
-import { BadRequestError } from '@digidocs/guardian';
+import { BadRequestError, Templates } from '@digidocs/guardian';
 import bcrypt from 'bcryptjs';
 import { generateToken } from 'auth/utils';
 import {
@@ -57,14 +57,17 @@ export class AuthService {
       profileImage: user.profileImage,
       notificationId: user.notificationId,
       deviceId: user.deviceId,
-      version: user.version
+      version: user.version,
     });
 
     new SendEmailPublisher(natsWrapper.client).publish({
       senderEmail: 'notifications@digidocs.one',
       clientEmail: user.email,
       subject: 'Welcome to Digidocs Esign',
-      body: `Hey ${user.firstname} thankyou for signing up to digidocs esign we are glad to have you on board`,
+      templateType: Templates.WELCOME,
+      data: {
+        user: user.firstname,
+      },
     });
 
     return { accessToken, refreshToken };
