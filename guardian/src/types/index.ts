@@ -31,10 +31,14 @@ export enum SignTypes {
   ESIGN_REQUEST = 'ESIGN_REQUEST',
   AADHAR_SIGN = 'AADHAR_SIGN',
   DIGITAL_SIGN = 'DIGITAL_SIGN',
-  FIELD_REQUEST = 'GET_COORD_DATA'
+  FIELD_REQUEST = 'GET_COORD_DATA',
 }
 
 export enum CreditUpdateType {
   ADDED = 'ADDED',
-  SUBTRACTED = 'SUBTRACTED'
+  SUBTRACTED = 'SUBTRACTED',
+}
+
+export enum Templates {
+  WELCOME = 'welcome',
 }

@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import { EmailOptions } from 'email-service/types';
-import { promisify } from 'util';
+import { Templates } from '@digidocs/guardian';
+import ejs from 'ejs';
 
 export const transporter = nodemailer.createTransport({
   host: 'smtp.zoho.in',
@@ -15,8 +16,39 @@ export const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmailToClient = (options: EmailOptions) => {
+const renderTemplate = (templateType: Templates, data: any) => {
+  const renderedTemplate = ejs.renderFile<string>(
+    `${__dirname}/../views/${templateType}.ejs`,
+    data
+  );
+
+  return renderedTemplate;
+};
+
+export const sendEmailToClient = async (options: EmailOptions) => {
   if (options.clientEmail) {
+    if (options.templateType) {
+      const renderedTemplate = await renderTemplate(
+        options.templateType,
+        options.data
+      );
+
+      return transporter.sendMail(
+        {
+          from: process.env.NODEMAILER_EMAIL!,
+          to: options.clientEmail,
+          subject: options.subject,
+          html: renderedTemplate,
+        },
+        (err, info) => {
+          if (err) {
+            throw err;
+          } else {
+            return true;
+          }
+        }
+      );
+    }
     return transporter.sendMail(
       {
         from: process.env.NODEMAILER_EMAIL!,
