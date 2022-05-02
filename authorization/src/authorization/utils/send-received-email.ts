@@ -1,3 +1,4 @@
+import { Templates } from '@digidocs/guardian';
 import { IDocument } from 'authorization-service/models/Document';
 import { IDocumentUserMap } from 'authorization-service/models/DocumentUserMap';
 import { IUser } from 'authorization-service/models/User';
@@ -15,6 +16,13 @@ export const sendReceivedEmail = (docUserMap: IDocumentUserMap) => {
     senderEmail: 'notifications@digidocs.one',
     clientEmail: user.email,
     subject: 'Document Received',
-    body: `You have received the document. Please click on the link to view the document. ${deeplink}`,
+    templateType: Templates.BUTTON,
+    data: {
+      title: 'Document Received',
+      subtitle:
+        'You have received the document. Please click on the link to view the document.',
+      buttontitle: 'View Document',
+      link: deeplink,
+    },
   });
 };

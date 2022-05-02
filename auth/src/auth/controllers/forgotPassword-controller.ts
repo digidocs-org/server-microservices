@@ -4,6 +4,7 @@ import {
   BadRequestError,
   COOKIE_OPTIONS,
   ForbiddenError,
+  Templates,
 } from '@digidocs/guardian';
 import User from 'auth/models';
 import { generateTimeBasedToken } from 'auth/utils';
@@ -27,7 +28,12 @@ export const forgotPasswordOtp = async (req: Request, res: Response) => {
     senderEmail: 'notifications@digidocs.one',
     clientEmail: user.email,
     subject: 'Account Password Reset',
-    body: `Your OTP for password change is: ${user.forgetPasswordOtp!.otp}`,
+    templateType: Templates.OTP,
+    data: {
+      title: 'Account Password Reset',
+      subtitle: 'Your OTP for password change is',
+      otp: user.forgetPasswordOtp!.otp,
+    },
   });
   await user.save();
   return res.send({ success: true });
