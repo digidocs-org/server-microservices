@@ -52,7 +52,7 @@
       margin: 0;
     "
   >
-    <div class="es-wrapper-color">
+    <div class="es-wrapper-color" style="background-color: #f6f6f6">
       <!--[if gte mso 9]>
         <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
           <v:fill type="tile" color="#f6f6f6"></v:fill>
@@ -167,7 +167,7 @@
                                         color: #333333;
                                       "
                                     >
-                                      Welcome to Digidocs E-Sign
+                                      <%= title %>
                                     </h2>
                                   </td>
                                 </tr>
@@ -195,10 +195,59 @@
                                         font-size: 14px;
                                       "
                                     >
-                                      Hey <%= user; %>, thank you for&nbsp;for
-                                      signing up to&nbsp;digidocs&nbsp;esign. We
-                                      are glad to have you on board.<br /><br /><br /><br />
+                                      <%= subtitle %><br />
                                     </p>
+                                  </td>
+                                </tr>
+                                <tr style="border-collapse: collapse">
+                                  <td
+                                    align="center"
+                                    style="
+                                      padding: 0;
+                                      margin: 0;
+                                      padding-top: 10px;
+                                      padding-bottom: 10px;
+                                    "
+                                  >
+                                    <span
+                                      class="es-button-border"
+                                      style="
+                                        border-style: solid;
+                                        border-color: #47598b;
+                                        background: #113cfc;
+                                        border-width: 0px;
+                                        display: inline-block;
+                                        border-radius: 4px;
+                                        width: auto;
+                                      "
+                                      ><a
+                                        href="<%= link %>"
+                                        class="es-button"
+                                        target="_blank"
+                                        style="
+                                          mso-style-priority: 100 !important;
+                                          text-decoration: none;
+                                          -webkit-text-size-adjust: none;
+                                          -ms-text-size-adjust: none;
+                                          mso-line-height-rule: exactly;
+                                          color: #ffffff;
+                                          font-size: 18px;
+                                          border-style: solid;
+                                          border-color: #113cfc;
+                                          border-width: 10px 20px 10px 20px;
+                                          display: inline-block;
+                                          background: #113cfc;
+                                          border-radius: 4px;
+                                          font-family: Arial, sans-serif;
+                                          font-weight: normal;
+                                          font-style: normal;
+                                          line-height: 22px;
+                                          width: auto;
+                                          text-align: center;
+                                        "
+                                        ><%= buttontitle %></a
+                                      ></span
+                                    >
                                   </td>
                                 </tr>
                               </table>

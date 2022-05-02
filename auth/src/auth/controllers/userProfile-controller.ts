@@ -1,19 +1,23 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { BadRequestError } from '@digidocs/guardian';
+import { BadRequestError, Templates } from '@digidocs/guardian';
 import { AuthService } from 'auth/services';
 import { SendEmailPublisher } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
 // import { sendEmailToClient } from 'auth/auth/utils/email';
 
-export const getUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const userId = req.currentUser?.id
-    const userInfo = await AuthService.getUser(userId)
+    const userId = req.currentUser?.id;
+    const userInfo = await AuthService.getUser(userId);
     return res.status(201).send(userInfo);
   } catch (error) {
-    return next(error)
+    return next(error);
   }
 };
 
@@ -22,7 +26,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   const user = req.userData;
 
   if (!user) {
-    throw new BadRequestError("User Not Found")
+    throw new BadRequestError('User Not Found');
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -36,7 +40,11 @@ export const resetPassword = async (req: Request, res: Response) => {
     senderEmail: 'notifications@digidocs.one',
     clientEmail: user.email,
     subject: 'Password Reset Successful',
-    body: 'Hi,\nYour password has been reset successfully'
+    templateType: Templates.GENERAL,
+    data: {
+      title: 'Password Reset Successful',
+      subtitle: 'Your password has been reset successfully.',
+    },
   });
   res.send({ success: true });
 };

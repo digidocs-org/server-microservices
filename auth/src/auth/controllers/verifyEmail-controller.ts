@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import crypto from 'crypto';
 import User from 'auth/models';
 // import { sendEmailToClient } from 'auth/utils';
-import { BadRequestError } from '@digidocs/guardian';
+import { BadRequestError, Templates } from '@digidocs/guardian';
 import { SendEmailPublisher } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
 
@@ -21,8 +21,13 @@ export const sendOTPEmail = async (req: Request, res: Response) => {
     new SendEmailPublisher(natsWrapper.client).publish({
       senderEmail: 'notification@digidocsapp.com',
       clientEmail: user.email,
-      subject: 'otp for email Verification',
-      body: `Hi, the OTP for email verification is ${secureRandom}`,
+      subject: 'Email Verificaion',
+      templateType: Templates.OTP,
+      data: {
+        title: 'Email Verificaion',
+        subtitle: 'Hi, the OTP for email verification is',
+        otp: secureRandom,
+      },
     });
     await user.save();
     return res.send({ success: true });

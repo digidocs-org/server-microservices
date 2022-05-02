@@ -4,6 +4,7 @@ import {
   DocumentStatus,
   NotAuthorizedError,
   SignTypes,
+  Templates,
 } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import { IDocument } from 'authorization-service/models/Document';
@@ -19,11 +20,11 @@ import { natsWrapper } from 'src/nats-wrapper';
 const cancelDocument = async (req: Request, res: Response) => {
   const currUserMap = req.docUserMap;
 
-  const userId = req.currentUser?.id
-  const user = await User.findById(userId)
+  const userId = req.currentUser?.id;
+  const user = await User.findById(userId);
 
   if (!user) {
-    throw new BadRequestError("User not found")
+    throw new BadRequestError('User not found');
   }
 
   if (!currUserMap) {
@@ -62,40 +63,45 @@ const cancelDocument = async (req: Request, res: Response) => {
         senderEmail: 'notification@digidocs.one',
         clientEmail: user.email,
         subject: `DOCUMENT ${documentStatus}`,
-        body: `${document.name
+        templateType: Templates.GENERAL,
+        data: {
+          title: `DOCUMENT ${documentStatus}`,
+          subtitle: `${
+            document.name
           } has been ${documentStatus.toLowerCase()} by a user.`,
+        },
       });
     }
 
     //Update user info an put all remaining credits
     if (document.signType == SignTypes.AADHAR_SIGN) {
-      const reservedCredits = document.reservedAadhaarCredits
-      user.aadhaarCredits += document.reservedAadhaarCredits
-      document.reservedAadhaarCredits = 0
-      await user.save()
-      await document.save()
+      const reservedCredits = document.reservedAadhaarCredits;
+      user.aadhaarCredits += document.reservedAadhaarCredits;
+      document.reservedAadhaarCredits = 0;
+      await user.save();
+      await document.save();
       new CreditUpdatePublisher(natsWrapper.client).publish({
         userId: user.id,
         data: {
           aadhaarCredits: reservedCredits,
-          digitalSignCredits: 0
+          digitalSignCredits: 0,
         },
-        type: CreditUpdateType.ADDED
-      })
+        type: CreditUpdateType.ADDED,
+      });
     } else if (document.signType == SignTypes.DIGITAL_SIGN) {
-      const reservedCredits = document.reservedDigitalCredits
-      user.digitalSignCredits += document.reservedDigitalCredits
-      document.reservedDigitalCredits = 0
-      await user.save()
-      await document.save()
+      const reservedCredits = document.reservedDigitalCredits;
+      user.digitalSignCredits += document.reservedDigitalCredits;
+      document.reservedDigitalCredits = 0;
+      await user.save();
+      await document.save();
       new CreditUpdatePublisher(natsWrapper.client).publish({
         userId: user.id,
         data: {
           aadhaarCredits: 0,
-          digitalSignCredits: reservedCredits
+          digitalSignCredits: reservedCredits,
         },
-        type: CreditUpdateType.ADDED
-      })
+        type: CreditUpdateType.ADDED,
+      });
     }
 
     return res.send({ success: true });

@@ -41,4 +41,7 @@ export enum CreditUpdateType {
 
 export enum Templates {
   WELCOME = 'welcome',
+  OTP = 'otp',
+  GENERAL = 'general',
+  BUTTON = 'button',
 }
