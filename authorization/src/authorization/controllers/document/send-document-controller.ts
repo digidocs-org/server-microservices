@@ -5,6 +5,7 @@ import {
   BadRequestError,
   CreditUpdateType,
   DocumentStatus,
+  PaymentRequiredError,
   SignTypes,
 } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
@@ -52,14 +53,21 @@ export const sendDocumentController = async (req: Request, res: Response) => {
   const signType = document.signType;
   if (signType == SignTypes.AADHAR_SIGN) {
     if (user.aadhaarCredits < recipients.length) {
-      throw new BadRequestError('Not enough aadhaar sign credits');
+      throw new PaymentRequiredError('Not enough aadhaar sign credits', {
+        aadharCredits: recipients.length - user.aadhaarCredits,
+      });
     }
   } else if (signType == SignTypes.DIGITAL_SIGN) {
     if (user.digitalSignCredits < recipients.length) {
-      throw new BadRequestError('Not enough digital sign credits');
+      throw new PaymentRequiredError('Not enough digital sign credits', {
+        digitalCredits: recipients.length - user.digitalSignCredits,
+      });
     }
   } else {
-    throw new BadRequestError('Not enough credits');
+    throw new PaymentRequiredError('Not enough credits', {
+      aadharCredits: recipients.length - user.aadhaarCredits,
+      digitalCredits: recipients.length - user.digitalSignCredits,
+    });
   }
 
   if (!document.selfSign) {
