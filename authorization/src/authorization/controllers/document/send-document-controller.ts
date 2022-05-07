@@ -54,7 +54,7 @@ export const sendDocumentController = async (req: Request, res: Response) => {
   if (signType == SignTypes.AADHAR_SIGN) {
     if (user.aadhaarCredits < recipients.length) {
       throw new PaymentRequiredError('Not enough aadhaar sign credits', {
-        aadharCredits: recipients.length - user.aadhaarCredits,
+        aadhaarCredits: recipients.length - user.aadhaarCredits,
       });
     }
   } else if (signType == SignTypes.DIGITAL_SIGN) {
@@ -65,7 +65,7 @@ export const sendDocumentController = async (req: Request, res: Response) => {
     }
   } else {
     throw new PaymentRequiredError('Not enough credits', {
-      aadharCredits: recipients.length - user.aadhaarCredits,
+      aadhaarCredits: recipients.length - user.aadhaarCredits,
       digitalCredits: recipients.length - user.digitalSignCredits,
     });
   }
