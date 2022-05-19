@@ -55,7 +55,7 @@ export const sendDocumentController = async (req: Request, res: Response) => {
       throw new BadRequestError("Not enough digital sign credits")
     }
   } else {
-    throw new BadRequestError("Not enough credits")
+    throw new BadRequestError("Please check sign type")
   }
 
   if (!document.selfSign) {

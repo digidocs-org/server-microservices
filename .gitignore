@@ -6,5 +6,8 @@ yarn-error.log
 .DS_store
 aadhaar-sign.jar
 digital-sign-v2.jar
+esign-utility-v2.jar
+certificate-digidocs-stage.cer
+cloud-key-access.json
 temp-*
 sign.png
