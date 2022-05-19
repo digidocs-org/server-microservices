@@ -1,11 +1,16 @@
 import { Request, Response } from 'express';
 import DocumentUserMap from 'authorization-service/models/DocumentUserMap';
 import Document, { IDocument } from 'authorization-service/models/Document';
-import { BadRequestError, CreditUpdateType, DocumentStatus, SignTypes } from '@digidocs/guardian';
+import {
+  BadRequestError,
+  CreditUpdateType,
+  DocumentStatus,
+  PaymentRequiredError,
+  SignTypes,
+} from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
-import { SendEmailPublisher } from 'src/events/publishers/send-email-publisher';
 import { natsWrapper } from 'src/nats-wrapper';
-import User, { IUser } from 'authorization-service/models/User';
+import User from 'authorization-service/models/User';
 import SendDocumentPublisher from 'src/events/publishers/send-document-publisher';
 import { ActionStatus, ActionType } from 'authorization-service/types';
 import AuditTrail from 'authorization-service/models/AuditTrail';
@@ -14,11 +19,11 @@ import { CreditUpdatePublisher } from 'src/events/publishers/credit-update-publi
 
 export const sendDocumentController = async (req: Request, res: Response) => {
   const documentData = req.docUserMap?.document as IDocument;
-  const userId = req.currentUser?.id
-  const user = await User.findById(userId)
+  const userId = req.currentUser?.id;
+  const user = await User.findById(userId);
 
   if (!user) {
-    throw new BadRequestError("User not found")
+    throw new BadRequestError('User not found');
   }
 
   const { id: documentId } = documentData;
@@ -45,17 +50,24 @@ export const sendDocumentController = async (req: Request, res: Response) => {
   }
 
   //Check if credits are sufficient to send document
-  const signType = document.signType
+  const signType = document.signType;
   if (signType == SignTypes.AADHAR_SIGN) {
     if (user.aadhaarCredits < recipients.length) {
-      throw new BadRequestError("Not enough aadhaar sign credits")
+      throw new PaymentRequiredError('Not enough aadhaar sign credits', {
+        aadhaarCredits: recipients.length - user.aadhaarCredits,
+      });
     }
   } else if (signType == SignTypes.DIGITAL_SIGN) {
     if (user.digitalSignCredits < recipients.length) {
-      throw new BadRequestError("Not enough digital sign credits")
+      throw new PaymentRequiredError('Not enough digital sign credits', {
+        digitalCredits: recipients.length - user.digitalSignCredits,
+      });
     }
   } else {
-    throw new BadRequestError("Please check sign type")
+    throw new PaymentRequiredError('Not enough credits', {
+      aadhaarCredits: recipients.length - user.aadhaarCredits,
+      digitalCredits: recipients.length - user.digitalSignCredits,
+    });
   }
 
   if (!document.selfSign) {
@@ -111,31 +123,31 @@ export const sendDocumentController = async (req: Request, res: Response) => {
 
   //Update user profile and document credits
   if (signType == SignTypes.AADHAR_SIGN) {
-    user.aadhaarCredits -= recipients.length
-    document.reservedAadhaarCredits += recipients.length
-    await user.save()
-    await document.save()
+    user.aadhaarCredits -= recipients.length;
+    document.reservedAadhaarCredits += recipients.length;
+    await user.save();
+    await document.save();
     new CreditUpdatePublisher(natsWrapper.client).publish({
       userId: user.id,
       data: {
         aadhaarCredits: recipients.length,
-        digitalSignCredits: 0
+        digitalSignCredits: 0,
       },
-      type: CreditUpdateType.SUBTRACTED
-    })
+      type: CreditUpdateType.SUBTRACTED,
+    });
   } else if (signType == SignTypes.DIGITAL_SIGN) {
-    user.digitalSignCredits -= recipients.length
-    document.reservedDigitalCredits += recipients.length
-    await user.save()
-    await document.save()
+    user.digitalSignCredits -= recipients.length;
+    document.reservedDigitalCredits += recipients.length;
+    await user.save();
+    await document.save();
     new CreditUpdatePublisher(natsWrapper.client).publish({
       userId: user.id,
       data: {
         aadhaarCredits: 0,
-        digitalSignCredits: recipients.length
+        digitalSignCredits: recipients.length,
       },
-      type: CreditUpdateType.SUBTRACTED
-    })
+      type: CreditUpdateType.SUBTRACTED,
+    });
   }
 
   await new SendDocumentPublisher(natsWrapper.client).publish({

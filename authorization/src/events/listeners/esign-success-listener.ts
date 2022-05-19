@@ -4,6 +4,7 @@ import {
   Listener,
   DocumentStatus,
   SignTypes,
+  Templates,
 } from '@digidocs/guardian';
 import { IDocumentActions } from 'authorization-service/models/Actions';
 import AuditTrail, {
@@ -57,11 +58,11 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
 
     //Decrease credit stored in document
     if (document.signType == SignTypes.AADHAR_SIGN) {
-      document.reservedAadhaarCredits--
-      await document.save()
+      document.reservedAadhaarCredits--;
+      await document.save();
     } else if (document.signType == SignTypes.DIGITAL_SIGN) {
-      document.reservedDigitalCredits--
-      await document.save()
+      document.reservedDigitalCredits--;
+      await document.save();
     }
 
     // TODO Send Email to the user who signed the document.
@@ -148,7 +149,11 @@ export class EsignSuccessListener extends Listener<EsignSuccessEvent> {
         senderEmail: 'notification@digidocsapp.com',
         clientEmail: owner.email,
         subject: 'Document Signed Successfully.',
-        body: 'All the recipients have signed the document.',
+        templateType: Templates.GENERAL,
+        data: {
+          title: 'Document Signed Successfully',
+          subtitle: 'All the recipients have signed the document.',
+        },
       });
     }
     msg.ack();

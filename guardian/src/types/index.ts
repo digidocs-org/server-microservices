@@ -37,5 +37,12 @@ export enum SignTypes {
 
 export enum CreditUpdateType {
   ADDED = 'ADDED',
-  SUBTRACTED = 'SUBTRACTED'
+  SUBTRACTED = 'SUBTRACTED',
+}
+
+export enum Templates {
+  WELCOME = 'welcome',
+  OTP = 'otp',
+  GENERAL = 'general',
+  BUTTON = 'button',
 }
