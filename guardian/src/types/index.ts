@@ -30,8 +30,9 @@ export interface IEmailOptions {
 export enum SignTypes {
   ESIGN_REQUEST = 'ESIGN_REQUEST',
   AADHAR_SIGN = 'AADHAR_SIGN',
+  AADHAAR_SIGN= 'AADHAAR_SIGN',
   DIGITAL_SIGN = 'DIGITAL_SIGN',
-  FIELD_REQUEST = 'GET_COORD_DATA',
+  FIELD_REQUEST = 'FIELD_REQUEST'
 }
 
 export enum CreditUpdateType {

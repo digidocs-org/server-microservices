@@ -39,8 +39,6 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
     }
     const signFieldData: EsignRequest = {
         name: "",
-        location: "",
-        reason: "",
         signatureFieldData: {
             data: signField
         }
@@ -69,6 +67,7 @@ export const digitalSignRequest = async (req: Request, res: Response) => {
         deleteFile(esignRequest.signedFilePath);
         return res.send({ success: true, msg: "document signed successfully!!" });
     } catch (error) {
+        console.log(error)
         deleteFile(esignRequest.signedFilePath);
         throw new BadRequestError("signing failed")
     }

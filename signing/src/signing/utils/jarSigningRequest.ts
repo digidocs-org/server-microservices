@@ -1,67 +1,58 @@
 import { convertToString, SignTypes } from "@digidocs/guardian"
-import { EsignRequest, Files } from 'signing-service/types'
+import { AadhaarSigningData, EsignRequest, Files, KMSKeyPath } from 'signing-service/types'
 import { v4 as uuid } from 'uuid'
 
-export const createJarSigningReq = (signType: string, requestData: EsignRequest, tempFile?: string) => {
+export const createJarSigningReq = (signType: string, requestData: EsignRequest, aadhaarSigningData?: AadhaarSigningData) => {
 
-    const { tempSigningDir, pfxKey, javaAadhaarUtility, javaDigitalUtilityV2 } = Files
-    const tempFileName = tempFile ?? `temp-${uuid()}`
-    const ASP_ID = process.env.ASP_ID
-    const pfxFilePass = process.env.PFX_FILE_PASS
+    const { tempSigningDir, pfxKey, digidocsEsignUtilityV2, stageCertificate, kmsAccessKey } = Files
+    const { stage: stageHSMKeyPath, prod: prodHSMKeyPath } = KMSKeyPath
+
+    const tempFileName = `temp-${uuid()}`
 
     const unsignedFilePath = `${tempSigningDir}/${tempFileName}/unsigned.pdf`;
-    const responseTextFile = signType == SignTypes.AADHAR_SIGN ? `${tempSigningDir}/${tempFileName}/response.txt` : "";
-    const signedFilePath = `${tempSigningDir}/${tempFileName}/unsigned_signedFinal.pdf`;
-    const unsignedFieldPath = `${tempSigningDir}/${tempFileName}/unsigned_encryptTempSigned.pdf`
-    const fieldDataFilePath = `${tempSigningDir}/${tempFileName}/field.txt`
-    const timeStampFilePath = `${tempSigningDir}/${tempFileName}/unsigned_calTimeStamp.txt`
-    const requestXmlFilePath = `${tempSigningDir}/${tempFileName}/unsigned_eSignRequestXml.txt`
+    const signedFilePath = `${tempSigningDir}/${tempFileName}/signed.pdf`;
+    const unsignedFieldPath = `${tempSigningDir}/${tempFileName}/unsigned_field.pdf`
     const signImageFilePath = `${tempSigningDir}/${tempFileName}/sign.png`
+    const responseTextFile = `${tempSigningDir}/${tempFileName}/response.txt`
 
     const data = {
-        esignResponse: convertToString(responseTextFile),
         unsignedPdfPath: convertToString(unsignedFilePath),
         tempSignedPdfPath: convertToString(signedFilePath),
         signImageFile: convertToString(signImageFilePath),
-        nameToShowOnStamp: convertToString(requestData.name),
-        locationToShowOnStamp: convertToString(requestData.location),
-        reasonToShowOnStamp: convertToString(requestData.reason),
+        nameToShowOnStamp: convertToString(requestData?.name),
         pfxPath: convertToString(pfxKey),
         pfxPass: convertToString(process.env.PFX_FILE_PASS!),
         signFieldData: convertToString(convertToString(requestData.signatureFieldData)),
-        fieldDataFilePath: convertToString(fieldDataFilePath)
+        kmsAccessKey: convertToString(kmsAccessKey),
+        stageHSMKeyPath: convertToString(stageHSMKeyPath),
+        prodHSMKeyPath: convertToString(prodHSMKeyPath),
+        stageCertificate: convertToString(stageCertificate),
+        xmlResponse: convertToString(responseTextFile),
+        timestamp: convertToString(aadhaarSigningData?.timestamp)
     }
 
     let signingRequest;
 
     if (signType == SignTypes.DIGITAL_SIGN) {
-        signingRequest = `java -jar ${javaDigitalUtilityV2} ${SignTypes.DIGITAL_SIGN} ${data.unsignedPdfPath} ${data.signImageFile} ${data.tempSignedPdfPath} ${data.nameToShowOnStamp} "${requestData.location}" "${requestData.reason}" ` + data.signFieldData + ` ${data.pfxPath} ${data.pfxPass}`
+        signingRequest = `java -jar ${digidocsEsignUtilityV2} ${SignTypes.DIGITAL_SIGN} ${data.unsignedPdfPath} ${data.nameToShowOnStamp} ${data.kmsAccessKey} ${data.stageHSMKeyPath} ${data.stageCertificate} ${data.signFieldData} `
     }
 
     if (signType == SignTypes.FIELD_REQUEST) {
-        signingRequest = `java -jar ${javaDigitalUtilityV2} ${SignTypes.FIELD_REQUEST} ${data.unsignedPdfPath} ${data.signFieldData} ${data.fieldDataFilePath}`
+        signingRequest = `java -jar ${digidocsEsignUtilityV2} ${SignTypes.FIELD_REQUEST} ${data.unsignedPdfPath} "" "" ${data.nameToShowOnStamp} ${data.signFieldData}`
     }
 
-    if (signType == SignTypes.ESIGN_REQUEST) {
-        signingRequest = `java -jar ${javaAadhaarUtility} 1 "" ${data.unsignedPdfPath} ${ASP_ID} 1 "" ${pfxKey} ${pfxFilePass} ${data.signImageFile} 15 1 "${requestData.name}" "${requestData.location}" "${requestData.reason}" "" "" ${data.fieldDataFilePath}`
-    }
-
-
-    if (signType == SignTypes.AADHAR_SIGN) {
-        signingRequest = `java -jar ${javaAadhaarUtility} 2 ${data.esignResponse} ${data.unsignedPdfPath} ${data.signImageFile} 15 "${requestData.name}" "${requestData.location}" "${requestData.reason}" "" "" ${data.fieldDataFilePath}`
+    if (signType == SignTypes.AADHAAR_SIGN) {
+        signingRequest = `java -jar ${digidocsEsignUtilityV2} ${SignTypes.AADHAAR_SIGN} ${data.unsignedPdfPath} ${data.xmlResponse} ${data.timestamp} ${data.nameToShowOnStamp} ${data.signFieldData}`
     }
 
 
     return {
         unsignedFilePath,
-        responseTextFile,
         signedFilePath,
         signingRequest,
-        fieldDataFilePath,
-        timeStampFilePath,
         tempFileName,
-        requestXmlFilePath,
         unsignedFieldPath,
-        signImageFilePath
+        signImageFilePath,
+        responseTextFile
     }
 }

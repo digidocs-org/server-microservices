@@ -12,7 +12,7 @@ import {
   readFile
 } from '@digidocs/guardian';
 import { createJarSigningReq, parseUploadData, verifyEsignResponse } from 'signing-service/utils';
-import { AadharEsignPayload, EsignRequest, EsignResponse } from 'signing-service/types';
+import { AadhaarSigningData, AadharEsignPayload, EsignRequest, EsignResponse } from 'signing-service/types';
 import jwt from 'jsonwebtoken'
 import { EsignSuccess } from 'src/events/publishers';
 import { natsWrapper } from 'src/nats-wrapper';
@@ -23,7 +23,6 @@ export const esignCallback = async (req: Request, res: Response) => {
 
   const decodedData = jwt.verify(signingData, process.env.ESIGN_SALT!) as AadharEsignPayload
   const { documentId, userId, redirectUrl, calTimeStamp, fieldData: signField } = decodedData
-
   const response = verifyEsignResponse(espResponse);
   if (response?.actionType == EsignResponse.CANCELLED) {
     return res.send(`${redirectUrl}?status=cancelled`);
@@ -33,7 +32,6 @@ export const esignCallback = async (req: Request, res: Response) => {
   if (!documentId || !userId || !user || !redirectUrl || !calTimeStamp || !signField || !user.signUrl) {
     return res.send(`${redirectUrl}?status=failed`);
   }
-
   const document = await Document.findById(documentId);
   if (!document) {
     return res.send(`${redirectUrl}?status=failed`);
@@ -51,24 +49,22 @@ export const esignCallback = async (req: Request, res: Response) => {
 
   const signFieldData: EsignRequest = {
     name: `${user.firstname} ${user.lastname}`,
-    location: "India",
-    reason: "Aadhaar Sign",
     signatureFieldData: {
       data: signField
     }
   }
 
+  const aadhaarSigningData: AadhaarSigningData = {
+    timestamp: calTimeStamp
+  }
 
-  const esignRequest = createJarSigningReq(SignTypes.AADHAR_SIGN, signFieldData);
+  const esignRequest = createJarSigningReq(SignTypes.AADHAAR_SIGN, signFieldData, aadhaarSigningData);
 
   try {
-    await writeFile(esignRequest.fieldDataFilePath, signField, 'utf-8');
     await writeFile(esignRequest.unsignedFilePath, decryptedFile, 'base64');
     await writeFile(esignRequest.signImageFilePath, sign, 'base64');
     await writeFile(esignRequest.responseTextFile, espResponse, 'utf-8');
-    await writeFile(esignRequest.timeStampFilePath, calTimeStamp, 'utf-8');
     await exec(esignRequest.signingRequest);
-
     const dataBuffer = await readFile(esignRequest.signedFilePath)
 
     const { encryptedFile, publicKey } = encryptDocument(dataBuffer);
