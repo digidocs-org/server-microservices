@@ -12,12 +12,12 @@
     "start-authorization": "yarn workspace @digidocs/authorization start",
     "start-signing": "yarn workspace @digidocs/signing start",
     "start-payments": "yarn workspace @digidocs/payments start",
-    "start-dev": "concurrently \"yarn start-auth-dev\" \"yarn start-email-dev\" \"yarn start-signing-dev\" \"yarn start-authorization-dev\" \"yarn start-payments-dev\"",
+    "start-dev": "concurrently \"yarn start-auth-dev\" \"yarn start-notification-service-dev\" \"yarn start-signing-dev\" \"yarn start-authorization-dev\" \"yarn start-payments-dev\"",
     "start-nats": "docker run -d -p 4222:4222 -p 8222:8222 nats-streaming -p 4222 -m 8222 -hbi 5s -hbt 5s -hbf 2 -SD -cid digidocs",
     "start-auth-dev": "dotenv -e ./auth/.env yarn workspace @digidocs/auth start",
     "start-authorization-dev": "dotenv -e ./authorization/.env yarn workspace @digidocs/authorization start",
     "start-signing-dev": "dotenv -e ./signing/.env yarn workspace @digidocs/signing start",
-    "start-email-dev": "dotenv -e ./email/.env yarn workspace @digidocs/email start",
+    "start-notification-service-dev": "dotenv -e ./notification-service/.env yarn workspace @digidocs/notification-service start",
     "start-payments-dev": "dotenv -e ./payment/.env yarn workspace @digidocs/payments start"
   },
   "private": true,
@@ -25,7 +25,7 @@
     "auth",
     "authorization",
     "guardian",
-    "email",
+    "notification-service",
     "signing",
     "payment",
     "k8s"

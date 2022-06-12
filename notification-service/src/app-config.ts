@@ -1,5 +1,5 @@
-import {SendEmailListener} from 'email-service/events/listeners';
-import {natsWrapper} from './nats-wrapper';
+import { SendEmailListener } from 'notification-service/events/listeners';
+import { natsWrapper } from './nats-wrapper';
 
 export class Application {
   constructor() {

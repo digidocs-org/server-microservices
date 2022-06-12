@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { EmailOptions } from 'email-service/types';
+import { EmailOptions } from 'notification-service/types';
 import { Templates } from '@digidocs/guardian';
 import ejs from 'ejs';
 

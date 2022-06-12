@@ -3,6 +3,7 @@ import esignRouter from './esign-router';
 import documentRouter from './document-router';
 import recipientRouter from './recipient-router'
 import paymentRouter from './payment-router'
+import contactRouter from './contact-router'
 
 export class DocumentAuthorizationRouter {
   private static router = Router();
@@ -28,6 +29,10 @@ export class DocumentAuthorizationRouter {
     */
     this.router.use('/api/v1/authorization/orders', paymentRouter);
 
+    /**
+    * @description Contact Router
+    */
+     this.router.use('/api/v1/authorization/contact', contactRouter);
 
     return this.router;
   }

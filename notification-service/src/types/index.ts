@@ -9,4 +9,4 @@ export interface EmailOptions {
   data?: any;
 }
 
-export const queueGroupName = 'email-service';
+export const queueGroupName = 'notification-service';
