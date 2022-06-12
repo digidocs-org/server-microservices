@@ -8,7 +8,14 @@ export interface SendEmailEvent {
     clientEmail: string;
     subject: string;
     body?: string;
-    templateType?: Templates;
+    templateType: Templates;
     data?: any;
+    attachments?: AttachmentOptions[];
   };
+}
+
+interface AttachmentOptions {
+  fileName: string
+  content: Buffer
+  contentType?: string
 }

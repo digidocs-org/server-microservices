@@ -1,19 +1,19 @@
 import nodemailer from 'nodemailer';
 import { EmailOptions } from 'notification-service/types';
 import { Templates } from '@digidocs/guardian';
-import ejs from 'ejs';
+import ejs, { render } from 'ejs';
+import key from 'src/digidocs-gsuite-credentials.json'
 
 export const transporter = nodemailer.createTransport({
-  host: 'smtp.zoho.in',
+  host: 'smtp.gmail.com',
   port: 465,
   secure: true,
   auth: {
+    type: "OAuth2",
     user: process.env.NODEMAILER_EMAIL,
-    pass: process.env.NODEMAILER_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
+    serviceClient: key.client_id,
+    privateKey: key.private_key
+  }
 });
 
 const renderTemplate = (templateType: Templates, data: any) => {
@@ -25,46 +25,26 @@ const renderTemplate = (templateType: Templates, data: any) => {
   return renderedTemplate;
 };
 
-export const sendEmailToClient = async (options: EmailOptions) => {
-  if (options.clientEmail) {
-    if (options.templateType) {
-      const renderedTemplate = await renderTemplate(
-        options.templateType,
-        options.data
-      );
-
-      return transporter.sendMail(
-        {
-          from: process.env.NODEMAILER_EMAIL!,
-          to: options.clientEmail,
-          subject: options.subject,
-          html: renderedTemplate,
-        },
-        (err, info) => {
-          if (err) {
-            throw err;
-          } else {
-            return true;
-          }
-        }
-      );
-    }
-    return transporter.sendMail(
-      {
-        from: process.env.NODEMAILER_EMAIL!,
-        to: options.clientEmail,
-        subject: options.subject,
-        text: options.body,
-      },
-      (err, info) => {
-        if (err) {
-          throw err;
-        } else {
-          return true;
-        }
-      }
-    );
-  } else {
-    console.log(options);
+const mailOptions = (options: EmailOptions, template: string) => {
+  return {
+    from: options.senderEmail ?? process.env.NODEMAILER_EMAIL!,
+    to: options.clientEmail,
+    subject: options.subject,
+    html: template,
+    attachments: options.attachments
   }
+}
+
+export const sendEmailToClient = async (options: EmailOptions) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await transporter.verify()
+      const template = await renderTemplate(options.templateType, options.data)
+      await transporter.sendMail(mailOptions(options, template))
+      resolve(true)
+    } catch (error) {
+      console.log(error)
+      resolve(false)
+    }
+  })
 };

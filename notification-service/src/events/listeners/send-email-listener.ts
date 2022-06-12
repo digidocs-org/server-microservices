@@ -13,7 +13,6 @@ export class SendEmailListener extends Listener<SendEmailEvent> {
       msg.ack();
     } catch (error) {
       console.log(error);
-      console.log(data);
       msg.ack();
     }
   }
