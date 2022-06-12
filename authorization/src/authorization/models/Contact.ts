@@ -9,7 +9,7 @@ export interface IContactUs extends Document {
     userMobile?: string
 }
 
-const auditTrailSchema = new Schema(
+const contactUsSchema = new Schema(
     {
         userName: { type: String },
         userEmail: { type: String },
@@ -28,9 +28,9 @@ const auditTrailSchema = new Schema(
     }
 );
 
-auditTrailSchema.set('versionKey', 'version');
-auditTrailSchema.plugin(updateIfCurrentPlugin);
+contactUsSchema.set('versionKey', 'version');
+contactUsSchema.plugin(updateIfCurrentPlugin);
 
-const ContactUs = mongoose.model<IContactUs>('auditTrail', auditTrailSchema);
+const ContactUs = mongoose.model<IContactUs>('contact-us', contactUsSchema);
 
 export default ContactUs;
