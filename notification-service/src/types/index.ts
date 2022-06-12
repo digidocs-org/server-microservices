@@ -1,7 +1,6 @@
 import { Templates } from '@digidocs/guardian';
 
 export interface EmailOptions {
-  senderEmail: string;
   clientEmail: string;
   subject: string;
   body?: string;

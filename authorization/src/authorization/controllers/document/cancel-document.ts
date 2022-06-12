@@ -60,7 +60,6 @@ const cancelDocument = async (req: Request, res: Response) => {
     for (const docUserMap of docUserMaps) {
       const user = docUserMap.user as IUser;
       new SendEmailPublisher(natsWrapper.client).publish({
-        senderEmail: 'notification@digidocs.one',
         clientEmail: user.email,
         subject: `DOCUMENT ${documentStatus}`,
         templateType: Templates.GENERAL,

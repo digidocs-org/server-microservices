@@ -27,7 +27,7 @@ const renderTemplate = (templateType: Templates, data: any) => {
 
 const mailOptions = (options: EmailOptions, template: string) => {
   return {
-    from: options.senderEmail ?? process.env.NODEMAILER_EMAIL!,
+    from: process.env.NODEMAILER_EMAIL!,
     to: options.clientEmail,
     subject: options.subject,
     html: template,

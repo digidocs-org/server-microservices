@@ -7,7 +7,6 @@ const contactUs = async (req: Request, res: Response) => {
     const { userName, userEmail, userQueryHeader, userQuery, userMobile } = req.body
 
     new SendEmailPublisher(natsWrapper.client).publish({
-        senderEmail: 'notifications@digidocs.one',
         clientEmail: userEmail,
         subject: userQueryHeader,
         templateType: Templates.GENERAL,
