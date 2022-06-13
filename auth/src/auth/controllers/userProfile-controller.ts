@@ -37,7 +37,6 @@ export const resetPassword = async (req: Request, res: Response) => {
   await user.save();
 
   new SendEmailPublisher(natsWrapper.client).publish({
-    senderEmail: 'notifications@digidocs.one',
     clientEmail: user.email,
     subject: 'Password Reset Successful',
     templateType: Templates.GENERAL,

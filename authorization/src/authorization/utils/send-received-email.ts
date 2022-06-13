@@ -13,7 +13,6 @@ export const sendReceivedEmail = (docUserMap: IDocumentUserMap) => {
 
   const deeplink = `${process.env.DOCUMENT_ACCESS_URL}/${document.id}?token=${token}`;
   new SendEmailPublisher(natsWrapper.client).publish({
-    senderEmail: 'notifications@digidocs.one',
     clientEmail: user.email,
     subject: 'Document Received',
     templateType: Templates.BUTTON,

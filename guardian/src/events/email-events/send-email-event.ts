@@ -4,11 +4,17 @@ import { Subjects } from '../subjects';
 export interface SendEmailEvent {
   subject: Subjects.SendEmail;
   data: {
-    senderEmail: string;
     clientEmail: string;
     subject: string;
     body?: string;
-    templateType?: Templates;
+    templateType: Templates;
     data?: any;
+    attachments?: AttachmentOptions[];
   };
+}
+
+interface AttachmentOptions {
+  fileName: string
+  content: Buffer
+  contentType?: string
 }

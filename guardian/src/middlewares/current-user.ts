@@ -22,6 +22,7 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
+
   const token = req.cookies['session'] ?? req.header('token') ?? req.body.token;
 
   try {

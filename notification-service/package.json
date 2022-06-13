@@ -1,7 +1,7 @@
 {
-  "name": "@digidocs/email",
+  "name": "@digidocs/notification-service",
   "version": "1.0.0",
-  "description": "Email microservice",
+  "description": "Microservice to send email and push notifications",
   "main": "index.js",
   "author": "digidocs",
   "license": "MIT",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@digidocs/guardian": "1.0.0",
     "@types/cookie-parser": "^1.4.2",
-    "@types/ejs": "^3.1.0",
+    "@types/ejs": "^3.1.1",
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.7",
     "node-nats-streaming": "^0.3.2",

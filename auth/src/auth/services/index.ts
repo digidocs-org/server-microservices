@@ -61,7 +61,6 @@ export class AuthService {
     });
 
     new SendEmailPublisher(natsWrapper.client).publish({
-      senderEmail: 'notifications@digidocs.one',
       clientEmail: user.email,
       subject: 'Welcome to Digidocs Esign',
       templateType: Templates.WELCOME,

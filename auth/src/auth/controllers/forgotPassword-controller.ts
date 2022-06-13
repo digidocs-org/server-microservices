@@ -25,7 +25,6 @@ export const forgotPasswordOtp = async (req: Request, res: Response) => {
   user.forgetPasswordOtp!.otp = secureRandom;
   user.forgetPasswordOtp!.expire = currentTimeStamp + 5 * 60000;
   new SendEmailPublisher(natsWrapper.client).publish({
-    senderEmail: 'notifications@digidocs.one',
     clientEmail: user.email,
     subject: 'Account Password Reset',
     templateType: Templates.OTP,

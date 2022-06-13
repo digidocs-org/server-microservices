@@ -20,10 +20,7 @@ spec:
               value: '80'
               
             - name: NODEMAILER_EMAIL
-              value: 'notifications@digidocsapp.com'
-
-            - name: NODEMAILER_PASS
-              value: 'notifications@12345'
+              value: 'notifications@digidocs.one'
 
             - name: NATS_CLIENT_ID
               valueFrom:
