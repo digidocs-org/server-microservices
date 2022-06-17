@@ -15,4 +15,4 @@ export interface AttachmentOptions {
   contentType?: string
 }
 
-export const queueGroupName = 'notification-service';
+export const queueGroupName = 'nato-service';

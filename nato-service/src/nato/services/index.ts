@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { EmailOptions } from 'notification-service/types';
+import { EmailOptions } from 'nato-service/nato/types';
 import { Templates } from '@digidocs/guardian';
 import ejs, { render } from 'ejs';
 import key from 'src/digidocs-gsuite-credentials.json'
