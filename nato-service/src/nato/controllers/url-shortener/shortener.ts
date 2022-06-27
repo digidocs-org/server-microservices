@@ -22,7 +22,7 @@ export const urlShortenerController = async (req: Request, res: Response) => {
                 data: url
             })
         }
-        const shortUrl = process.env.BASE_URL + urlCode
+        const shortUrl = process.env.URL_SHORTENER_BASE_URL + urlCode
 
         url = await UrlShortener.create({
             longUrl,
