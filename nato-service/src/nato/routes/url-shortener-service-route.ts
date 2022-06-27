@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import {
+  redirectController,
   urlShortenerController
-} from 'nato-service/controllers/url-shortener/shortener';
+} from 'nato-service/controllers/url-shortener';
 import {
   bodyValidators,
   currentUser,
@@ -11,8 +12,8 @@ import {
 const router = Router();
 
 /**
- * @Route  GET '/api/v1/document'
- * @Desc   Create new document
+ * @Route  GET '/api/v1/nato/shortener/create'
+ * @Desc   Create new shortened url
  * @Access Public
  */
 router.post(
@@ -22,4 +23,13 @@ router.post(
   urlShortenerController
 );
 
+/**
+ * @Route  GET '/api/v1/nato/shortener/get'
+ * @Desc   Create new document
+ * @Access Public
+ */
+router.get(
+  '/:code',
+  redirectController
+);
 export = router;
