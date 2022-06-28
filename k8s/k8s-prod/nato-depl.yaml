@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: nato
-          image: asia.gcr.io/digidocs-stage/nato:latest
+          image: asia.gcr.io/digidocs-stage/nato-service:latest
           env:
             - name: PORT
               value: "80"
