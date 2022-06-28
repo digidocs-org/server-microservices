@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "docker system prune -a",
     "start-auth": "yarn workspace @digidocs/auth start",
-    "start-email": "yarn workspace @digidocs/email start",
+    "start-nato": "yarn workspace @digidocs/nato-service start",
     "start-authorization": "yarn workspace @digidocs/authorization start",
     "start-signing": "yarn workspace @digidocs/signing start",
     "start-payments": "yarn workspace @digidocs/payments start",
