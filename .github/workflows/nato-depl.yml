@@ -1,18 +1,18 @@
-name: Email deployment
+name: Nato deployment
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'email/**'
+      - 'nato-service/**'
       - 'guardian/**'
   workflow_dispatch:
 
 env:
   PROJECT_ID: digidocs-stage
   GKE_ZONE: asia-south1-b
-  IMAGE: email
+  IMAGE: nato
 
 jobs:
   build_and_push:
