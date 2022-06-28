@@ -8,7 +8,7 @@ export class NatoRouter {
         /** 
          * @desc url shortener route acting as a downstream
         */
-        this.router.use('api/v1/nato/shortener', UrlShortenerServiceRouter)
+        this.router.use('/api/v1/nato/shortener', UrlShortenerServiceRouter)
         return this.router;
     }
 }
