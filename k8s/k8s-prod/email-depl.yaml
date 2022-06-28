@@ -17,18 +17,24 @@ spec:
           image: asia.gcr.io/digidocs-stage/email:latest
           env:
             - name: PORT
-              value: '80'
-              
+              value: "80"
+
+            - name: MONGO_URI
+              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/natodb
+
             - name: NODEMAILER_EMAIL
-              value: 'notifications@digidocs.one'
+              value: "notifications@digidocs.one"
 
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name 
+                  fieldPath: metadata.name
+
+            - name: URL_SHORTENER_BASE_URL
+              value: "https://di-gi.in/"
 
             - name: NATS_URI
-              value: 'http://nats-srv:4222'
+              value: "http://nats-srv:4222"
 
             - name: NATS_CLUSTER_ID
-              value: 'digidocs'
+              value: "digidocs"

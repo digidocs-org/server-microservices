@@ -1,5 +1,9 @@
 import {Application} from './app-config';
 
+if (!process.env.PORT) {
+  throw new Error('PORT is required.');
+}
+
 if (!process.env.NODEMAILER_EMAIL) {
   throw new Error('JWT_KEY is required.');
 }
@@ -21,4 +25,5 @@ if (!process.env.NATS_CLUSTER_ID) {
 }
 
 //initialise application
-new Application();
+const application = new Application();
+application.start(parseInt(process.env.PORT))
