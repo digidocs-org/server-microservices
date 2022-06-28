@@ -36,3 +36,10 @@ spec:
                 name: payment-srv
                 port: 
                   number: 80
+          - path: /api/v1/nato/?(.*)
+            pathType: Prefix
+            backend:
+              service: 
+                name: nato-srv
+                port: 
+                  number: 80

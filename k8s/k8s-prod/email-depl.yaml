@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: email-depl
+  name: nato-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: email
+      app: nato
   template:
     metadata:
       labels:
-        app: email
+        app: nato
     spec:
       containers:
-        - name: email
-          image: asia.gcr.io/digidocs-stage/email:latest
+        - name: nato
+          image: asia.gcr.io/digidocs-stage/nato:latest
           env:
             - name: PORT
               value: "80"
@@ -38,3 +38,16 @@ spec:
 
             - name: NATS_CLUSTER_ID
               value: "digidocs"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nato-srv
+spec:
+  selector:
+    app: nato
+  ports:
+    - name: nato
+      protocol: TCP
+      port: 80
+      targetPort: 80
