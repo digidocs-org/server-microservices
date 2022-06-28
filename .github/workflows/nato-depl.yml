@@ -12,7 +12,7 @@ on:
 env:
   PROJECT_ID: digidocs-stage
   GKE_ZONE: asia-south1-b
-  IMAGE: nato
+  IMAGE: nato-service
 
 jobs:
   build_and_push:
