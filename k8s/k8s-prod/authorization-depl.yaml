@@ -75,14 +75,8 @@ spec:
             - name: AWS_S3_BUCKET
               value: 'digidocs-local-bucket'
 
-            - name: DOCUMENT_SERVICE_URL
-              value: 'http://document-srv'
-
             - name: ESIGN_SERVICE_BASE_URL
               value: 'http://signing-srv'
-
-            - name: DOCUMENT_SERVICE_URL
-              value: 'http://document-srv'
 
             - name: PAYMENT_SERVICE_BASE_URL
               value: 'https://stage-api.digidocs.one/api/v1'
