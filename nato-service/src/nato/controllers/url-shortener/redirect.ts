@@ -6,15 +6,18 @@ export const redirectController = async (req: Request, res: Response) => {
     const code = req.params.code
 
     try {
-        const uri = await UrlShortener.findOne({
+        const urlData = await UrlShortener.findOne({
             urlCode: code
         })
 
-        if (!uri) {
+        if (!urlData) {
             throw new BadRequestError("url not found")
         }
 
-        return res.redirect(uri.longUrl)
+        return res.send({
+            success: true,
+            data: urlData
+        })
     } catch (error) {
         console.log(error)
         throw new BadRequestError("url not found")
