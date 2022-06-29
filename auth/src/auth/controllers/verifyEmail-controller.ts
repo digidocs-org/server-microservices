@@ -19,7 +19,6 @@ export const sendOTPEmail = async (req: Request, res: Response) => {
     user.emailOtp!.otp = secureRandom;
     user.emailOtp!.expire = currentTimeStamp + 10 * 60000;
     new SendEmailPublisher(natsWrapper.client).publish({
-      senderEmail: 'notification@digidocsapp.com',
       clientEmail: user.email,
       subject: 'Email Verificaion',
       templateType: Templates.OTP,

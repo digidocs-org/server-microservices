@@ -1,4 +1,4 @@
-import { SendEmailListener } from 'nato-service/events/listeners';
+import { SendEmailListener } from 'src/events/listeners';
 import { natsWrapper } from './nats-wrapper';
 import { json, urlencoded } from 'express';
 import { App } from '@digidocs/guardian';

@@ -21,7 +21,6 @@ export const enum DocumentStatus {
 }
 
 export interface IEmailOptions {
-  senderEmail: string;
   clientEmail: string;
   subject: string;
   body?: string;
