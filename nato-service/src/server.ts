@@ -4,11 +4,7 @@ if (!process.env.PORT) {
   throw new Error('PORT is required.');
 }
 
-if (!process.env.NODEMAILER_EMAIL) {
-  throw new Error('JWT_KEY is required.');
-}
-
-if (!process.env.NODEMAILER_PASS) {
+if (!process.env.MONGO_URI) {
   throw new Error('MONGO_URI is required.');
 }
 

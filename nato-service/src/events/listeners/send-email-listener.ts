@@ -1,6 +1,6 @@
 import { Subjects, SendEmailEvent, Listener } from '@digidocs/guardian';
-import { sendEmailToClient } from 'nato-service/nato/services';
-import { queueGroupName } from 'nato-service/nato/types';
+import { sendEmailToClient } from 'nato-service/services';
+import { queueGroupName } from 'nato-service/types';
 import { Message } from 'node-nats-streaming';
 
 export class SendEmailListener extends Listener<SendEmailEvent> {
