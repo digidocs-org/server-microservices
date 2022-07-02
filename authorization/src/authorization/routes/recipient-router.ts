@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import {
-  currentUser,
-  headerValidators,
-  validateRequest,
-} from '@digidocs/guardian';
+import { currentUser } from '@digidocs/guardian';
 import hasDocumentAccess from 'authorization-service/middlewares/has-document-access';
 import { addRecipientsController } from 'authorization-service/controllers/recipient';
 
