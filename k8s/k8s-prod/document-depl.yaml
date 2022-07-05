@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: authorization-depl
+  name: document-service-depl
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: authorization
+      app: document
   template:
     metadata:
       labels:
-        app: authorization
+        app: document
     spec:
       containers:
-        - name: authorization
-          image: asia.gcr.io/digidocs-stage/authorization:latest
+        - name: document
+          image: asia.gcr.io/digidocs-stage/document:latest
           env:
             - name: PORT
               value: '80'
 
             - name: MONGO_URI
-              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/authorization
+              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/documentdb
 
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -82,17 +82,17 @@ spec:
               value: 'https://stage-api.digidocs.one/api/v1'
 
             - name: PAYMENT_CALLBACK_URL
-              value: 'https://stage-api.digidocs.one/api/v1/authorization/orders/payment/callback'
+              value: 'https://stage-api.digidocs.one/api/v1/document/orders/payment/callback'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: authorization-srv
+  name: document-srv
 spec:
   selector:
-    app: authorization
+    app: document
   ports:
-    - name: authorization
+    - name: document
       protocol: TCP
       port: 80
       targetPort: 80
