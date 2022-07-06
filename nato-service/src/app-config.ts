@@ -31,7 +31,6 @@ export class Application {
     }
 
     this.app = new App(
-      [NatoRouter.route()],
       [
         cors({
           credentials: true,
@@ -43,7 +42,8 @@ export class Application {
         }),
         json({ limit: '50mb' }),
         urlencoded({ extended: true }),
-      ]
+      ],
+      [NatoRouter.route()],
     );
   }
 

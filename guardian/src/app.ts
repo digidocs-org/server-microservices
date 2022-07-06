@@ -9,8 +9,8 @@ import { NotFoundError } from './errors';
 class App {
   private app: Express;
   constructor(
-    private routes: Router[],
     private middlewares: any[],
+    private routes?: Router[],
     private views?: { viewPath: string; engine: string }[]
   ) {
     this.app = express();
@@ -30,7 +30,7 @@ class App {
     });
 
     // Configure Routes
-    this.routes.forEach((route, index, array) => {
+    this.routes?.forEach((route, index, array) => {
       this.app.use(route);
     });
 

@@ -44,19 +44,19 @@ export class Application {
     }
 
     this.app = new App(
-      [SigningRouter.route()],
       [
         cors(),
         express.urlencoded({ extended: true }),
         express.json(),
         fileUpload(),
       ],
+      [SigningRouter.route()],
       [
         {
           viewPath: path.join(path.resolve(), 'src/signing/views'),
           engine: 'ejs',
         },
-      ]
+      ],
     );
   }
 

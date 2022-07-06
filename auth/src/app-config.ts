@@ -42,7 +42,6 @@ export class Application {
     }
 
     this.app = new App(
-      [AuthRouter.route()],
       [
         cors({
           credentials: true,
@@ -56,7 +55,8 @@ export class Application {
         urlencoded({ extended: true }),
         fileUpload(),
         passport.initialize(),
-      ]
+      ],
+      [AuthRouter.route()],
     );
   }
 

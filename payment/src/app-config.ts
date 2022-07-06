@@ -34,19 +34,19 @@ export class Application {
     }
 
     this.app = new App(
-      [PaymentRouter.route()],
       [
         cors(),
         json({ limit: '50mb' }),
         fileUpload(),
         express.urlencoded({ extended: true })
       ],
+      [PaymentRouter.route()],
       [
         {
           viewPath: path.join(path.resolve(), 'src/payments/views'),
           engine: 'ejs',
         },
-      ]
+      ],
     );
   }
 

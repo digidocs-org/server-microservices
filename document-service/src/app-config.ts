@@ -41,7 +41,6 @@ export class Application {
     }
 
     this.app = new App(
-      [DocumentServiceRouter.route()],
       [
         cors({
           credentials: true,
@@ -54,7 +53,8 @@ export class Application {
         json({ limit: '50mb' }),
         urlencoded({ extended: true }),
         fileUpload(),
-      ]
+      ],
+      [DocumentServiceRouter.route()],
     );
   }
 

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: internal-gateway-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: internal-gateway
+  template:
+    metadata:
+      labels:
+        app: internal-gateway
+    spec:
+      containers:
+        - name: internal-gateway
+          image: asia.gcr.io/digidocs-stage/internal-gateway-service:latest
+          env:
+            - name: DOCUMENT_SERVICE
+              value: "document-srv"
+
+            - name: SIGNING_SERVICE
+              value: "signing-srv"
+
+            - name: PAYMENT_SERVICE
+              value: "payment-srv"
+            
+            - name: NATO_SERVICE
+              value: "nato-srv"
+
+            - name: AUTH_SERVICE
+              value: "auth-srv"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: internal-gateway-srv
+spec:
+  selector:
+    app: internal-gateway
+  ports:
+    - name: internal-gateway
+      protocol: TCP
+      port: 80
+      targetPort: 80
