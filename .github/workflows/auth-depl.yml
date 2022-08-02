@@ -21,32 +21,28 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v2
 
-      job_id:
-          # Add "id-token" with the intended permissions.
-          permissions:
-            contents: 'read'
-            id-token: 'write'
-          steps:
-            - id: 'auth'
-              uses: 'google-github-actions/auth@v0.8.0'
-              with:
-                credentials_json: '${{ secrets.GCR_SERVICE_JSON }}'
-            - name: 'Set up Cloud SDK'
-              uses: 'google-github-actions/setup-gcloud@v0.6.0'
+      # Gcloud auth and setup
+      - name: 'G-Cloud Auth'
+        uses: 'google-github-actions/auth@v0.8.0'
+        with:
+          credentials_json: '${{ secrets.GCR_SERVICE_JSON }}'
 
+        - name: 'Set up Cloud SDK'
+          uses: 'google-github-actions/setup-gcloud@v0.6.0'
       - run: gcloud --quiet auth configure-docker
 
-      - name: Build image
+      # Build Image
+      - name: 'Build image'
         run: docker build -t asia.gcr.io/$PROJECT_ID/$IMAGE -f $IMAGE/Dockerfile .
       - name: Push image
         run: docker push asia.gcr.io/$PROJECT_ID/$IMAGE
 
       # Digital Ocean Setup and deployment
-      - name: Install doctl
+      - name: 'Install doctl'
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Config kubernetes
+      - name: 'Config kubernetes'
         run: doctl kubernetes cluster kubeconfig save digidocs-stage-cluster
       - name: Restart deployment
         run: kubectl rollout restart deployment $IMAGE-depl
