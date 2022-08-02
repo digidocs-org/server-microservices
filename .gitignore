@@ -1,4 +1,4 @@
-.vscode 
+.vscode
 node_modules
 *-lock.json
 *.lock
@@ -11,3 +11,4 @@ certificate-digidocs-stage.cer
 cloud-key-access.json
 temp-*
 sign.png
+cert-manager.yaml

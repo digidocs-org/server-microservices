@@ -124,11 +124,14 @@ kubectl describe clusterissuer letsencrypt-cluster-issuer
 
 ```
 
-## Issue Certificate 
-
-```
+# Issue Certificate 
 kubectl apply -f certificate.yaml
+```
+
 
 # check the cert has been issued 
 
-kubectl describe certificate example-app
+```
+kubectl describe certificate digidocs-app-tls
+```
+

@@ -2,9 +2,9 @@
 import cors from 'cors';
 import { json, urlencoded } from 'express';
 import fileUpload from 'express-fileupload';
+import morgan from 'morgan'
 
 import { App } from '@digidocs/guardian';
-
 
 export class Application {
   private app: App;
@@ -23,6 +23,7 @@ export class Application {
         json({ limit: '50mb' }),
         urlencoded({ extended: true }),
         fileUpload(),
+        morgan('combined')
       ]
     );
   }
