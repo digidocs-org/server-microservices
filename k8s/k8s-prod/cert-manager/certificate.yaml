@@ -8,5 +8,5 @@ spec:
     - stage-api.digidocs.one
   secretName: digidocs-app-tls
   issuerRef:
-    name: letsencrypt-cluster-issuer
+    name: letsencrypt-prod
     kind: ClusterIssuer

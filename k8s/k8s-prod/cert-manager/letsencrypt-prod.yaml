@@ -1,14 +1,14 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-cluster-issuer
+  name: letsencrypt-prod
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: digidocsapp@gmail.com
+    email: naman.icebed@gmail.com
     privateKeySecretRef:
-      name: letsencrypt-cluster-issuer-key
+      name: letsencrypt-prod
     solvers:
-    - http01:
-       ingress:
-         class: nginx
+      - http01:
+          ingress:
+            class: nginx
