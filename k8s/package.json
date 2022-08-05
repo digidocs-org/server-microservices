@@ -1,9 +1,0 @@
-{
-  "name": "@digidocs/k8s",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "install-certis": "cd k8s-prod/cert-manager && kubectl apply -f cert-manager-1.5.3.yaml"
-  }
-}

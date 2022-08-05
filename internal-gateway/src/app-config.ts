@@ -1,8 +1,7 @@
-/* eslint-disable no-process-exit */
 import cors from 'cors';
 import { json, urlencoded } from 'express';
 import fileUpload from 'express-fileupload';
-import morgan from 'morgan'
+import morgan from 'morgan';
 
 import { App } from '@digidocs/guardian';
 
@@ -10,22 +9,20 @@ export class Application {
   private app: App;
 
   constructor() {
-    this.app = new App(
-      [
-        cors({
-          credentials: true,
-          origin: [
-            'https://accounts.digidocs.one',
-            'https://stage.digidocs.one',
-            'http://localhost:3000',
-          ],
-        }),
-        json({ limit: '50mb' }),
-        urlencoded({ extended: true }),
-        fileUpload(),
-        morgan('combined')
-      ]
-    );
+    this.app = new App([
+      cors({
+        credentials: true,
+        origin: [
+          'https://accounts.digidocs.one',
+          'https://stage.digidocs.one',
+          'http://localhost:3000',
+        ],
+      }),
+      json({ limit: '50mb' }),
+      urlencoded({ extended: true }),
+      fileUpload(),
+      morgan('combined'),
+    ]);
   }
 
   public async start(portNumber: number) {

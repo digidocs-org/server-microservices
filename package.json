@@ -30,7 +30,7 @@
     "document-service",
     "signing",
     "payment",
-    "k8s",
+    "infra",
     "internal-gateway"
   ]
 }
