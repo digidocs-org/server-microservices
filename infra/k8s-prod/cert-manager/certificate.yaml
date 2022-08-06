@@ -5,7 +5,8 @@ metadata:
   namespace: default
 spec:
   dnsNames:
-    - stage-api.digidocs.one
+    - kongqa.digidocs.one
+    - kongqa-admin.digidocs.one
   secretName: digidocs-app-tls
   issuerRef:
     name: letsencrypt-prod

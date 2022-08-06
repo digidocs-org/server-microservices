@@ -28,6 +28,6 @@
     "nato-service",
     "signing",
     "payment",
-    "k8s"
+    "infra"
   ]
 }
