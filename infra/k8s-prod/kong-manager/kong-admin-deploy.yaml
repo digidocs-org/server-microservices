@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: konga
+  namespace: kong
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: konga
+  template:
+    metadata:
+      labels:
+        name: konga
+        app: konga
+    spec:
+      containers:
+        - name: konga
+          image: pantsel/konga
+          ports:
+            - containerPort: 1337
+          env:
+            - name: NO_AUTH
+              value: "false"
+            - name: DB_ADAPTER
+              value: "postgres"
+            - name: DB_URI
+              value: "postgresql://kong:kong@postgres:5432/kong"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: konga-svc
+  namespace: kong
+spec:
+  selector:
+    app: konga
+  ports:
+    - port: 1337
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-admin-srv
+spec:
+  type: ExternalName
+  externalName: konga-svc.kong.svc.cluster.local
+  selector:
+    app: konga
+  ports:
+    - port: 1337

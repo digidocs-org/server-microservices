@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="078eda18-c220-45ae-a9d5-427a7cd995db" name="Changes" comment="updated cert deployment files" />
+    <list default="true" id="078eda18-c220-45ae-a9d5-427a7cd995db" name="Changes" comment="moved k8s to infra">
+      <change afterPath="$PROJECT_DIR$/infra/k8s-prod/kong-manager/kong-admin-deploy.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/infra/k8s-prod/kong-manager/kong-deploy.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-manifests.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-manifests.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/Readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/infra/Readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/auth-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/auth-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/authorization-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/authorization-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/cert-manager/certificate.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/certificate.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/cert-manager/ingress-nginx-svc.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/ingress-nginx-svc.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/cert-manager/letsencrypt-prod.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/letsencrypt-prod.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/ingress-srv.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/ingress-srv.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/nato-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/nato-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/nats-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/nats-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/payment-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/payment-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/signing-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/signing-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/infra/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="BAC-53-Authorization-removal" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -43,6 +61,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/infra/k8s-prod/deployments-manager" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
