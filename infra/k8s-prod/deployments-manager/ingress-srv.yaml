@@ -7,11 +7,11 @@ metadata:
 spec:
   tls:
     - hosts:
-        - kongqa.digidocs.one
-        - kongqa-admin.digidocs.one
+        - api.digidocs.one
+        - kong-admin.digidocs.one
       secretName: digidocs-app-tls
   rules:
-    - host: kongqa.digidocs.one
+    - host: api.digidocs.one
       http:
         paths:
           - path: /api/v1/auth/?(.*)
@@ -42,7 +42,7 @@ spec:
                 name: nato-srv
                 port:
                   number: 80
-    - host: kongqa-admin.digidocs.one
+    - host: kong-admin.digidocs.one
       http:
         paths:
           - path: /?(.*)

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="078eda18-c220-45ae-a9d5-427a7cd995db" name="Changes" comment="updated and refactored infra">
+    <list default="true" id="078eda18-c220-45ae-a9d5-427a7cd995db" name="Changes" comment="added kong and base api gateway">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/ingress-nginx-svc.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/certificate.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/certificate.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/ingress-srv.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/ingress-srv.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +43,8 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/B0224569/Desktop/workspace/digidocs/server-microservices/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -61,6 +63,7 @@
       <updated>1659420297093</updated>
       <workItem from="1659420299405" duration="4210000" />
       <workItem from="1659442985567" duration="10720000" />
+      <workItem from="1659951526428" duration="5147000" />
     </task>
     <task id="LOCAL-00001" summary="added morgan">
       <created>1659442776870</created>
@@ -125,7 +128,14 @@
       <option name="project" value="LOCAL" />
       <updated>1659769168763</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="added kong and base api gateway">
+      <created>1659771722715</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1659771722715</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,6 +159,11 @@
     <MESSAGE value="updated all deployments" />
     <MESSAGE value="updated cert deployment files" />
     <MESSAGE value="updated and refactored infra" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated and refactored infra" />
+    <MESSAGE value="added kong and base api gateway" />
+    <option name="LAST_COMMIT_MESSAGE" value="added kong and base api gateway" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
