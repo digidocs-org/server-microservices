@@ -20,7 +20,10 @@ spec:
               value: "80"
 
             - name: MONGO_URI
-              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/natodb
+              valueFrom:
+                secretKeyRef:
+                  name: nato-mongo-uri
+                  key: NATO_MONGO_URI
 
             - name: NODEMAILER_EMAIL
               value: "notifications@digidocs.one"

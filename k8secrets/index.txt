@@ -18,3 +18,8 @@ kubectl create secret generic ccavenue-merchant-id --from-literal=CCAVENUE_MERCH
 kubectl create secret generic encryption-secret --from-literal=ENCRYPTION_SECRET=ad68d6aee9625dc46b4f2e831471f77a
 kubectl create secret generic document-access-url --from-literal=DOCUMENT_ACCESS_URL=https://stage.digidocs.one/document
 kubectl create secret generic payment-salt-expire --from-literal=PAYMENT_SALT_EXPIRE=1h
+kubectl create secret generic auth-mongo-uri --from-literal=AUTH_MONGO_URI=mongodb+srv://dbadmin:sB5PGUCGSqk6ygnp@digidocs-prod-cluster.mteentu.mongodb.net/authdb
+kubectl create secret generic authorization-mongo-uri --from-literal=AUTHORIZATION_MONGO_URI=mongodb+srv://dbadmin:sB5PGUCGSqk6ygnp@digidocs-prod-cluster.mteentu.mongodb.net/authorizationdb
+kubectl create secret generic nato-mongo-uri --from-literal=NATO_MONGO_URI=mongodb+srv://dbadmin:sB5PGUCGSqk6ygnp@digidocs-prod-cluster.mteentu.mongodb.net/natodb
+kubectl create secret generic payment-mongo-uri --from-literal=PAYMENT_MONGO_URI=mongodb+srv://dbadmin:sB5PGUCGSqk6ygnp@digidocs-prod-cluster.mteentu.mongodb.net/paymentdb
+kubectl create secret generic signing-mongo-uri --from-literal=SIGNING_MONGO_URI=mongodb+srv://dbadmin:sB5PGUCGSqk6ygnp@digidocs-prod-cluster.mteentu.mongodb.net/signingdb

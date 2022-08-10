@@ -20,7 +20,10 @@ spec:
               value: '80'
 
             - name: MONGO_URI
-              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/payment
+              valueFrom:
+                secretKeyRef:
+                  name: payment-mongo-uri
+                  key: PAYMENT_MONGO_URI
 
             - name: NATS_CLIENT_ID
               valueFrom:
