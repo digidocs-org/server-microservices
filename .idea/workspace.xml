@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="078eda18-c220-45ae-a9d5-427a7cd995db" name="Changes" comment="added kong and base api gateway">
+    <list default="true" id="078eda18-c220-45ae-a9d5-427a7cd995db" name="Changes" comment="updated mongo URIs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/certificate.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/certificate.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/ingress-srv.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/ingress-srv.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/.env" beforeDir="false" afterPath="$PROJECT_DIR$/auth/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authorization/.env" beforeDir="false" afterPath="$PROJECT_DIR$/authorization/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guardian/src/middlewares/current-user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/guardian/src/middlewares/current-user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/payment-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/payment-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8secrets/index.txt" beforeDir="false" afterPath="$PROJECT_DIR$/k8secrets/index.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nato-service/.env" beforeDir="false" afterPath="$PROJECT_DIR$/nato-service/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/.env" beforeDir="false" afterPath="$PROJECT_DIR$/payment/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/src/payments/controllers/paymentRequest-controller/paymentRequest-controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/payment/src/payments/controllers/paymentRequest-controller/paymentRequest-controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signing/.env" beforeDir="false" afterPath="$PROJECT_DIR$/signing/.env" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +21,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="kong-gateway-release" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -64,6 +71,8 @@
       <workItem from="1659420299405" duration="4210000" />
       <workItem from="1659442985567" duration="10720000" />
       <workItem from="1659951526428" duration="5147000" />
+      <workItem from="1660110361416" duration="1774000" />
+      <workItem from="1660135551541" duration="8786000" />
     </task>
     <task id="LOCAL-00001" summary="added morgan">
       <created>1659442776870</created>
@@ -135,7 +144,21 @@
       <option name="project" value="LOCAL" />
       <updated>1659771722715</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="added kong and base api gateway">
+      <created>1660110476505</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1660110476506</updated>
+    </task>
+    <task id="LOCAL-00012" summary="updated mongo URIs">
+      <created>1660136073249</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1660136073250</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -160,7 +183,8 @@
     <MESSAGE value="updated cert deployment files" />
     <MESSAGE value="updated and refactored infra" />
     <MESSAGE value="added kong and base api gateway" />
-    <option name="LAST_COMMIT_MESSAGE" value="added kong and base api gateway" />
+    <MESSAGE value="updated mongo URIs" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated mongo URIs" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

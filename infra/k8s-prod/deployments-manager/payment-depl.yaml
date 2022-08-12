@@ -66,8 +66,8 @@ spec:
                   name: payment-salt-expire
                   key: PAYMENT_SALT_EXPIRE
 
-            - name: CCAVENUE_STAGE_URL
-              value: https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction
+            - name: CCAVENUE_PROD_URL
+              value: https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction
 
             - name: PAYMENT_CALLBACK
               value: https://stage-api.digidocs.one/api/v1/orders/payments/callback
