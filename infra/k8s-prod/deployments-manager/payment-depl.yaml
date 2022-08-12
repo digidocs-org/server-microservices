@@ -70,7 +70,7 @@ spec:
               value: https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction
 
             - name: PAYMENT_CALLBACK
-              value: https://stage-api.digidocs.one/api/v1/orders/payments/callback
+              value: https://api.digidocs.one/api/v1/orders/payments/callback
 
 ---
 apiVersion: v1

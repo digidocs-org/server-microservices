@@ -79,7 +79,7 @@ spec:
                   key: PFX_FILE_PASS
 
             - name: ESIGN_RESPONSE_URL
-              value: "https://stage-api.digidocs.one/api/v1/authorization/esign/aadhar/callback"
+              value: "https://api.digidocs.one/api/v1/authorization/esign/aadhar/callback"
 
             - name: ESIGN_SALT
               value: "aalkjdsf993848ji34ij3i.ewpoef023444a"
@@ -88,7 +88,7 @@ spec:
               value: "1000000"
 
             - name: REDIRECT_URI
-              value: "https://stage-api.digidocs.one/api/v1/authorization/esign/aadhar/redirect"
+              value: "https://api.digidocs.one/api/v1/authorization/esign/aadhar/redirect"
 
             - name: SIGNATURE_URL
               value: "https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com/signature/signature.jpeg"
