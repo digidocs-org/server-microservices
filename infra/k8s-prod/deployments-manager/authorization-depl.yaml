@@ -82,10 +82,10 @@ spec:
               value: 'http://signing-srv'
 
             - name: PAYMENT_SERVICE_BASE_URL
-              value: 'https://stage-api.digidocs.one/api/v1'
+              value: 'https://api.digidocs.one/api/v1'
 
             - name: PAYMENT_CALLBACK_URL
-              value: 'https://stage-api.digidocs.one/api/v1/authorization/orders/payment/callback'
+              value: 'https://api.digidocs.one/api/v1/authorization/orders/payment/callback'
 ---
 apiVersion: v1
 kind: Service
