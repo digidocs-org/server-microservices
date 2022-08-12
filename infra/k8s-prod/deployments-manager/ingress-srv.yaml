@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: ingress-srv
   annotations:
-    kubernetes.io/ingress.class: "kong"
+    kubernetes.io/ingress.class: 'kong'
 spec:
   tls:
     - hosts:
@@ -14,18 +14,18 @@ spec:
     - host: api.digidocs.one
       http:
         paths:
-          - path: /api/v1/auth/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-srv
-                port:
-                  number: 80
           - path: /api/v1/authorization/?(.*)
             pathType: Prefix
             backend:
               service:
                 name: authorization-srv
+                port:
+                  number: 80
+          - path: /api/v1/auth/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-srv
                 port:
                   number: 80
           - path: /api/v1/orders/?(.*)
