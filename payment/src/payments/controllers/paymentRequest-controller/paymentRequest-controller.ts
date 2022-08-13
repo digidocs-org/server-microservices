@@ -43,7 +43,7 @@ export const paymentRequest = (req: Request, res: Response) => {
     const responseBuffer = Buffer.from(parsedData)
     const encRequest = encrypt(responseBuffer, workingKey)
     res.render("paymentRequest", {
-        gatewayUrl: process.env.CCAVENUE_STAGE_URL,
+        gatewayUrl: process.env.CCAVENUE_PROD_URL,
         encryptedData: encRequest,
         accessCode: accessKey
     })

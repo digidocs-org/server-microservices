@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'infra/infra-prod/**'
+      - 'infra/k8s-prod/**'
   workflow_dispatch:
 
 jobs:
@@ -19,6 +19,6 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - name: Config kubernetes
-        run: doctl kubernetes cluster kubeconfig save digidocs-stage-cluster
+        run: doctl kubernetes cluster kubeconfig save kongqa-stage-cluster
       - name: Apply infra
-        run: kubectl apply -f infra/infra-prod
+        run: kubectl apply -f infra/k8s-prod/deployments-manager

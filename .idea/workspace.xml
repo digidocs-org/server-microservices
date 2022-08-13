@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="078eda18-c220-45ae-a9d5-427a7cd995db" name="Changes" comment="updated code">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/auth-depl.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/auth-depl.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-manifests.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-manifests.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/document-depl.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/document-depl.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/nato-depl.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/nato-depl.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/payment-depl.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/payment-depl.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/signing-depl.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/signing-depl.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/.env" beforeDir="false" afterPath="$PROJECT_DIR$/auth/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/src/app-config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/auth/src/app-config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/document-service/.env" beforeDir="false" afterPath="$PROJECT_DIR$/document-service/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/document-service/src/app-config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/document-service/src/app-config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guardian/src/middlewares/current-user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/guardian/src/middlewares/current-user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/Readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/auth-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/auth-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/cert-issuer-nginx-ingress.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/letsencrypt-prod.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/certificate.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/certificate.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/cert-manager/ingress_nginx_svc.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/document-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/authorization-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/ingress-srv.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/ingress-srv.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/kong-manifests/kong-deploy.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/kong-manager/kong-deploy.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/kong-manifests/konga-admin-deploy.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/kong-manager/kong-admin-deploy.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/nato-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/nato-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/nats-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/nats-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/payment-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/payment-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra/k8s-prod/signing-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/infra/k8s-prod/deployments-manager/signing-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal-gateway/.dockerignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal-gateway/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal-gateway/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal-gateway/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal-gateway/src/app-config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal-gateway/src/route-config/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal-gateway/src/server.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal-gateway/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/auth-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/k8s/k8s-prod/auth-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/authorization-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/k8s/k8s-prod/authorization-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/cert-manager/cert-issuer-nginx-ingress.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/k8s/k8s-prod/cert-manager/cert-issuer-nginx-ingress.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/ingress-srv.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/k8s/k8s-prod/ingress-srv.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/nato-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/k8s/k8s-prod/nato-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/nats-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/k8s/k8s-prod/nats-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/payment-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/k8s/k8s-prod/payment-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8s/k8s-prod/signing-depl.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/k8s/k8s-prod/signing-depl.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/k8secrets/index.txt" beforeDir="false" afterPath="$PROJECT_DIR$/k8secrets/index.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nato-service/.env" beforeDir="false" afterPath="$PROJECT_DIR$/nato-service/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nato-service/src/app-config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/nato-service/src/app-config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/.env" beforeDir="false" afterPath="$PROJECT_DIR$/payment/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment/src/payments/controllers/paymentRequest-controller/paymentRequest-controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/payment/src/payments/controllers/paymentRequest-controller/paymentRequest-controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signing/.env" beforeDir="false" afterPath="$PROJECT_DIR$/signing/.env" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="kong-gateway-release" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2CmutFeeQ3LgLTgfuToEfIi5Bgv" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/B0224569/Desktop/workspace/digidocs/server-microservices&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/B0224569/Desktop/workspace/digidocs/server-microservices/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/infra/k8s-prod/deployments-manager" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="078eda18-c220-45ae-a9d5-427a7cd995db" name="Changes" comment="" />
+      <created>1659420297093</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1659420297093</updated>
+      <workItem from="1659420299405" duration="4210000" />
+      <workItem from="1659442985567" duration="10720000" />
+      <workItem from="1659951526428" duration="5147000" />
+      <workItem from="1660110361416" duration="1774000" />
+      <workItem from="1660135551541" duration="9477000" />
+    </task>
+    <task id="LOCAL-00001" summary="added morgan">
+      <created>1659442776870</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1659442776870</updated>
+    </task>
+    <task id="LOCAL-00002" summary="updated auth depl">
+      <created>1659443163589</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1659443163589</updated>
+    </task>
+    <task id="LOCAL-00003" summary="updated auth depl">
+      <created>1659443493446</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1659443493446</updated>
+    </task>
+    <task id="LOCAL-00004" summary="updated auth depl">
+      <created>1659443779788</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1659443779788</updated>
+    </task>
+    <task id="LOCAL-00005" summary="updated auth depl">
+      <created>1659444112440</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1659444112440</updated>
+    </task>
+    <task id="LOCAL-00006" summary="updated auth depl">
+      <created>1659444198297</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1659444198297</updated>
+    </task>
+    <task id="LOCAL-00007" summary="updated all deployments">
+      <created>1659444734888</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1659444734888</updated>
+    </task>
+    <task id="LOCAL-00008" summary="updated cert deployment files">
+      <created>1659500578914</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1659500578914</updated>
+    </task>
+    <task id="LOCAL-00009" summary="updated and refactored infra">
+      <created>1659769168763</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1659769168763</updated>
+    </task>
+    <task id="LOCAL-00010" summary="added kong and base api gateway">
+      <created>1659771722715</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1659771722715</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added kong and base api gateway">
+      <created>1660110476505</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1660110476506</updated>
+    </task>
+    <task id="LOCAL-00012" summary="updated mongo URIs">
+      <created>1660136073249</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1660136073250</updated>
+    </task>
+    <task id="LOCAL-00013" summary="updated ccavenue prod URL">
+      <created>1660314833511</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1660314833511</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="added morgan" />
+    <MESSAGE value="updated auth depl" />
+    <MESSAGE value="updated all deployments" />
+    <MESSAGE value="updated cert deployment files" />
+    <MESSAGE value="updated and refactored infra" />
+    <MESSAGE value="added kong and base api gateway" />
+    <MESSAGE value="updated mongo URIs" />
+    <MESSAGE value="updated ccavenue prod URL" />
+    <MESSAGE value="updated code" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated code" />
+    <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

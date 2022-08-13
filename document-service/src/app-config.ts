@@ -47,6 +47,7 @@ export class Application {
           origin: [
             'https://accounts.digidocs.one',
             'https://stage.digidocs.one',
+            'https://app.digidocs.one',
             'http://localhost:3000',
           ],
         }),

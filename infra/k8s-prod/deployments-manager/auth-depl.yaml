@@ -20,7 +20,10 @@ spec:
               value: "80"
 
             - name: MONGO_URI
-              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/authentication
+              valueFrom:
+                secretKeyRef:
+                  name: auth-mongo-uri
+                  key: AUTH_MONGO_URI
 
             - name: NATS_CLIENT_ID
               valueFrom:

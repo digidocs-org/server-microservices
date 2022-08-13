@@ -20,7 +20,10 @@ spec:
               value: '80'
 
             - name: MONGO_URI
-              value: mongodb+srv://admin:FTPSX3tKzXqdfhXE@digidocs-cluster1.mpdbe.mongodb.net/payment
+              valueFrom:
+                secretKeyRef:
+                  name: payment-mongo-uri
+                  key: PAYMENT_MONGO_URI
 
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -63,11 +66,11 @@ spec:
                   name: payment-salt-expire
                   key: PAYMENT_SALT_EXPIRE
 
-            - name: CCAVENUE_STAGE_URL
-              value: https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction
+            - name: CCAVENUE_PROD_URL
+              value: https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction
 
             - name: PAYMENT_CALLBACK
-              value: https://stage-api.digidocs.one/api/v1/orders/payments/callback
+              value: https://api.digidocs.one/api/v1/orders/payments/callback
 
 ---
 apiVersion: v1
