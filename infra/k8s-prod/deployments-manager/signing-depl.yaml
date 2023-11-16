@@ -61,7 +61,7 @@ spec:
                   key: FILE_KEY
 
             - name: CLOUDFRONT_URI
-              value: "https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com"
+              value: ""
 
             - name: AWS_S3_BUCKET
               value: digidocs-local-bucket
@@ -79,19 +79,19 @@ spec:
                   key: PFX_FILE_PASS
 
             - name: ESIGN_RESPONSE_URL
-              value: "https://api.digidocs.one/api/v1/authorization/esign/aadhar/callback"
+              value: ""
 
             - name: ESIGN_SALT
-              value: "aalkjdsf993848ji34ij3i.ewpoef023444a"
+              value: ""
 
             - name: ESIGN_SALT_EXPIRE
               value: "1000000"
 
             - name: REDIRECT_URI
-              value: "https://api.digidocs.one/api/v1/authorization/esign/aadhar/redirect"
+              value: ""
 
             - name: SIGNATURE_URL
-              value: "https://digidocs-local-bucket.s3.ap-south-1.amazonaws.com/signature/signature.jpeg"
+              value: ""
 ---
 apiVersion: v1
 kind: Service
