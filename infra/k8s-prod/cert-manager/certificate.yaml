@@ -1,13 +1,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: digidocs-app
+  name: example-app
   namespace: default
 spec:
   dnsNames:
-    - api.digidocs.one
-    - kong-admin.digidocs.one
-  secretName: digidocs-app-tls
+    - api.example.com
+  secretName: example
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
