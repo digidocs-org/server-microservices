@@ -26,7 +26,7 @@ spec:
                   key: NATO_MONGO_URI
 
             - name: NODEMAILER_EMAIL
-              value: "notifications@digidocs.one"
+              value: ""
 
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -34,13 +34,13 @@ spec:
                   fieldPath: metadata.name
 
             - name: URL_SHORTENER_BASE_URL
-              value: "https://di-gi.in/"
+              value: ""
 
             - name: NATS_URI
-              value: "http://nats-srv:4222"
+              value: ""
 
             - name: NATS_CLUSTER_ID
-              value: "digidocs"
+              value: ""
 ---
 apiVersion: v1
 kind: Service
